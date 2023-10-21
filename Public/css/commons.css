@@ -1,0 +1,76 @@
+::-webkit-scrollbar {
+    background-color: black;
+    height: 10px;
+    max-width: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #caf979;
+    max-width: 1.5rem;
+    height: 4px;
+    border-radius: 25px;
+}
+
+.back {
+    position: absolute;
+    height: 50px;
+    width: 50px;
+    margin-top: 15px;
+    margin-left: 10px;
+}
+
+.backBtn {
+    height: inherit;
+    width: inherit;
+    background-color: black;
+    border: none;
+    transition: background-color 0.15s ease-in-out;
+    border-radius: 6px;
+}
+
+.backBtn:hover {
+    background-color: #caf979;
+}
+
+.backBtn img {
+    height: 25px;
+    width: 25px;
+    border-radius: inherit;
+    filter: invert();
+    transition: filter 0.15s ease-in-out;
+}
+
+.backBtn:hover img {
+    filter: none;
+}
+
+.backBtn:active {
+    background-color: black;
+    border: 1px solid rgb(97,97,97)
+}
+
+.backBtn:active img {
+    filter: invert();
+}
+
+.backBtn:focus {
+    outline: none;
+}
+
+.loader {
+    border: 10px solid #000;
+    border-top: 10px solid #caf979;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 45%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+    animation: spin 1s linear infinite;
+}
+  
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

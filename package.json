@@ -1,0 +1,20 @@
+{
+  "name": "animestream",
+  "version": "1.0.0",
+  "description": "",
+  "type": "commonjs",
+  "scripts": {
+    "test": "npm run build && npm start",
+    "build": "rimraf dist/ && tsc",
+    "start": "electron dist/Main/Main.js",
+    "dev": "nodemon"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.5.1",
+    "electron": "^27.0.0",
+    "electron-squirrel-startup": "^1.0.0"
+  }
+}

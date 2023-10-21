@@ -1,0 +1,192 @@
+@font-face {
+    font-family: NotoSans-Bold;
+    src: url('../Assets/Fonts/NotoSans-Bold.ttf')
+}
+
+@font-face {
+    font-family: Poppins-Bold;
+    src: url('../Assets/Fonts/Poppins-Bold.ttf')
+}
+
+
+body {
+    background-color: black;
+    padding: 0;
+    margin: 0;
+    color: white;
+    font-family: NotoSans-Bold;
+    overflow-x: hidden;
+    padding-bottom: 50px;
+}
+
+.main {
+    display: none;
+    flex-direction: column;
+}
+
+.nav {
+    /* border: 1px solid white; */
+    height: 5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* color: rgb(238, 235, 58); */
+}
+
+.container {
+    justify-content: center;
+    margin-top: 20px;
+    padding: 25px;
+    /* border: 1px solid white; */
+}
+
+.animeName p {
+    font-family: Poppins-Bold;
+    font-size: 2rem;
+}
+
+.baseContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 25rem;
+    /* margin-left: 5% */
+}
+
+.coverImage {
+    flex-shrink: 0;
+    /* border: 1px solid white; */
+    height: 300px;
+    width: 225px;
+    border-radius: 12px;
+}
+
+.coverPic {
+    height: inherit;
+    width: inherit;
+    border-radius: inherit;
+}
+
+.basicInfo {
+    scroll-behavior: smooth;
+    flex-shrink: 0;
+    margin-left: 3rem;
+    height: 300px;
+    width: 50%;
+    border-radius: 12px;
+    overflow: auto;
+    padding-left: 20px;
+    padding-right: 25px;
+    border: 1px solid black;
+    overflow: hidden;
+    transition: border-color 0.15s ease-in-out, overflow 0.15s ease-in-out;
+}
+
+.basicInfo:hover {
+    overflow: auto;
+    border: 1px solid white;
+}
+
+.basicInfo p {
+    font-size: 1.2rem;
+}
+
+.subInfo {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.advancedInfo {
+    flex-shrink: 0;
+    /* border: 1px solid white; */
+    font-size: 1.4rem;
+    padding-left: 20px;
+    padding-right: 20px; 
+    border-radius: 12px;
+    width: 37%;
+    max-width: 525px;
+}
+
+.miscInfo {
+    flex-shrink: 0;
+    margin-left: 3rem;
+    /* border: 1px solid white; */
+    border-radius: 12px;
+    padding-right: 20px;
+    padding-left: 20px;
+    font-size: 1.4rem;
+    width: 37%;
+    max-width: 525px;
+}
+
+.charactersDiv {
+    margin-top: 5rem;
+    display: flex;
+    justify-content: center;
+    height: 350px;
+}
+
+.characters {
+    padding-top: 10px;
+    position: absolute;
+    border: 1px solid white;
+    width: 90%;
+    max-width: 1181.720px;
+    display: flex;
+    flex-direction: row;
+    height: inherit;
+    border-radius: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 10px
+}
+
+.charaText {
+    position: absolute;
+    margin-top: -4rem; 
+    font-size: 1.7rem;
+}
+
+.characters .character:last-child {
+    margin-right: 10px;
+}
+
+.character {
+    margin-left: 1rem;
+}
+
+.character img {
+    border-radius: 12px;
+    height: 240px;
+    width: 158.4px;
+}
+
+.episodes {
+    border: 1px solid white;
+    margin-top: 5rem;
+    height: 200px;
+    width: 60%;
+}
+
+.pages {
+    border-bottom: 2px solid #caf979;
+    height: 4rem;
+    display: flex;
+    padding-left: 1rem;
+}
+
+.page {
+    margin-top: 1rem;
+    height: 3rem;
+    border: 1px solid wheat;
+    width: 3rem;
+    background-color: #caf979;
+    color: black
+}
+
+.page p {
+    margin-top: 13px;
+    margin-left: 19px;
+}

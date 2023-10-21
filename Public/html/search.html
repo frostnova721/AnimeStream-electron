@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime stream</title>
+    <link rel="stylesheet" href="../css/search.css"/>
+    <link rel="stylesheet" href="../css/commons.css">
+</head>
+<body>
+    <div class="loader" id="loader"></div>
+    <div class="main" id="main">
+        <div class="back"><button class="backBtn" id="backBtn"><img src="../Assets/Icons/arrow.png"></button></div>
+        <div class="nav">
+            <div class="search">
+                <input type="text" class="searchBar" id="searchBar" placeholder="search..." draggable="false" >
+                <button class="searchBtn" id="searchBtn"><span><img src="../Assets/Icons/search-interface-symbol.png"></span></button>
+            </div>
+        </div>
+        <div class="container">
+            <div class="results" id="results">
+
+            </div>
+        </div>
+    </div>
+    <script>
+        require('../../dist/Render/renderSearch.js')
+    </script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+@font-face {
+    font-family: NotoSans-Bold;
+    src: url('../Assets/Fonts/NotoSans-Bold.ttf')
+}
+
+body {
+    background-color: black;
+    padding: 0;
+    margin: 0;
+    color: white;
+    font-family: NotoSans-Bold;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+}
+
+.loader {
+    display: none;
+}
+
+.nav {
+    /* border: 1px solid white; */
+    height: 5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    margin-top: 20px;
+    padding: 25px
+    /* border: 1px solid white; */
+}
+
+.results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    justify-content: space-evenly;
+    align-content: space-evenly;
+}
+
+.div_anime_cover img {
+    height: 250px;
+    width: 180px;
+    margin: 10px;
+    border-radius: 5px;
+    transition: transform 0.2s ease-in-out
+}
+
+.div_anime_cover:hover img {
+    transform: scale(1.05);
+    margin-bottom: 5px;
+    border-radius: 0px;
+    
+}
+
+.div_anime_cover p {
+    transition: color 0.1s ease-in-out;
+}
+
+.div_anime_cover:hover p {
+    color: #caf979;
+}
+
+.searchBtn img {
+    height: 10px;
+    scale: 1.7;
+    filter: invert();
+    -webkit-filter: invert();
+}
+
+.searchBar {
+    margin-top: -2px;
+    height: 2.4rem;
+    width: 20rem;
+    border-radius: 12px;
+    padding-left: 1rem;
+    background-color: black;
+    color: white;
+    border: 2px solid rgb(97, 97, 97);
+    vertical-align: top;
+    font-size: 1.15rem;
+}
+
+.searchBar:focus {
+    outline: none;
+    border-color: #caf979; 
+}
+
+.searchBtn {
+    height: 2.4rem;
+    width: 3rem;
+    border-radius: 10px;
+    border: 1px solid white;
+    background-color: black;
+}
+
+.searchBtn:hover {
+    background-color: #caf979;    
+}
+
+.searchBtn:hover img {
+    filter: none;
+}
+
+.div_anime_cover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.div_anime_cover p {
+    text-align: center;
+    text-wrap: wrap;
+}
