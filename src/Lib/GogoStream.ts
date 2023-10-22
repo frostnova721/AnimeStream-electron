@@ -3,7 +3,7 @@ import cheerio from 'cheerio'
 import { ISearchOutput, IStreamOutput } from '../Types';
 const CryptoJS = require('crypto-js')
 
-export class Streams {
+export class GogoStreams {
     constructor(){}
 
     private readonly keys = {
@@ -42,13 +42,13 @@ export class Streams {
         }
         const searchResults = []
         for(const item of list) {
-            // const extraa = await this.getAnimeEpisodeLink(links[list.indexOf(item)])
+            const extraa = await this.getAnimeEpisodeLink(links[list.indexOf(item)])
             searchResults.push({
                 name: item, 
                 alias: links[list.indexOf(item)],
                 imageUrl: images[list.indexOf(item)],
-                // episodes: extraa.episodes,
-                // episodeLink: `${this.baseUrl}${extraa.link.trim()}`
+                episodes: extraa.episodes,
+                episodeLink: `${this.baseUrl}${extraa.link.trim()}`
             })
         }
 

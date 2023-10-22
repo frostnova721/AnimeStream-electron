@@ -1,9 +1,33 @@
-import { readClickedResult, getAnimeInfo } from "../Core";
+import { readClickedResult, getAnimeInfo, gogoSearch } from "../Core";
+
+const pages: any = {}
 
 document.addEventListener("DOMContentLoaded", async () => {
+  let toggled = false
   const backBtn = document.getElementById('backBtn')
-  if(!backBtn) return;
+  const watchBtn = document.getElementById('watchBtn')
+  const epCounter = document.getElementById('episodeCounter')
+  const main = document.getElementById('container')
+  const closeBtn = document.getElementById('close')
+
+  if(!backBtn || !watchBtn || !epCounter || !main || !closeBtn) return;
   backBtn.onclick = () => window.location.href = './search.html'
+  watchBtn.onclick = () => {
+    if(!toggled) {
+      main.style.display = 'none'
+      epCounter.style.display = 'block'
+      toggled = true
+    } else {
+      main.style.display = 'block'
+      epCounter.style.display = 'none'
+      toggled = false
+    }
+  }
+  closeBtn.onclick = () => {
+    main.style.display = 'block'
+    epCounter.style.display = 'none'
+    toggled = false
+  }
   await renderResult()
 })
 
@@ -84,4 +108,39 @@ async function renderResult() {
 
     loader.style.display = 'none'
     main.style.display = 'flex'
+
+    return void appendEpisodes(res.synonyms)
+}
+
+async function appendEpisodes(term: string) {
+  const res = (await gogoSearch(term))[0]
+  const epContent = document.getElementById('episodeContent')
+  if(!epContent) return
+  console.log(res)
+  for(let i=1; i <= res.episodes; i++) {
+    if(i%20 === 0) createPage(i)
+    createEpisode(i, epContent)
+  }
+}
+
+function createEpisode(number: number, div: HTMLElement) {
+  const divElement = document.createElement('div')
+    divElement.className = 'episode'
+
+    const button = document.createElement('button')
+    button.className = 'epBtn'
+    button.textContent = `${number}`
+
+    divElement.appendChild(button)
+    div.appendChild(divElement)
+}
+
+function createPage(number: number) {
+  const pagesContainer = document.getElementById('pages')
+  const newPage = document.createElement('div')
+  newPage.className = 'page'
+  const p = document.createElement('p')
+  p.textContent = `${number}`
+  newPage.appendChild(p)
+  pagesContainer?.appendChild(newPage)
 }

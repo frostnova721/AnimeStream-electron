@@ -12,8 +12,8 @@ export interface ISearchOutput {
     name: string;
     alias: string;
     imageUrl: string;
-    // episodes: number;
-    // episodeLink: string;
+    episodes: number;
+    episodeLink: string;
 }
 
 export interface IMALSearch {

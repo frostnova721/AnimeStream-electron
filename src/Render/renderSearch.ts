@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', async() => {
             await appendSearchResults(searchBar.value)
         }
     })
-
 })
 
 async function appendSearchResults(searchValue: string) {
