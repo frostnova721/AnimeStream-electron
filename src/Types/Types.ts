@@ -35,6 +35,7 @@ export type TChara = {
 }
 
 export interface IAnimeDetails {
+    title: string;
     synonyms: string;
     names: {
         japanese: string;

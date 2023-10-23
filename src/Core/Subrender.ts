@@ -34,8 +34,13 @@ export async function gogoSearch(term: string): Promise<ISearchOutput[]> {
 
 export async function getGogoStreams(episodeId: string, quality?: '360' | '480' | '720' | '1080'): Promise<IStreamOutput> {
     const gogo = new GogoStreams()
-    const results = gogo.getStreams(episodeId, quality)
-    return results
+    try {
+        const results = gogo.getStreams(episodeId, quality)
+        return results
+    } catch(err) {
+        console.log(err)
+        throw new Error('Couldnt get any results')
+    }
 }
 
 export async function stream(videoElement: HTMLVideoElement, src: string) {

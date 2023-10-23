@@ -42,14 +42,18 @@ export class GogoStreams {
         }
         const searchResults = []
         for(const item of list) {
-            const extraa = await this.getAnimeEpisodeLink(links[list.indexOf(item)])
-            searchResults.push({
-                name: item, 
-                alias: links[list.indexOf(item)],
-                imageUrl: images[list.indexOf(item)],
-                episodes: extraa.episodes,
-                episodeLink: `${this.baseUrl}${extraa.link.trim()}`
-            })
+            try {
+                const extraa = await this.getAnimeEpisodeLink(links[list.indexOf(item)])
+                searchResults.push({
+                    name: item, 
+                    alias: links[list.indexOf(item)],
+                    imageUrl: images[list.indexOf(item)],
+                    episodes: extraa.episodes,
+                    episodeLink: `${this.baseUrl}${extraa.link.trim()}`
+                })
+            } catch(err) {
+                console.log('err')
+            }
         }
 
         return searchResults

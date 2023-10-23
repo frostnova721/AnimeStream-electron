@@ -128,7 +128,7 @@ async function renderResult() {
     if(res.synonyms.length > 1) name = res.synonyms
 
     if(name) 
-      return void await appendEpisodes(res.names.english, name)
+      return void await appendEpisodes(res.title.replace(/[,|\.]/g, ''), res.names.english)
     else
       return void await appendEpisodes(res.names.english)
 }
@@ -136,10 +136,13 @@ async function renderResult() {
 async function appendEpisodes(term: string, term2?: string) {
   let res;
   try {
+    console.log(`searching ${term}`)
     res = (await gogoSearch(term))[0]
   } catch(err) {
-    if(term2)
+    if(term2){
+      console.log(`searching ${term2}`)
       res = (await gogoSearch(term2))[0]
+    }
     else
       throw new Error('Couldnt get any results :(')
   }

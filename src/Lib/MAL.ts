@@ -21,6 +21,9 @@ export class MAL {
         const animeInfo = $('.spaceit_pad')
         const info = $('p[itemprop="description"]')
         const charactersDiv = $('.detail-characters-list')
+        const titleDiv = $('h1.title-name')
+
+        const title = titleDiv.children('strong').text().trim()
 
         const imgArr: string[] = []
         const infoArr: string[] = []
@@ -83,6 +86,7 @@ export class MAL {
         })
     
         const finalInfo = {
+            title: title,
             synonyms: infoArr.find(item => item.split(':')[0].trim() === 'Synonyms')?.split(':')[1].trim() ?? '',
             names: {
                 japanese: infoArr.find(item => item.split(':')[0].trim() === 'Japanese')?.split(':')[1].trim() ?? '',
