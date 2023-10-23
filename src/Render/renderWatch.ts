@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', async() => {
     const timeCurrent = document.getElementById('current')
     const totalTime = document.getElementById('total')
     const controls = document.getElementById('controls')
+    const fullScreenBtn = document.getElementById('fullScreen')
 
     if(!video 
         || !sourcesDiv 
@@ -20,6 +21,7 @@ document.addEventListener('DOMContentLoaded', async() => {
         || !timeCurrent 
         || !totalTime 
         || !controls
+        || !fullScreenBtn
         )   throw new Error('err');
 
     backBtn.onclick = () => window.location.href = './AnimeInfo.html'
@@ -32,6 +34,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             playState = false
         }
     }
+    fullScreenBtn.onclick = () => video.requestFullscreen()
 
     const sources = (await getGogoStreams(await getStoredEpisodeId())).sources
     for(const source of sources) {
@@ -54,18 +57,11 @@ document.addEventListener('DOMContentLoaded', async() => {
 
     video.addEventListener('timeupdate', () => {
         if (!isNaN(video.duration) && isFinite(video.duration)) {
-            timeCurrent.textContent = Math.floor(video.currentTime).toString()
+            totalTime.textContent = `${secondsToTime(Math.floor(video.duration))}`
+            timeCurrent.textContent = secondsToTime(Math.floor(video.currentTime))
             progressBar.value = (video.currentTime / video.duration) * 100;
         }
     })
-
-    video.addEventListener('mouseenter', () => {
-        controls.style.display = 'block';
-    });
-    
-    video.addEventListener('mouseleave', () => {
-        progressBar.style.display = 'none';
-    });
 
     progressBar.addEventListener('click', (e) => {
         const currentTarget = e.currentTarget as HTMLElement
@@ -78,3 +74,13 @@ function showControlsWithState(control: HTMLElement, state: boolean) {
     if(!state) control.style.opacity = '0'
     else control.style.opacity = '1'
 }
+
+function secondsToTime(seconds: number) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+  
+    const minutesStr = String(minutes).padStart(2, '0');
+    const secondsStr = String(remainingSeconds).padStart(2, '0');
+  
+    return `${minutesStr}:${secondsStr}`;
+  }

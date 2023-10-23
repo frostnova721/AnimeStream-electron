@@ -50,7 +50,6 @@ export async function stream(videoElement: HTMLVideoElement, src: string) {
         hls.loadSource(src);
         hls.attachMedia(videoElement);
         hls.on(Hls.Events.MANIFEST_PARSED, function () {
-
         });
     }
 }

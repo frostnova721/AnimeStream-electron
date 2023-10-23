@@ -54,11 +54,17 @@ body {
 }
 
 .controls {
+    opacity: 0;
     width: 95%;
     max-width: 860px;
     background-color: rgba(0, 0, 0, 0.527);
     margin-top: -5rem;
     z-index: 4;
+    transition: opacity 0.3s ease-out;
+}
+
+.playerContainer:hover .controls {
+    opacity: 1;
 }
 
 .timeDiv {
