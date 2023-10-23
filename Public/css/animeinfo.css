@@ -167,7 +167,8 @@ body {
     z-index: 2;
     display: none;
     margin-top: 5rem;
-    height: auto;
+    min-height: 150px;
+    max-height: 350px;
     width: 70%;
     max-width: 50rem;
     position: absolute;
@@ -176,10 +177,23 @@ body {
     transform: translate(-50%, -50%);
 }
 
+.loaderContainer {
+    /* display: none; */
+    position: absolute;
+    left: 45%;
+    top: 50%;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
 .episodes {
     border: 1px solid white;
-    height: 100%;
-    max-width: 50rem; 
+    height: 180px;
+    max-height: 286px;
+    max-width: 50rem;
+    display: block;
 }
 
 .pages {
@@ -192,7 +206,9 @@ body {
 .close {
     height: 30px;
     width: 30px;
-    margin-left: 87%;
+    position: absolute;
+    float: right;
+    right: 16px;
     margin-top: 16px;
     display: flex;
     justify-content: center;
@@ -220,7 +236,7 @@ body {
     border: 1px solid wheat;
     width: 3rem;
     background-color: #caf979;
-    color: black
+    color: black;
 }
 
 .page p {
@@ -262,9 +278,10 @@ body {
 }
 
 .episodeContent {
-    height: auto;
+    height: 60%;
     display: flex;
     overflow-x: hidden;
+    overflow-y: auto; 
     flex-wrap: wrap;
 }
 
@@ -279,4 +296,13 @@ body {
     width: 100%;
     font-family: Poppins-Bold;
     font-size: 1.1rem;
+    background-color: white;
+    border: 1px solid black;
+    transition: border-color 0.15s ease-in-out, color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+}
+
+.epBtn:hover {
+    background-color: black;
+    color: white;
+    border-color: white;
 }

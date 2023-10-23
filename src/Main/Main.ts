@@ -7,7 +7,8 @@ if(require('electron-squirrel-startup')) {
 }
 
 const globalVars: TGlobalVar = { 
-    clickedResult: ''
+    clickedResult: '',
+    episodeId: ''
 }
 
 const createWindow = () => {
@@ -20,7 +21,7 @@ const createWindow = () => {
         },
     })
 
-    mainWindow.loadFile(path.join(__dirname, '../../Public/html/home.html'))
+    mainWindow.loadFile(path.join(__dirname, '../../Public/html/Home.html'))
 
     if(!app.isPackaged) {
         mainWindow.webContents.openDevTools()
@@ -35,6 +36,15 @@ const createWindow = () => {
 
     ipcMain.handle("readCR", (e) => {
         return globalVars.clickedResult
+    })
+
+    ipcMain.handle("setEpisodeId", (e, episodeId: string) => {
+        globalVars.episodeId = episodeId
+        return null
+    })
+
+    ipcMain.handle("getEpisodeId", (e) => {
+        return globalVars.episodeId
     })
 
     // ipcMain.handle('showDialog', (e, message, title, type))

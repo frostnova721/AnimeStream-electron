@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Stream</title>
+    <link rel="stylesheet" href="../css/commons.css">
+    <link rel="stylesheet" href="../css/watch.css">
+</head>
+<body>
+    <div class="main" id="main">
+        <div class="back"><button class="backBtn" id="backBtn"><img src="../Assets/Icons/arrow.png"></button></div>
+        <div class="nav">
+
+        </div>
+        <div class="container" id="container">
+            <div class="playerContainer">
+                <div class="player">
+                    <video class="videoPlayer" id="videoPlayer">
+                        na na
+                    </video>
+                    <div class="controls">
+                        <div class="timeDiv">
+                            <div class="current">0:00</div>&nbsp;/&nbsp;
+                            <div class="total">0:00</div>
+                        </div>
+                        <progress id="watch_progress" min="0" max="100" value="0"></progress>
+                        <div class="mediaButtons">
+                            <button class="play_pause" id="playPause">play</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sourcesContainer">
+                <div class="sources" id="sources">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        require('../../dist/Render/renderWatch.js')
+    </script>
+</body>
+</html>

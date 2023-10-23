@@ -1,0 +1,118 @@
+@font-face {
+    font-family: NotoSans-Bold;
+    src: url('../Assets/Fonts/NotoSans-Bold.ttf')
+}
+
+@font-face {
+    font-family: Poppins-Bold;
+    src: url('../Assets/Fonts/Poppins-Bold.ttf')
+}
+
+body {
+    background-color: black;
+    padding: 0;
+    margin: 0;
+    color: white;
+    font-family: NotoSans-Bold;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav {
+    /* border: 1px solid white; */
+    height: 5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    margin-top: 20px;
+    padding: 25px;
+    /* border: 1px solid white; */
+}
+
+.playerContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.player {
+    border: 1px solid white;
+    height: 500px;
+    width: 90%;
+    max-width: 1000px;
+}
+
+.videoPlayer {
+    height: 100%;
+    width: 100%;
+    background-color: black;
+}
+
+.sourcesContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.sources {
+    border: 1px solid white;
+    border-radius: 12px;
+    display: flex;
+    padding: 5px;
+    width: 50rem;
+}
+
+.source {
+    max-width: 150px;
+    width: 100px;
+    height: 50px;
+    text-align: center;
+    border: 1px solid rgb(97,97,97);
+    margin: 5px;
+    background-color: black;
+    padding: 5px;
+    color: white;
+    font-size: 1.4rem;
+    font-family: Poppins-Bold;
+    border-radius: 12px;
+    transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.source:hover {
+    background-color: #caf979;
+    color: black;
+}
+
+.source:active {
+    background-color: black;
+    color: #caf979;
+    border-color: #caf979;
+    transition: none;
+}
+
+.timeDiv {
+    display: flex;
+}
+
+#watch_progress {
+    width: 100%;
+}
+
+.controls {
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
+    /* margin-top: -4.5rem; */
+    padding-left: 2.5%;
+    padding-right: 2.5%;
+}

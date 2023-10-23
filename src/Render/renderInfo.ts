@@ -1,4 +1,4 @@
-import { readClickedResult, getAnimeInfo, gogoSearch } from "../Core";
+import { readClickedResult, getAnimeInfo, gogoSearch, storeEpisodeId } from "../Core";
 
 const pages: any = {}
 
@@ -29,7 +29,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     toggled = false
   }
   await renderResult()
+
+  
+  const epContent = document.getElementById('episodeContent')
+  if(!epContent) throw new Error('No buttons');
+  epContent.addEventListener('click', async(e) => {
+    const target = e.target as HTMLElement
+    if(target.id === 'epBtn') {
+      await storeEpisodeId(target.getAttribute('data-value') ?? '')
+      window.location.href = './Watch.html'
+    }
+  })
 })
+
+
+//functions
 
 async function renderResult() {
   const loader = document.getElementById('loader')
@@ -109,26 +123,47 @@ async function renderResult() {
     loader.style.display = 'none'
     main.style.display = 'flex'
 
-    return void appendEpisodes(res.synonyms)
+    let name: string | undefined;
+
+    if(res.synonyms.length > 1) name = res.synonyms
+
+    if(name) 
+      return void await appendEpisodes(res.names.english, name)
+    else
+      return void await appendEpisodes(res.names.english)
 }
 
-async function appendEpisodes(term: string) {
-  const res = (await gogoSearch(term))[0]
+async function appendEpisodes(term: string, term2?: string) {
+  let res;
+  try {
+    res = (await gogoSearch(term))[0]
+  } catch(err) {
+    if(term2)
+      res = (await gogoSearch(term2))[0]
+    else
+      throw new Error('Couldnt get any results :(')
+  }
   const epContent = document.getElementById('episodeContent')
-  if(!epContent) return
+  const loaderContainer = document.getElementById('loaderContainer')
+  if(!epContent || !loaderContainer) return;
+  loaderContainer.style.display = 'none'
+  epContent.style.display = 'flex'
   console.log(res)
   for(let i=1; i <= res.episodes; i++) {
-    if(i%20 === 0) createPage(i)
-    createEpisode(i, epContent)
+    // if(i%20 === 0) createPage(i)
+    createEpisode(i, epContent, res.episodeLink)
   }
+
 }
 
-function createEpisode(number: number, div: HTMLElement) {
+function createEpisode(number: number, div: HTMLElement, episodeId: string) {
   const divElement = document.createElement('div')
     divElement.className = 'episode'
 
     const button = document.createElement('button')
     button.className = 'epBtn'
+    button.id = 'epBtn'
+    button.setAttribute('data-value', `${episodeId}${number}`)
     button.textContent = `${number}`
 
     divElement.appendChild(button)

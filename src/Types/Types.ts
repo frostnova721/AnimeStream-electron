@@ -66,4 +66,5 @@ export interface IAnimeDetails {
 
 export type TGlobalVar = {
     clickedResult: string ;
+    episodeId: string
 }

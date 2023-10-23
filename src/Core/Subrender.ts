@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron'
 import { MAL, GogoStreams } from '../Lib'
 import { IMALSearch, ISearchOutput, IStreamOutput } from '../Types'
-
+import Hls from 'hls.js'
 
 const mal = new MAL()
 
@@ -32,8 +32,29 @@ export async function gogoSearch(term: string): Promise<ISearchOutput[]> {
     return results
 }
 
-export async function getGogoStreams(episodeId: string): Promise<IStreamOutput> {
+export async function getGogoStreams(episodeId: string, quality?: '360' | '480' | '720' | '1080'): Promise<IStreamOutput> {
     const gogo = new GogoStreams()
-    const results = gogo.getStreams(episodeId)
+    const results = gogo.getStreams(episodeId, quality)
     return results
+}
+
+export async function stream(videoElement: HTMLVideoElement, src: string) {
+    if(!videoElement) throw new Error('ERRRRRRR')
+    if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(src);
+        hls.attachMedia(videoElement);
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+
+        });
+    }
+}
+
+export async function storeEpisodeId(epId: string): Promise<void> {
+    await ipcRenderer.invoke('setEpisodeId', epId)
+}
+
+export async function getStoredEpisodeId(): Promise<string> {
+    const id = ipcRenderer.invoke('getEpisodeId')
+    return id;
 }
