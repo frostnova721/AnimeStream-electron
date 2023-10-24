@@ -45,12 +45,16 @@ export async function getGogoStreams(episodeId: string, quality?: '360' | '480' 
 
 export async function stream(videoElement: HTMLVideoElement, src: string) {
     if(!videoElement) throw new Error('ERRRRRRR')
+    try {
     if (Hls.isSupported()) {
         const hls = new Hls();
         hls.loadSource(src);
         hls.attachMedia(videoElement);
         hls.on(Hls.Events.MANIFEST_PARSED, function () {
         });
+    }
+    } catch(err) {
+        throw new Error()
     }
 }
 

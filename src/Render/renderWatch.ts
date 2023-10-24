@@ -1,17 +1,23 @@
 import { getGogoStreams, getStoredEpisodeId, stream } from "../Core";
 
 let playState = false
+let videoLoaded = false
 
 document.addEventListener('DOMContentLoaded', async() => {
     const backBtn = document.getElementById('backBtn')
     const video = <HTMLVideoElement>document.getElementById('videoPlayer')
     const sourcesDiv = document.getElementById('sources')
     const playPause = document.getElementById('playPause')
-    const progressBar = <HTMLProgressElement>document.getElementById('watch_progress')
+    const progressBar = document.getElementById('watch_progress')
+    const progressed = document.getElementById('progressed')
+    const point = document.getElementById('point')
     const timeCurrent = document.getElementById('current')
     const totalTime = document.getElementById('total')
     const controls = document.getElementById('controls')
     const fullScreenBtn = document.getElementById('fullScreen')
+    const playPauseImg = <HTMLImageElement>document.getElementById('playPauseImg')
+    const fsImg = <HTMLImageElement>document.getElementById('fsImg')
+    const srcLoader = document.getElementById('srcLoader')
 
     if(!video 
         || !sourcesDiv 
@@ -22,16 +28,17 @@ document.addEventListener('DOMContentLoaded', async() => {
         || !totalTime 
         || !controls
         || !fullScreenBtn
+        || !progressed
+        || !point
+        || !playPauseImg
+        || !fsImg
+        || !srcLoader
         )   throw new Error('err');
 
     backBtn.onclick = () => window.location.href = './AnimeInfo.html'
     playPause.onclick = () => {
-        if(!playState) {
-            video.play()
-            playState = true
-        } else {
-            video.pause()
-            playState = false
+        if(videoLoaded) {
+            playState = updatePlayButton(playState, video, playPauseImg)
         }
     }
     fullScreenBtn.onclick = () => video.requestFullscreen()
@@ -46,12 +53,19 @@ document.addEventListener('DOMContentLoaded', async() => {
 
         sourcesDiv.appendChild(child)
     }
+    srcLoader.style.display = 'none'
 
     sourcesDiv.addEventListener('click', async(e) => {
         const target = e.target as HTMLElement
         if(target.id === 'source') {
             const src = target.getAttribute('data-value') ?? ''
-            await stream(video, src)
+            try {
+                await stream(video, src)
+                videoLoaded = true
+            } catch(err) {
+                console.log(err)
+                
+            }
         }
     })
 
@@ -59,7 +73,8 @@ document.addEventListener('DOMContentLoaded', async() => {
         if (!isNaN(video.duration) && isFinite(video.duration)) {
             totalTime.textContent = `${secondsToTime(Math.floor(video.duration))}`
             timeCurrent.textContent = secondsToTime(Math.floor(video.currentTime))
-            progressBar.value = (video.currentTime / video.duration) * 100;
+            progressed.style.width = `${(video.currentTime / video.duration) * 100}%`
+            point.style.marginLeft = `${((video.currentTime / video.duration) * 100) - 0.5}%`
         }
     })
 
@@ -68,7 +83,36 @@ document.addEventListener('DOMContentLoaded', async() => {
         const clickPercent = e.offsetX / currentTarget.offsetWidth
         video.currentTime = video.duration * clickPercent
     })
+
+    document.addEventListener('keydown', event => {
+        if (event.key === ' ' || event.keyCode === 32 || event.which === 32) {
+            event.preventDefault();
+            if(videoLoaded) {
+                playState = updatePlayButton(playState, video, playPauseImg)
+            }
+        }
+    });
+
+    video.addEventListener('click', () => {
+        if(videoLoaded) {
+            playState = updatePlayButton(playState, video, playPauseImg)
+        }
+    })
 })
+
+function updatePlayButton(playState: boolean, video: HTMLVideoElement, img: HTMLImageElement) {
+    if(!playState) {
+        video.play()
+        img.src = '../Assets/Icons/pause-button.png'
+        playState = true
+        return playState
+    } else {
+        video.pause()
+        img.src = '../Assets/Icons/play.png'
+        playState = false
+        return playState
+    }
+}
 
 function showControlsWithState(control: HTMLElement, state: boolean) {
     if(!state) control.style.opacity = '0'
@@ -83,4 +127,4 @@ function secondsToTime(seconds: number) {
     const secondsStr = String(remainingSeconds).padStart(2, '0');
   
     return `${minutesStr}:${secondsStr}`;
-  }
+}

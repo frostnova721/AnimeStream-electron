@@ -6,6 +6,7 @@
     <title>Anime Stream</title>
     <link rel="stylesheet" href="../css/commons.css">
     <link rel="stylesheet" href="../css/watch.css">
+    <link rel="stylesheet" href="../css/loader.css">
 </head>
 <body>
     <div class="main" id="main">
@@ -15,24 +16,35 @@
         </div>
         <div class="container" id="container">
             <div class="playerContainer">
-                <div class="player">
-                    <video class="videoPlayer" id="videoPlayer">
-                        na na
-                    </video>
-                </div>
-                <div class="controls" id="controls">
-                    <div class="timeDiv">
-                        &nbsp;&nbsp;<div class="current" id="current">00:00</div>&nbsp;/&nbsp;
-                        <div class="total" id="total">00:00</div>
+                <div class="playerContainer2">
+                    <div class="player">
+                        <video class="videoPlayer" id="videoPlayer">
+                            na na
+                        </video>
                     </div>
-                    <progress id="watch_progress" min="0" max="100" value="0"></progress>
-                    <div class="mediaButtons">
-                        <button class="play_pause" id="playPause">play</button>
-                        <button class="fullScreen" id="fullScreen">fs</button>
+                    <div class="controlContainer">
+                        <div class="controls" id="controls">
+                            <div class="timeDiv">
+                                &nbsp;&nbsp;<div class="current" id="current">00:00</div>&nbsp;/&nbsp;
+                                <div class="total" id="total">00:00</div>
+                            </div>
+                            <div id="watch_progress">
+                                <div id="progressed">
+                                </div>
+                                <div id="point"></div>
+                            </div>
+                            <div class="mediaButtons">
+                                <button class="play_pause" id="playPause"><img id="playPauseImg" src="../Assets/Icons/play.png"></button>
+                                <button class="fullScreen" id="fullScreen"><img id="fsImg" src="../Assets/Icons/full-screen.png"></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="sourcesContainer">
+                <div class="srcLoader" id="srcLoader">
+                    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                </div>
                 <div class="sources" id="sources">
                 </div>
             </div>
