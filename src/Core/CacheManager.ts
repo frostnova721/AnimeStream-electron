@@ -1,15 +1,19 @@
 import * as fs from 'fs'
+import path from 'path'
 import { Coder } from '../Coder/codeIt'
-const cachePath = '../../Cache'
+const cachePath = path.join(__dirname, '../../Cache')
 const code = new Coder()
 
-export async function storeAnimeWatchedCache (animeName: string, imageLink: string):Promise<Boolean> {
+export async function storeAnimeWatchedCache (animeName: string, imageLink: string, infoLink: string):Promise<Boolean> {
     try {
         const recPath = `${cachePath}/recents.mewmew`
-        if(!fs.existsSync(recPath)) fs.writeFileSync(recPath, await code.encode('{ recents: [] }'))
+        if(!fs.existsSync(recPath)) fs.writeFileSync(recPath, await code.encode('{ "recents": [] }'))
+        const data = fs.readFileSync(recPath, 'utf8')
+        if(data.length === 0) fs.writeFileSync(recPath, await code.encode('{ "recents": [] }'))
         const currentData = JSON.parse(await code.decode(fs.readFileSync(recPath, 'utf8')))
-        currentData.recents.push({name: animeName, img: imageLink})
-        fs.writeFileSync(recPath, await code.encode(currentData))
+        console.log(currentData)
+        currentData.recents.push({name: animeName, img: imageLink, infoLink: infoLink})
+        fs.writeFileSync(recPath, await code.encode(JSON.stringify(currentData, null, 2)))
         return true
     } catch(err) {
         console.log(err)
@@ -17,7 +21,7 @@ export async function storeAnimeWatchedCache (animeName: string, imageLink: stri
     }
 }
 
-export async function fetchRecentsFromCache(): Promise<{name: string, img: string}[] | undefined> {
+export async function fetchRecentsFromCache(): Promise<{name: string, img: string, infoLink: string}[] | undefined> {
     try {
         const recPath = `${cachePath}/recents.mewmew`
         if(!fs.existsSync(recPath)) return undefined;
@@ -25,7 +29,6 @@ export async function fetchRecentsFromCache(): Promise<{name: string, img: strin
         const decoded = JSON.parse(await code.decode(data))
         return decoded.recents;
     } catch(err) {
-        console.log(err)
-        throw new Error('Error while fetching recents')
+        return undefined;
     }
 }

@@ -1,0 +1,38 @@
+@font-face {
+    font-family: NotoSans-Bold;
+    src: url('../Assets/Fonts/NotoSans-Bold.ttf')
+}
+
+@font-face {
+    font-family: Poppins-Bold;
+    src: url('../Assets/Fonts/Poppins-Bold.ttf')
+}
+
+
+body {
+    background-color: black;
+    padding: 0;
+    margin: 0;
+    color: white;
+    font-family: NotoSans-Bold;
+    overflow-x: hidden;
+    padding-bottom: 50px;
+}
+
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.left{
+    border: 1px solid white;
+    height: 400px;
+    width: 30%;
+}
+
+.right {
+    border: 1px solid white;
+    height: 400px;
+    width: 70%;
+}

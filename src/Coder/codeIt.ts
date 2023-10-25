@@ -1,10 +1,11 @@
 import * as fs from 'fs'
+import path from 'path'
 
 export class Coder {
     constructor() {}
 
     private loadKeys = async() => {
-        const keys = JSON.parse(fs.readFileSync('keymap.json', 'utf8'))
+        const keys = JSON.parse(fs.readFileSync(path.join(__dirname, '../../keys/keymap.json'), 'utf8'))
         return keys;
     }
 

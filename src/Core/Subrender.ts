@@ -66,3 +66,7 @@ export async function getStoredEpisodeId(): Promise<string> {
     const id = ipcRenderer.invoke('getEpisodeId')
     return id;
 }
+
+export async function createNewWindow() {
+  await ipcRenderer.invoke("createNewWindow")
+}

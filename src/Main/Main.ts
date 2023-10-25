@@ -1,4 +1,4 @@
-import { app, BrowserWindow, nativeImage, Menu, MenuItem, dialog, ipcMain } from 'electron'
+import { app, BrowserWindow, Menu, ipcMain } from 'electron'
 import path from 'path'
 import { TGlobalVar } from '../Types'
 
@@ -8,10 +8,15 @@ if(require('electron-squirrel-startup')) {
 
 const globalVars: TGlobalVar = { 
     clickedResult: '',
-    episodeId: ''
+    episodeId: '',
+    subWindows: 0
 }
 
 const createWindow = () => {
+
+    // const iconPath = path.join(__dirname, '../../Icons/animestream.ico')
+    // const appIcon = nativeImage.createFromPath(iconPath)
+
     const mainWindow = new BrowserWindow({
         width: 1200,
         height: 850,
@@ -47,7 +52,26 @@ const createWindow = () => {
         return globalVars.episodeId
     })
 
-    // ipcMain.handle('showDialog', (e, message, title, type))
+    ipcMain.handle("createNewWindow", (e) => {
+        if(globalVars.subWindows === 0) {
+            globalVars.subWindows++
+
+            const newWindow = new BrowserWindow({
+                width: 800,
+                height: 600,
+                webPreferences: {
+                    nodeIntegration: true,
+                },
+            })
+
+            newWindow.loadFile(path.join(__dirname, '../../Public/html/Settings.html'))
+
+            newWindow.on('close', () => {
+                globalVars.subWindows--
+            })
+        }
+    })
+
 }
 
 app.on('ready', createWindow)

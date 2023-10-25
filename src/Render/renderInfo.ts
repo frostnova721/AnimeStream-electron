@@ -1,6 +1,5 @@
-import { readClickedResult, getAnimeInfo, gogoSearch, storeEpisodeId } from "../Core";
-
-const pages: any = {}
+import { readClickedResult, getAnimeInfo, gogoSearch, storeEpisodeId, storeAnimeWatchedCache } from "../Core";
+import { IAnimeDetails } from "../Types";
 
 document.addEventListener("DOMContentLoaded", async () => {
   let toggled = false
@@ -28,7 +27,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     epCounter.style.display = 'none'
     toggled = false
   }
-  await renderResult()
+  const link = await readClickedResult();
+  const res = await getAnimeInfo(link);
+  await renderResult(res)
 
   
   const epContent = document.getElementById('episodeContent')
@@ -37,6 +38,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const target = e.target as HTMLElement
     if(target.id === 'epBtn') {
       await storeEpisodeId(target.getAttribute('data-value') ?? '')
+      const img = res.cover
+      const title = res.names.english
+      await storeAnimeWatchedCache(title, img, link)
       window.location.href = './Watch.html'
     }
   })
@@ -45,17 +49,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 //functions
 
-async function renderResult() {
+async function renderResult(res: IAnimeDetails) {
   const loader = document.getElementById('loader')
   const main = document.getElementById('main')
   if(!loader || !main) return;
-  const link = await readClickedResult();
-  const res = await getAnimeInfo(link);
   const imgDiv = document.getElementById("coverImage");
   if (!imgDiv) return;
   const img = document.createElement("img");
   img.src = res.cover;
   img.className = "coverPic";
+  img.id = "coverPic";
   img.draggable = false;
   imgDiv.appendChild(img);
 
@@ -173,12 +176,12 @@ function createEpisode(number: number, div: HTMLElement, episodeId: string) {
     div.appendChild(divElement)
 }
 
-function createPage(number: number) {
-  const pagesContainer = document.getElementById('pages')
-  const newPage = document.createElement('div')
-  newPage.className = 'page'
-  const p = document.createElement('p')
-  p.textContent = `${number}`
-  newPage.appendChild(p)
-  pagesContainer?.appendChild(newPage)
-}
+// function createPage(number: number) {
+//   const pagesContainer = document.getElementById('pages')
+//   const newPage = document.createElement('div')
+//   newPage.className = 'page'
+//   const p = document.createElement('p')
+//   p.textContent = `${number}`
+//   newPage.appendChild(p)
+//   pagesContainer?.appendChild(newPage)
+// }
