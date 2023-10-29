@@ -87,3 +87,8 @@ export async function getBackTo(): Promise<string> {
 }
 
 export const Path = path
+
+export async function getLatestAnime() {
+    const res = await mal.fetchLatestAnime()
+    return res
+}

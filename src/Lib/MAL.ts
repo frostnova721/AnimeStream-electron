@@ -1,6 +1,6 @@
 import axios from 'axios'
 import cheerio from 'cheerio'
-import { IAnimeDetails, IMALSearch, TChara } from '../Types'
+import { IAnimeDetails, ILatestAnimes, IMALSearch, TChara } from '../Types'
 
 export class MAL {
     constructor() {}
@@ -119,6 +119,12 @@ export class MAL {
         return finalInfo
     }
 
+    /**
+     * 
+     * Get the search results from MAL
+     * @param searchTerm text to search for in MAL
+     * @returns search results
+     */
     public searchForAnime = async(searchTerm: string): Promise<IMALSearch[]> => {
         const url = `${this.baseUrl}anime.php?q=${searchTerm}&cat=anime`
         const res = await this.fetch(url)
@@ -145,6 +151,43 @@ export class MAL {
         })
 
         return results;
+    }
+
+    /**
+     * Get the latest/currenly airing animes
+     */
+    public fetchLatestAnime = async(): Promise<ILatestAnimes[]> => {
+        const url = `https://myanimelist.net/anime/season`
+        const res = await this.fetch(url)
+        const $ = cheerio.load(res)
+
+        const array:ILatestAnimes[] = []
+    
+        const NewAnimes = $('.seasonal-anime-list.js-seasonal-anime-list.js-seasonal-anime-list-key-1 > .js-anime-category-producer.seasonal-anime.js-seasonal-anime.js-anime-type-all.js-anime-type-1')
+    
+        NewAnimes.each((i, e) => {
+            const element = $(e)
+            const html = element.children('.image').children('a').find('img')
+            const img = html.attr('src') || html.attr('data-src')
+            const title = element.find('.h2_anime_title').text()
+            const score = parseFloat(element.find('.scormem-item').text()
+                                                        .replace(/\n/g, '')
+                                                        .trim()
+                                                        .replace(/\s+/g, ' ')
+                                                        .replace('N/A', '0')
+                                                        .split(' ')[0])
+            const link = element.children('.image').children('a').attr('href')
+    
+            if(img) 
+            array.push({
+                image: img ?? '',
+                title: title ?? '',
+                score: score ?? 0,
+                infoLink: link ?? ''
+            })
+        })
+
+        return array
     }
 
     private fetch = async(url: string, options?: any): Promise<any> => {

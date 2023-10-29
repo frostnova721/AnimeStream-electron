@@ -1,3 +1,7 @@
+body {
+    user-select: none;
+}
+
 ::-webkit-scrollbar {
     background-color: black;
     height: 10px;

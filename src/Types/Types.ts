@@ -71,3 +71,10 @@ export type TGlobalVar = {
     subWindows: number;
     backTo: string;
 }
+
+export interface ILatestAnimes {
+    image: string;
+    title: string;
+    score: number;
+    infoLink: string;
+}
