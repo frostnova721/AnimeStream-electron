@@ -9,7 +9,8 @@ if(require('electron-squirrel-startup')) {
 const globalVars: TGlobalVar = { 
     clickedResult: '',
     episodeId: '',
-    subWindows: 0
+    subWindows: 0,
+    backTo: ''
 }
 
 const createWindow = () => {
@@ -59,8 +60,11 @@ const createWindow = () => {
             const newWindow = new BrowserWindow({
                 width: 800,
                 height: 600,
+                maxHeight: 600,
+                maxWidth: 800,
                 webPreferences: {
                     nodeIntegration: true,
+                    contextIsolation: false
                 },
             })
 
@@ -69,7 +73,18 @@ const createWindow = () => {
             newWindow.on('close', () => {
                 globalVars.subWindows--
             })
+
+            newWindow.webContents.openDevTools()
         }
+    })
+
+    ipcMain.handle("setBackTo", (e, to: string) => {
+        globalVars.backTo = to
+        return;
+    })
+
+    ipcMain.handle("getBackTo", (e) => {
+        return globalVars.backTo
     })
 
 }

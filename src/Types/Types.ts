@@ -69,4 +69,5 @@ export type TGlobalVar = {
     clickedResult: string ;
     episodeId: string;
     subWindows: number;
+    backTo: string;
 }

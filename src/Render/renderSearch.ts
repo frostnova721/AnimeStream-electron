@@ -1,9 +1,11 @@
-import { displayResults, setClickableResult } from '../Core'
+import { Path, displayResults, setBackTo, setClickableResult } from '../Core'
 
 
 document.addEventListener('DOMContentLoaded', async() => {
     const btn = document.getElementById('searchBtn')
     if(!btn) throw new Error('No btn');
+
+    await setBackTo(Path.join(__dirname, '../../Public/html/search.html'))
 
     btn.onclick = async() => {
         const searchbar = (<HTMLInputElement>document.getElementById('searchBar'))

@@ -15,7 +15,7 @@ body {
     margin: 0;
     color: white;
     font-family: NotoSans-Bold;
-    overflow-x: hidden;
+    overflow: hidden;
     padding-bottom: 50px;
 }
 
@@ -26,6 +26,8 @@ body {
 }
 
 .left{
+    display: flex;
+    flex-direction: column;
     border: 1px solid white;
     height: 400px;
     width: 30%;
@@ -35,4 +37,31 @@ body {
     border: 1px solid white;
     height: 400px;
     width: 70%;
+}
+
+.right p {
+    color:rgb(48, 48, 48);
+    margin: 40px
+}
+
+.options {
+    border: 1px solid white;
+    display: flex;
+    padding-left: 20px;
+}
+
+.options.selected {
+    background-color: #caf979;
+    color: black;
+    transition: background-color 0.1s ease-in-out;
+}
+
+.options:hover {
+    background-color: #caf97971;
+    color: rgb(255, 255, 255);
+}
+
+.options.selected:hover {
+    background-color: #caf979c4;
+    color: black
 }

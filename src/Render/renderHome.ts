@@ -1,7 +1,9 @@
-import { createNewWindow, fetchRecentsFromCache } from "../Core";
+import { Path, createNewWindow, fetchRecentsFromCache, setBackTo, setClickableResult } from "../Core";
 
 document.addEventListener('DOMContentLoaded', async() => {
     const connectedToAccount = false
+
+    await setBackTo(Path.join(__dirname, '../../Public/html/home.html'))
 
     const recentContainer = document.getElementById('recents')
 
@@ -20,9 +22,11 @@ document.addEventListener('DOMContentLoaded', async() => {
 
 const searchBtn = document.getElementById('navigate_search')
 const settingsBtn = document.getElementById('settingsBtn')
+const recentDiv = document.getElementById('recents')
 
 if( !searchBtn
     || !settingsBtn
+    || !recentDiv
     )   throw new Error('No btn') 
 
 searchBtn.onclick = () => {
@@ -32,6 +36,17 @@ searchBtn.onclick = () => {
 settingsBtn.onclick = async() => {
     await createNewWindow()
 }
+
+recentDiv.addEventListener('click', async(e) => {
+    const target = e.target as HTMLElement
+    if(!target) return
+    const div = target.closest('div')
+    const link = div?.getAttribute('data-value')
+    if(link) {
+        await setClickableResult(link)
+        window.location.href = './AnimeInfo.html'
+    }
+})
 
 async function loadRecentsFromAccount() {
     //to be programmed!

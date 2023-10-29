@@ -1,4 +1,10 @@
-import { readClickedResult, getAnimeInfo, gogoSearch, storeEpisodeId, storeAnimeWatchedCache } from "../Core";
+import { readClickedResult, 
+  getAnimeInfo, 
+  gogoSearch, 
+  storeEpisodeId, 
+  storeAnimeWatchedCache, 
+  getBackTo,
+ } from "../Core";
 import { IAnimeDetails } from "../Types";
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -8,9 +14,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const epCounter = document.getElementById('episodeCounter')
   const main = document.getElementById('container')
   const closeBtn = document.getElementById('close')
+  const characterContainer = document.getElementById('characters')
 
-  if(!backBtn || !watchBtn || !epCounter || !main || !closeBtn) return;
-  backBtn.onclick = () => window.location.href = './search.html'
+  if(!backBtn || !watchBtn || !epCounter || !main || !closeBtn || !characterContainer) return;
+
+  backBtn.onclick = async() => window.location.href = await getBackTo()
   watchBtn.onclick = () => {
     if(!toggled) {
       main.style.display = 'none'
@@ -31,6 +39,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const res = await getAnimeInfo(link);
   await renderResult(res)
 
+  characterContainer.addEventListener('wheel', (event) => {
+    if (event.deltaY !== 0) {
+    characterContainer.scrollLeft += event.deltaY/1.6
+    event.preventDefault()
+    }
+})
   
   const epContent = document.getElementById('episodeContent')
   if(!epContent) throw new Error('No buttons');
@@ -139,11 +153,11 @@ async function renderResult(res: IAnimeDetails) {
 async function appendEpisodes(term: string, term2?: string) {
   let res;
   try {
-    console.log(`searching ${term}`)
+    // console.log(`searching ${term}`)
     res = (await gogoSearch(term))[0]
   } catch(err) {
     if(term2){
-      console.log(`searching ${term2}`)
+      // console.log(`searching ${term2}`)
       res = (await gogoSearch(term2))[0]
     }
     else
@@ -154,7 +168,7 @@ async function appendEpisodes(term: string, term2?: string) {
   if(!epContent || !loaderContainer) return;
   loaderContainer.style.display = 'none'
   epContent.style.display = 'flex'
-  console.log(res)
+  // console.log(res)
   for(let i=1; i <= res.episodes; i++) {
     // if(i%20 === 0) createPage(i)
     createEpisode(i, epContent, res.episodeLink)

@@ -2,6 +2,8 @@ import { ipcRenderer } from 'electron'
 import { MAL, GogoStreams } from '../Lib'
 import { IMALSearch, ISearchOutput, IStreamOutput } from '../Types'
 import Hls from 'hls.js'
+import * as fs from 'fs'
+import path from 'path'
 
 const mal = new MAL()
 
@@ -70,3 +72,18 @@ export async function getStoredEpisodeId(): Promise<string> {
 export async function createNewWindow() {
   await ipcRenderer.invoke("createNewWindow")
 }
+
+export async function readSettings() {
+    const settings = JSON.parse(fs.readFileSync('../../settings/settings.json', 'utf8'))
+
+}
+
+export async function setBackTo(to: string) {
+    await ipcRenderer.invoke("setBackTo", to)
+}
+
+export async function getBackTo(): Promise<string> {
+    return await ipcRenderer.invoke("getBackTo")
+}
+
+export const Path = path
