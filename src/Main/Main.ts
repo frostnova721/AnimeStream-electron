@@ -1,6 +1,7 @@
-import { app, BrowserWindow, Menu, ipcMain } from 'electron'
+import { app, BrowserWindow, Menu, ipcMain, dialog } from 'electron'
 import path from 'path'
 import { TGlobalVar } from '../Types'
+import { clearRuntimeCache } from '../Core'
 
 if(require('electron-squirrel-startup')) {
     app.quit()
@@ -11,6 +12,10 @@ const globalVars: TGlobalVar = {
     episodeId: '',
     subWindows: 0,
     backTo: ''
+}
+
+const anilistData = {
+    data: '' as any
 }
 
 const createWindow = () => {
@@ -29,11 +34,15 @@ const createWindow = () => {
 
     mainWindow.loadFile(path.join(__dirname, '../../Public/html/Home.html'))
 
-    if(!app.isPackaged) {
+    // if(!app.isPackaged) {
         mainWindow.webContents.openDevTools()
-    }
+    // }
 
     Menu.setApplicationMenu(null)
+
+    ipcMain.handle('dialog', (e, msg: string) => {
+        dialog.showMessageBox({ message: msg, title: 'done!', type: 'none' })
+    })
 
     ipcMain.handle("setCR", (e, link: string) => {
         globalVars.clickedResult = link
@@ -87,11 +96,21 @@ const createWindow = () => {
         return globalVars.backTo
     })
 
+    ipcMain.handle("storeAnimeData", (e, data: any) => {
+        anilistData.data = JSON.parse(data)
+        return;
+    })
+
+    ipcMain.handle("getStoredAnimeData", (e) => {
+        return anilistData.data
+    })
+
 }
 
 app.on('ready', createWindow)
 
 app.on('window-all-closed', () => {
+    clearRuntimeCache()
     if(process.platform !== 'darwin') {
         app.quit()
     }

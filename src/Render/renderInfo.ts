@@ -4,10 +4,17 @@ import { readClickedResult,
   storeEpisodeId, 
   storeAnimeWatchedCache, 
   getBackTo,
+  getStoredAnimeData,
+  getDataBase,
+  displayResults,
  } from "../Core";
 import { IAnimeDetails } from "../Types";
 
 document.addEventListener("DOMContentLoaded", async () => {
+
+  // const settings = await readSettings()
+  const db = await getDataBase()
+
   let toggled = false
   const backBtn = document.getElementById('backBtn')
   const watchBtn = document.getElementById('watchBtn')
@@ -35,9 +42,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     epCounter.style.display = 'none'
     toggled = false
   }
-  const link = await readClickedResult();
-  const res = await getAnimeInfo(link);
+
+  let res: any = ''
+  let link: string = ''
+  let q: any = {}
+  const queries = window.location.href.split('?')[1]?.split('=')
+  if(queries) {
+      q = {
+        [queries[0]]: queries[1]
+      } 
+  }
+  if(db === 'mal' || (q.rel && q.rel === 'latest' || q.rel === 'recents')) {
+  link = await readClickedResult();
+  res = await getAnimeInfo(link);
   await renderResult(res)
+  } else if(db === 'anilist') {
+    res = await getStoredAnimeData()
+    link = (await displayResults(res.title.english))[0].infoLink
+    const searchOnMal = await getAnimeInfo(link)
+    await renderResult(searchOnMal)
+  }
 
   characterContainer.addEventListener('wheel', (event) => {
     if (event.deltaY !== 0) {
@@ -53,7 +77,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if(target.id === 'epBtn') {
       await storeEpisodeId(target.getAttribute('data-value') ?? '')
       const img = res.cover
-      const title = res.names.english
+      const title = res.names?.english || res.title?.english
       await storeAnimeWatchedCache(title, img, link)
       window.location.href = './Watch.html'
     }
@@ -79,7 +103,7 @@ async function renderResult(res: IAnimeDetails) {
   const titleDiv = document.getElementById("animeName");
   if (!titleDiv) return;
   const title = document.createElement("p");
-  title.innerText = res.names.english;
+  title.innerText = res.names.english.length > 45 ? res.names.english.slice(0, 45) + '...' : res.names.english;
   titleDiv.appendChild(title);
 
   const basicInfo = document.getElementById("basicInfo");
@@ -189,13 +213,3 @@ function createEpisode(number: number, div: HTMLElement, episodeId: string) {
     divElement.appendChild(button)
     div.appendChild(divElement)
 }
-
-// function createPage(number: number) {
-//   const pagesContainer = document.getElementById('pages')
-//   const newPage = document.createElement('div')
-//   newPage.className = 'page'
-//   const p = document.createElement('p')
-//   p.textContent = `${number}`
-//   newPage.appendChild(p)
-//   pagesContainer?.appendChild(newPage)
-// }

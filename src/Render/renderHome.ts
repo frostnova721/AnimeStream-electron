@@ -1,4 +1,5 @@
-import { Path, createNewWindow, fetchRecentsFromCache, setBackTo, setClickableResult, getLatestAnime } from "../Core";
+import { Path, createNewWindow, fetchRecentsFromCache, setBackTo, setClickableResult, getLatestAnime, aniListSearch, fetchLatestFromCache, storeLatestAnimeCache } from "../Core";
+import { ILatestAnimes } from "../Types";
 
 document.addEventListener('DOMContentLoaded', async() => {
     const connectedToAccount = false
@@ -41,7 +42,7 @@ if( !searchBtn
     || !latestDiv
     )   throw new Error('No btn') 
 
-searchBtn.onclick = () => {
+searchBtn.onclick = async() => {
     window.location.href = "./search.html"
 };
 
@@ -56,7 +57,7 @@ recentDiv.addEventListener('click', async(e) => {
     const link = div?.getAttribute('data-value')
     if(link) {
         await setClickableResult(link)
-        window.location.href = './AnimeInfo.html'
+        window.location.href = './AnimeInfo.html?rel=recents'
     }
 })
 
@@ -67,7 +68,7 @@ latestDiv.addEventListener('click', async(e) => {
     const link = div?.getAttribute('data-value')
     if(link) {
         await setClickableResult(link)
-        window.location.href = './AnimeInfo.html'
+        window.location.href = './AnimeInfo.html?rel=latest'
     }
 })
 
@@ -86,10 +87,13 @@ async function loadRecentsFromCache() {
         parent.appendChild(element)
         return;
     }
+    const loaded: string[] = []
     for(const data of datas.reverse()) {
+        if(loaded.includes(data.name)) continue;  //prevent multiple entries!
+        loaded.push(data.name)
         let name = ''
-        if(data.name.length >= 35) {
-            name = data.name.slice(0,35) + '...'
+        if(data.name.length >= 30) {
+            name = data.name.slice(0,30) + '...'
         } else {
             name = data.name
         }
@@ -112,11 +116,19 @@ async function loadRecentsFromCache() {
 }
 
 async function loadLatestAnimes() {
-    const latestAnimes = await (await getLatestAnime()).slice(0, 50)
+    let latestAnimes: ILatestAnimes[] | undefined = undefined
+    const cache = await fetchLatestFromCache()
+    if(cache) latestAnimes = cache
+    else {
+        latestAnimes = await (await getLatestAnime()).slice(0, 50)
+        await storeLatestAnimeCache(latestAnimes)
+    }
+
+    if(!latestAnimes) return;
     for(const latestAnime of latestAnimes) {
         let name = ''
-        if(latestAnime.title.length >= 35) {
-            name = latestAnime.title.slice(0,35) + '...'
+        if(latestAnime.title.length >= 30) {
+            name = latestAnime.title.slice(0,30) + '...'
         } else {
             name = latestAnime.title
         }

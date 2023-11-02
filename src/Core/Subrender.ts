@@ -1,11 +1,12 @@
 import { ipcRenderer } from 'electron'
-import { MAL, GogoStreams } from '../Lib'
-import { IMALSearch, ISearchOutput, IStreamOutput } from '../Types'
+import { MAL, GogoStreams, AniList, AnilistResult } from '../Lib'
+import { IMALSearch, ISearchOutput, IStreamOutput, Settings } from '../Types'
 import Hls from 'hls.js'
 import * as fs from 'fs'
 import path from 'path'
 
 const mal = new MAL()
+const anilist = new AniList()
 
 export async function displayResults(searchTerm: string): Promise<IMALSearch[]> {
     const results = await mal.searchForAnime(searchTerm)
@@ -15,6 +16,11 @@ export async function displayResults(searchTerm: string): Promise<IMALSearch[]> 
 export async function getAnimeInfo(link: string) {
     const results = mal.getAnimeDetails(link)
     return results
+}
+
+export async function aniListSearch(searchTerm: string) {
+    const res = await anilist.searchAnime(searchTerm)
+    return res
 }
 
 export async function setClickableResult(link: string):Promise<void> {
@@ -74,8 +80,15 @@ export async function createNewWindow() {
 }
 
 export async function readSettings() {
-    const settings = JSON.parse(fs.readFileSync('../../settings/settings.json', 'utf8'))
+    const settings: Settings = JSON.parse(fs.readFileSync(path.join(__dirname, '../../settings/settings.json'), 'utf8'))
+    return settings
 
+}
+
+export async function writeSettings(setting: Settings) {
+    const stringy = JSON.stringify(setting, null, 2)
+    fs.writeFileSync(path.join(__dirname, '../../settings/settings.json'), stringy)
+    console.log("applied setting to"+ path.join(__dirname, '../../settings/settings.json'), JSON.parse(stringy))
 }
 
 export async function setBackTo(to: string) {
@@ -91,4 +104,24 @@ export const Path = path
 export async function getLatestAnime() {
     const res = await mal.fetchLatestAnime()
     return res
+}
+
+export async function storeAnimeData(data: string) {
+    await ipcRenderer.invoke("storeAnimeData", data)
+}
+
+export async function getStoredAnimeData() {
+    const res: AnilistResult = await ipcRenderer.invoke("getStoredAnimeData")
+    return res
+}
+
+export async function getDataBase() {
+    const settings = await readSettings()
+    return settings.database
+}
+
+export async function changeDataBase(db: "mal" | "anilist") {
+    const settings = await readSettings()
+    settings.database = db
+    await writeSettings(settings)
 }

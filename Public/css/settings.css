@@ -17,6 +17,7 @@ body {
     font-family: NotoSans-Bold;
     overflow: hidden;
     padding-bottom: 50px;
+    user-select: none;
 }
 
 .main {
@@ -28,24 +29,39 @@ body {
 .left{
     display: flex;
     flex-direction: column;
-    border: 1px solid white;
+    /* border: 1px solid white; */
     height: 400px;
     width: 30%;
 }
 
 .right {
-    border: 1px solid white;
+    /* border: 1px solid white; */
     height: 400px;
     width: 70%;
+    display: flex;
+    flex-direction: column;
 }
 
-.right p {
+.right p.noItems {
     color:rgb(48, 48, 48);
     margin: 40px
 }
 
+#insidediv {
+    margin: 40px
+}
+
+.item {
+    margin-left: 40px;
+}
+
+button.item {
+    width: 5.5rem;
+    height: 2.2rem;
+}
+
 .options {
-    border: 1px solid white;
+    /* border: 1px solid white; */
     display: flex;
     padding-left: 20px;
 }
@@ -65,3 +81,62 @@ body {
     background-color: #caf979c4;
     color: black
 }
+
+.desc {
+    margin-bottom: 20px;
+}
+
+.dboptions {
+    display: flex;
+    border: 1px solid white;
+    border-radius: 12px;
+    width: 200px;
+    height: 50px;
+    justify-content: center;
+    margin-left: 20px
+}
+
+.separation {
+    border: 1px solid rgb(124, 124, 124);
+    height: 50%;
+    margin-top: 11px;
+    margin-left: -1px;
+    margin-right: -1px;
+    z-index: 2;
+}
+
+.al, .mal {
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.al {
+    border-radius: 10px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    width: 100%;
+    height: auto;
+    text-align: center;
+    padding-top: 13px;
+}
+
+.mal {
+    border-radius: 10px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    width: 100%;
+    height: auto;
+    text-align: center;
+    padding-top: 13px;
+}
+
+.mal:hover, .al:hover {
+    background-color: #caf979ab;
+    color: black;
+}
+
+.mal.dbselected, .al.dbselected {
+    background-color: #caf979;
+    color: black;
+}
+
+
