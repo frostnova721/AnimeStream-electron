@@ -2,6 +2,16 @@ import { app, BrowserWindow, Menu, ipcMain, dialog } from 'electron'
 import path from 'path'
 import { TGlobalVar } from '../Types'
 import { clearRuntimeCache } from '../Core'
+import * as fs from 'fs'
+
+if(!fs.existsSync('../../Cache')) {
+    fs.mkdirSync('../../Cache')
+}
+
+if(!fs.existsSync('../../settings')) {
+    fs.mkdirSync('../../settings')
+}
+
 
 if(require('electron-squirrel-startup')) {
     app.quit()
@@ -35,7 +45,7 @@ const createWindow = () => {
     mainWindow.loadFile(path.join(__dirname, '../../Public/html/Home.html'))
 
     // if(!app.isPackaged) {
-        mainWindow.webContents.openDevTools()
+        // mainWindow.webContents.openDevTools()
     // }
 
     Menu.setApplicationMenu(null)

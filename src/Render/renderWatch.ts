@@ -62,6 +62,9 @@ document.addEventListener('DOMContentLoaded', async() => {
             try {
                 await stream(video, src)
                 videoLoaded = true
+                video.addEventListener('loadedmetadata', () => {
+                    updateDuration(video, totalTime)
+                })
             } catch(err) {
                 console.log(err)
                 
@@ -100,6 +103,12 @@ document.addEventListener('DOMContentLoaded', async() => {
     })
 })
 
+//functions
+
+function updateDuration(videoElement: HTMLVideoElement, totalTime: HTMLElement) {
+    totalTime.textContent = `${secondsToTime(Math.floor(videoElement.duration))}`
+}
+
 function updatePlayButton(playState: boolean, video: HTMLVideoElement, img: HTMLImageElement) {
     if(!playState) {
         video.play()
@@ -120,11 +129,13 @@ function showControlsWithState(control: HTMLElement, state: boolean) {
 }
 
 function secondsToTime(seconds: number) {
-    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(seconds / 3600)
+    const minutes = Math.floor((seconds % 3600) / 60);
     const remainingSeconds = seconds % 60;
   
+    const hoursStr = String(hours).padStart(2, '0')
     const minutesStr = String(minutes).padStart(2, '0');
     const secondsStr = String(remainingSeconds).padStart(2, '0');
   
-    return `${minutesStr}:${secondsStr}`;
+    return `${hours>0 ? `${hoursStr}:` : ''}${minutesStr}:${secondsStr}`;
 }

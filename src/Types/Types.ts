@@ -78,3 +78,17 @@ export interface ILatestAnimes {
     score: number;
     infoLink: string;
 }
+
+export interface IAnilistResult {
+    id: number;
+    idMal: number;
+    title: {
+        english: string;
+        romaji: string;
+    }
+    coverImage: {
+        extraLarge: string;
+        large: string;
+    }
+
+}

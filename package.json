@@ -1,18 +1,20 @@
 {
   "name": "animestream",
   "version": "1.0.0",
-  "description": "",
+  "description": "just another platfrom to stream and download anime",
   "type": "commonjs",
   "main": "dist/Main/Main.js",
   "scripts": {
     "test": "npm run build && npm start",
     "build": "rimraf dist/ && tsc",
-    "start": "electron dist/Main/Main.js",
+    "start": "electron .",
     "dev": "nodemon",
-    "package": "npm run build && electron-forge package"
+    "prepack": "npm run build && node prepare.js",
+    "package": "npm run prepack && electron-forge package",
+    "make": "npm run prepack electron-forge make"
   },
   "keywords": [],
-  "author": "",
+  "author": "FrostNova",
   "license": "ISC",
   "dependencies": {
     "anilist-node": "^1.14.0",
@@ -20,15 +22,18 @@
     "cheerio": "^1.0.0-rc.12",
     "crypto-js": "^4.2.0",
     "electron-squirrel-startup": "^1.0.0",
+    "graphql": "^16.8.1",
+    "graphql-request": "^6.1.0",
     "hls.js": "^1.4.12"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.2.1",
-    "@electron-forge/maker-deb": "^6.2.1",
-    "@electron-forge/maker-rpm": "^6.2.1",
-    "@electron-forge/maker-squirrel": "^6.2.1",
-    "@electron-forge/maker-zip": "^6.2.1",
-    "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
+    "@electron-forge/cli": "^6.4.2",
+    "@electron-forge/maker-deb": "^6.4.2",
+    "@electron-forge/maker-rpm": "^6.4.2",
+    "@electron-forge/maker-squirrel": "^6.4.2",
+    "@electron-forge/maker-wix": "^6.4.2",
+    "@electron-forge/maker-zip": "^6.4.2",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.4.2",
     "electron": "^27.0.2"
   }
 }

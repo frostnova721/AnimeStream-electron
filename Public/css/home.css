@@ -49,7 +49,7 @@ button:focus {
     position: absolute;
     right: 0;
     margin-right: 15px;
-    margin-top: 15px;
+    margin-top: 20px;
     height: 50px;
     width: 60px;
 }
@@ -106,6 +106,8 @@ button:focus {
     overflow-y: hidden;
     height: 300px;
     padding-bottom: 25px;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
 }
 
 .recents div {
@@ -147,6 +149,8 @@ button:focus {
     height: 300px;
     padding-bottom: 25px;
     margin-bottom: 50px;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
 }
 
 .latest div {
@@ -205,25 +209,41 @@ button:focus {
 }
 
 .buttons {
-    margin-left: 3rem;
-    margin-bottom: 2rem
+    /* margin-left: 3rem;
+    margin-bottom: 2rem */
+    position: absolute;
+    margin-top: 20px;
+    margin-left: 15px
 }
 
 .searchButton {
     background-color: black;
     color: white;
-    border: 1px solid white;
-    border-radius: 35px;
-    height: 4rem;
-    width: 17rem;
+    /* border: 1px solid white; */
+    border: none;
+    border-radius: 15px;
+    height: 50px;
+    width: 60px;
     font-size: 1.6rem;
     font-family: Poppins-Bold;
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
+.searchButton img {
+    margin-top: 7px;
+    height: 2rem;
+    width: 2rem;
+    filter: invert();
+    transition: filter 0.3s ease-in-out;
+}
+
 .searchButton:hover {
     background-color: #caf979;
     color: black;
+}
+
+.searchButton:hover img {
+    filter: none;
 }
 
 .searchButton:focus {
@@ -235,4 +255,8 @@ button:focus {
     color: #caf979;
     border: 1px solid #caf979;
     transition: none;
+}
+
+.searchButton:active img {
+    filter: invert()
 }

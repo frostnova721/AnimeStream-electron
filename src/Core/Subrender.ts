@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron'
-import { MAL, GogoStreams, AniList, AnilistResult } from '../Lib'
-import { IMALSearch, ISearchOutput, IStreamOutput, Settings } from '../Types'
+import { MAL, GogoStreams, AniList } from '../Lib'
+import { IAnilistResult, IMALSearch, ISearchOutput, IStreamOutput, Settings } from '../Types'
 import Hls from 'hls.js'
 import * as fs from 'fs'
 import path from 'path'
@@ -80,7 +80,7 @@ export async function createNewWindow() {
 }
 
 export async function readSettings() {
-    const settings: Settings = JSON.parse(fs.readFileSync(path.join(__dirname, '../../settings/settings.json'), 'utf8'))
+    const settings = JSON.parse(fs.readFileSync(path.join(__dirname, '../../settings/settings.json'), 'utf8')) as Settings
     return settings
 
 }
@@ -88,7 +88,6 @@ export async function readSettings() {
 export async function writeSettings(setting: Settings) {
     const stringy = JSON.stringify(setting, null, 2)
     fs.writeFileSync(path.join(__dirname, '../../settings/settings.json'), stringy)
-    console.log("applied setting to"+ path.join(__dirname, '../../settings/settings.json'), JSON.parse(stringy))
 }
 
 export async function setBackTo(to: string) {
@@ -111,7 +110,7 @@ export async function storeAnimeData(data: string) {
 }
 
 export async function getStoredAnimeData() {
-    const res: AnilistResult = await ipcRenderer.invoke("getStoredAnimeData")
+    const res: IAnilistResult = await ipcRenderer.invoke("getStoredAnimeData")
     return res
 }
 
@@ -123,5 +122,6 @@ export async function getDataBase() {
 export async function changeDataBase(db: "mal" | "anilist") {
     const settings = await readSettings()
     settings.database = db
+    console.log(settings)
     await writeSettings(settings)
 }

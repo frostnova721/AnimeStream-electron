@@ -1,11 +1,11 @@
-import { Path, displayResults, setBackTo, setClickableResult, aniListSearch, readSettings, storeAnimeData, getDataBase } from '../Core'
+import { displayResults, setBackTo, setClickableResult, aniListSearch, readSettings, storeAnimeData, getDataBase } from '../Core'
 
 
 document.addEventListener('DOMContentLoaded', async() => {
     const btn = document.getElementById('searchBtn')
     if(!btn) throw new Error('No btn');
 
-    await setBackTo(Path.join(__dirname, '../../Public/html/search.html'))
+    await setBackTo('../../Public/html/search.html')
     // const settings = await readSettings()
     const db = await getDataBase()
 
@@ -115,7 +115,7 @@ async function appendAnilistSearchResults(searchValue: string) {
         img.draggable = false
 
         const textElement = document.createElement('p')
-        textElement.innerText = result.title.english ?? result.title.romaji
+        textElement.innerText = result.title.english ?? result.title.romaji ?? ''
 
         resultDiv.appendChild(newDiv)
         newDiv.appendChild(img)

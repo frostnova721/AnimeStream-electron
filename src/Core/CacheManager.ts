@@ -2,7 +2,7 @@ import * as fs from 'fs'
 import path from 'path'
 import { Coder } from '../Coder/codeIt'
 import { ILatestAnimes } from '../Types'
-const cachePath = path.join(__dirname, '../../Cache')
+const cachePath = '../../Cache'
 const code = new Coder()
 
 export async function storeAnimeWatchedCache (animeName: string, imageLink: string, infoLink: string):Promise<Boolean> {
@@ -45,7 +45,7 @@ export async function storeLatestAnimeCache (data: ILatestAnimes[]):Promise<Bool
         return true
     } catch(err) {
         console.log(err)
-        throw new Error('Error while writing cache');
+        throw new Error('Error while writing latest cache');
     }
 }
 

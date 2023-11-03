@@ -8,7 +8,7 @@ import { readClickedResult,
   getDataBase,
   displayResults,
  } from "../Core";
-import { IAnimeDetails } from "../Types";
+import { IAnilistResult, IAnimeDetails } from "../Types";
 
 document.addEventListener("DOMContentLoaded", async () => {
 
@@ -58,17 +58,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   await renderResult(res)
   } else if(db === 'anilist') {
     res = await getStoredAnimeData()
-    link = (await displayResults(res.title.english))[0].infoLink
+    link = (await displayResults(res.title?.english))[0].infoLink
     const searchOnMal = await getAnimeInfo(link)
     await renderResult(searchOnMal)
   }
 
-  characterContainer.addEventListener('wheel', (event) => {
-    if (event.deltaY !== 0) {
-    characterContainer.scrollLeft += event.deltaY/1.6
-    event.preventDefault()
-    }
-})
+  
   
   const epContent = document.getElementById('episodeContent')
   if(!epContent) throw new Error('No buttons');
@@ -159,19 +154,26 @@ async function renderResult(res: IAnimeDetails) {
       characterdiv.appendChild(charaName)
       characterdiv.appendChild(charaRole)
       characters.appendChild(characterdiv)
+
+      characters.addEventListener('wheel', (event) => {
+        if (event.deltaY !== 0) {
+        characters.scrollLeft += event.deltaY/1.8
+        event.preventDefault()
+        }
+    })
     }
 
     loader.style.display = 'none'
     main.style.display = 'flex'
 
-    let name: string | undefined;
+    // let name: string | undefined;
 
-    if(res.synonyms.length > 1) name = res.synonyms
+    // if(res.synonyms.length > 1) name = res.synonyms
 
-    if(name) 
-      return void await appendEpisodes(res.title.replace(/[,|\.]/g, ''), res.names.english)
-    else
-      return void await appendEpisodes(res.names.english)
+    // if(name) 
+      return void await appendEpisodes(res.title.replace(/[,|\.]/g, ''), res.names.english ?? res.names.japanese)
+    // else
+    //   return void await appendEpisodes(res.names.english)
 }
 
 async function appendEpisodes(term: string, term2?: string) {

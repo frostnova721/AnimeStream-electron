@@ -1,16 +1,19 @@
-import { Path, createNewWindow, fetchRecentsFromCache, setBackTo, setClickableResult, getLatestAnime, aniListSearch, fetchLatestFromCache, storeLatestAnimeCache } from "../Core";
+import { createNewWindow, fetchRecentsFromCache, setBackTo, setClickableResult, getLatestAnime, aniListSearch, fetchLatestFromCache, storeLatestAnimeCache } from "../Core";
 import { ILatestAnimes } from "../Types";
 
 document.addEventListener('DOMContentLoaded', async() => {
     const connectedToAccount = false
 
-    await setBackTo(Path.join(__dirname, '../../Public/html/home.html'))
+    await setBackTo('../../Public/html/home.html')
 
     const recentContainer = document.getElementById('recents')
     const latestContainer = document.getElementById('latest')
 
     if(!recentContainer || !latestContainer) throw new Error('No DIVVVVV');
 
+    latestContainer.style.opacity = '1'
+    recentContainer.style.opacity = '1'
+    
     if(connectedToAccount) await loadRecentsFromAccount()
     else await loadRecentsFromCache()
 
@@ -92,7 +95,7 @@ async function loadRecentsFromCache() {
         if(loaded.includes(data.name)) continue;  //prevent multiple entries!
         loaded.push(data.name)
         let name = ''
-        if(data.name.length >= 30) {
+        if(data.name?.length >= 30) {
             name = data.name.slice(0,30) + '...'
         } else {
             name = data.name
@@ -132,11 +135,11 @@ async function loadLatestAnimes() {
         } else {
             name = latestAnime.title
         }
-        const recentDiv = document.createElement('div')
+        const latestDiv = document.createElement('div')
         const image = document.createElement('img')
         const title = document.createElement('p')
-        recentDiv.className = 'latest_div'
-        recentDiv.setAttribute('data-value', latestAnime.infoLink)
+        latestDiv.className = 'latest_div'
+        latestDiv.setAttribute('data-value', latestAnime.infoLink)
         image.src = latestAnime.image
         image.draggable = false
         image.className = 'recent_img'
@@ -144,8 +147,8 @@ async function loadLatestAnimes() {
         title.className = 'anime_title'
         const parentDiv = document.getElementById('latest')
         if(!parentDiv) return
-        parentDiv.appendChild(recentDiv)
-        recentDiv.appendChild(image)
-        recentDiv.appendChild(title)
+        parentDiv.appendChild(latestDiv)
+        latestDiv.appendChild(image)
+        latestDiv.appendChild(title)
     }
 }
