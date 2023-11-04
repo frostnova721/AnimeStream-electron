@@ -23,9 +23,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const closeBtn = document.getElementById('close');
     const characterContainer = document.getElementById('characters');
 
-    if (!backBtn || !watchBtn || !epCounter || !main || !closeBtn || !characterContainer) return;
+    if (!backBtn || !watchBtn || !epCounter || !main || !closeBtn || !characterContainer) return; //typescript's OCD
 
+    //to go back
     backBtn.onclick = async () => (window.location.href = await getBackTo());
+
+    //toggle the view of episode menu
     watchBtn.onclick = () => {
         if (!toggled) {
             main.style.display = 'none';
@@ -37,6 +40,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             toggled = false;
         }
     };
+
+    //close the menu
     closeBtn.onclick = () => {
         main.style.display = 'block';
         epCounter.style.display = 'none';
@@ -46,13 +51,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     let res: any = '';
     let link: string = '';
     let q: any = {};
+
+    //get the queries
     const queries = window.location.href.split('?')[1]?.split('=');
     if (queries) {
         q = {
             [queries[0]]: queries[1],
         };
     }
-    if (db === 'mal' || (q.rel && q.rel === 'latest') || q.rel === 'recents') {
+
+    if (db === 'mal' || (q.rel && q.rel === 'latest') || q.rel === 'recents' || q.rel === 'bwatch') {
         link = await readClickedResult();
         res = await getAnimeInfo(link);
         await renderResult(res);
@@ -65,6 +73,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const epContent = document.getElementById('episodeContent');
     if (!epContent) throw new Error('No buttons');
+    //goto watch page when clicked on a episode
     epContent.addEventListener('click', async (e) => {
         const target = e.target as HTMLElement;
         if (target.id === 'epBtn') {

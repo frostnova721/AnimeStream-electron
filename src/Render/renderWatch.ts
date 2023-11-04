@@ -35,16 +35,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         !fsImg ||
         !srcLoader
     )
-        throw new Error('err');
+        throw new Error('err'); //useless check for typescript's OCD
 
-    backBtn.onclick = () => (window.location.href = './AnimeInfo.html');
+    //to go back
+    backBtn.onclick = () => (window.location.href = './AnimeInfo.html?rel=bwatch');
+
+    //pause or play the video when play-pause icon is clicked
     playPause.onclick = () => {
         if (videoLoaded) {
             playState = updatePlayButton(playState, video, playPauseImg);
         }
     };
+
+    //get fullscreen for the video
     fullScreenBtn.onclick = () => video.requestFullscreen();
 
+    //append the sources (needs a rework)
     const sources = (await getGogoStreams(await getStoredEpisodeId())).sources;
     for (const source of sources) {
         const child = document.createElement('button');
@@ -55,8 +61,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         sourcesDiv.appendChild(child);
     }
+
+    //hide the loader
     srcLoader.style.display = 'none';
 
+    //listen for the clicks on source to change the source
     sourcesDiv.addEventListener('click', async (e) => {
         const target = e.target as HTMLElement;
         if (target.id === 'source') {
@@ -73,6 +82,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    //update the timer
     video.addEventListener('timeupdate', () => {
         if (!isNaN(video.duration) && isFinite(video.duration)) {
             totalTime.textContent = `${secondsToTime(Math.floor(video.duration))}`;
@@ -82,12 +92,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    //update the progressbar on click
     progressBar.addEventListener('click', (e) => {
         const currentTarget = e.currentTarget as HTMLElement;
         const clickPercent = e.offsetX / currentTarget.offsetWidth;
         video.currentTime = video.duration * clickPercent;
     });
 
+    //pause or play when space key is pressed
     document.addEventListener('keydown', (event) => {
         if (event.key === ' ' || event.keyCode === 32 || event.which === 32) {
             event.preventDefault();
@@ -97,6 +109,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    //pause or play when clicked on the video element
     video.addEventListener('click', () => {
         if (videoLoaded) {
             playState = updatePlayButton(playState, video, playPauseImg);
@@ -104,7 +117,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
-//functions
+//functions  (Their name does the explanation)
 
 function updateDuration(videoElement: HTMLVideoElement, totalTime: HTMLElement) {
     totalTime.textContent = `${secondsToTime(Math.floor(videoElement.duration))}`;
@@ -124,6 +137,7 @@ function updatePlayButton(playState: boolean, video: HTMLVideoElement, img: HTML
     }
 }
 
+//hide the controls when mouse isnt moved while inside the video element
 function showControlsWithState(control: HTMLElement, state: boolean) {
     if (!state) control.style.opacity = '0';
     else control.style.opacity = '1';
