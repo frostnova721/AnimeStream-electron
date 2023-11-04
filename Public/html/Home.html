@@ -1,45 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anime stream</title>
-    <link rel="stylesheet" href="../css/home.css">
-    <link rel="stylesheet" href="../css/commons.css">
-</head>
-<body>
-    <div class="main">
-        <div class="nav">
-            <div class="title">
-                <p>Anime Stream</p>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Anime stream</title>
+        <link rel="stylesheet" href="../css/home.css" />
+        <link rel="stylesheet" href="../css/commons.css" />
+    </head>
+    <body>
+        <div class="main">
+            <div class="nav">
+                <div class="title">
+                    <p>Anime Stream</p>
+                </div>
             </div>
-        </div>
-        <div class="buttons">
-            <button class="searchButton" id="navigate_search"><img src="../Assets/Icons/search-interface-symbol.png"></button>
-        </div>
-        <div class="settings">
-            <button class="settingsBtn" id="settingsBtn"><img src="../Assets/Icons/setting.png"/></button>
-        </div>
-        <div class="container">
-            <div class="contents">
-                
-                <p>Continue from where you left off</p>
-                <div class="recents" id="recents">
-                    <!-- <div class="recent_div">
+            <div class="buttons">
+                <button class="searchButton" id="navigate_search">
+                    <img src="../Assets/Icons/search-interface-symbol.png" />
+                </button>
+            </div>
+            <div class="settings">
+                <button class="settingsBtn" id="settingsBtn">
+                    <img src="../Assets/Icons/setting.png" />
+                </button>
+            </div>
+            <div class="container">
+                <div class="contents">
+                    <p>Continue from where you left off</p>
+                    <div class="recents" id="recents">
+                        <!-- <div class="recent_div">
                         <img height="225" width="170">
                         <p class="anime_title">title title title title tiel af af afaf afafs sfsf sfsgsdg sdfdsfg afdsagfsg</p>
                     </div> -->
-                    <!-- <p class="no_act">No recent activity</p> -->
-                </div>
-                <p>Latest releases</p>
-                <div class="latest" id="latest">
-                   
+                        <!-- <p class="no_act">No recent activity</p> -->
+                    </div>
+                    <p>Latest releases</p>
+                    <div class="latest" id="latest"></div>
                 </div>
             </div>
         </div>
-    </div>
-    <script>
-        require('../../dist/Render/renderHome.js')
-    </script>
-</body>
+        <script>
+            require('../../dist/Render/renderHome.js');
+        </script>
+    </body>
 </html>

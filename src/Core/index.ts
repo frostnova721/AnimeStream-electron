@@ -1,2 +1,2 @@
-export * from './Subrender'
-export * from './CacheManager'
+export * from './Subrender';
+export * from './CacheManager';

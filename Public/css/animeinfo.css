@@ -1,13 +1,12 @@
 @font-face {
     font-family: NotoSans-Bold;
-    src: url('../Assets/Fonts/NotoSans-Bold.ttf')
+    src: url('../Assets/Fonts/NotoSans-Bold.ttf');
 }
 
 @font-face {
     font-family: Poppins-Bold;
-    src: url('../Assets/Fonts/Poppins-Bold.ttf')
+    src: url('../Assets/Fonts/Poppins-Bold.ttf');
 }
-
 
 body {
     background-color: black;
@@ -102,7 +101,7 @@ body {
     /* border: 1px solid white; */
     font-size: 1.4rem;
     padding-left: 20px;
-    padding-right: 20px; 
+    padding-right: 20px;
     border-radius: 12px;
     width: 37%;
     max-width: 525px;
@@ -132,19 +131,19 @@ body {
     position: absolute;
     border: 1px solid white;
     width: 90%;
-    max-width: 1181.720px;
+    max-width: 1181.72px;
     display: flex;
     flex-direction: row;
     height: inherit;
     border-radius: 12px;
     overflow-x: auto;
     overflow-y: hidden;
-    padding-bottom: 10px
+    padding-bottom: 10px;
 }
 
 .charaText {
     position: absolute;
-    margin-top: -4rem; 
+    margin-top: -4rem;
     font-size: 1.7rem;
 }
 
@@ -280,7 +279,7 @@ body {
     height: 60%;
     display: flex;
     overflow-x: hidden;
-    overflow-y: auto; 
+    overflow-y: auto;
     flex-wrap: wrap;
 }
 
@@ -297,7 +296,8 @@ body {
     font-size: 1.1rem;
     background-color: white;
     border: 1px solid black;
-    transition: border-color 0.15s ease-in-out, color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, color 0.15s ease-in-out,
+        background-color 0.15s ease-in-out;
 }
 
 .epBtn:hover {

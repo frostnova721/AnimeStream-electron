@@ -50,7 +50,7 @@ body {
 
 .backBtn:active {
     background-color: black;
-    border: 1px solid rgb(97,97,97)
+    border: 1px solid rgb(97, 97, 97);
 }
 
 .backBtn:active img {
@@ -73,8 +73,12 @@ body {
     transform: translate(-50%, -50%);
     animation: spin 1s linear infinite;
 }
-  
+
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

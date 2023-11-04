@@ -1,11 +1,11 @@
 @font-face {
     font-family: NotoSans-Bold;
-    src: url('../Assets/Fonts/NotoSans-Bold.ttf')
+    src: url('../Assets/Fonts/NotoSans-Bold.ttf');
 }
 
 @font-face {
     font-family: Poppins-Bold;
-    src: url('../Assets/Fonts/Poppins-Bold.ttf')
+    src: url('../Assets/Fonts/Poppins-Bold.ttf');
 }
 
 body {
@@ -14,6 +14,7 @@ body {
     margin: 0;
     color: white;
     font-family: NotoSans-Bold;
+    user-select: none;
 }
 
 button:focus {
@@ -145,7 +146,7 @@ button:focus {
     width: 100px;
     height: 50px;
     text-align: center;
-    border: 1px solid rgb(97,97,97);
+    border: 1px solid rgb(97, 97, 97);
     margin: 5px;
     background-color: black;
     padding: 5px;

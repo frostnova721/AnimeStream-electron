@@ -1,6 +1,6 @@
 @font-face {
     font-family: NotoSans-Bold;
-    src: url('../Assets/Fonts/NotoSans-Bold.ttf')
+    src: url('../Assets/Fonts/NotoSans-Bold.ttf');
 }
 
 body {
@@ -31,7 +31,7 @@ body {
 
 .container {
     margin-top: 20px;
-    padding: 25px
+    padding: 25px;
     /* border: 1px solid white; */
 }
 
@@ -48,14 +48,13 @@ body {
     width: 180px;
     margin: 10px;
     border-radius: 5px;
-    transition: transform 0.2s ease-in-out
+    transition: transform 0.2s ease-in-out;
 }
 
 .div_anime_cover:hover img {
     transform: scale(1.05);
     margin-bottom: 5px;
     border-radius: 0px;
-    
 }
 
 .div_anime_cover p {
@@ -88,7 +87,7 @@ body {
 
 .searchBar:focus {
     outline: none;
-    border-color: #caf979; 
+    border-color: #caf979;
 }
 
 .searchBtn {
@@ -100,7 +99,7 @@ body {
 }
 
 .searchBtn:hover {
-    background-color: #caf979;    
+    background-color: #caf979;
 }
 
 .searchBtn:hover img {

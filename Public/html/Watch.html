@@ -1,57 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anime Stream</title>
-    <link rel="stylesheet" href="../css/commons.css">
-    <link rel="stylesheet" href="../css/watch.css">
-    <link rel="stylesheet" href="../css/loader.css">
-</head>
-<body>
-    <div class="main" id="main">
-        <div class="back"><button class="backBtn" id="backBtn"><img src="../Assets/Icons/arrow.png"></button></div>
-        <div class="nav">
-
-        </div>
-        <div class="container" id="container">
-            <div class="playerContainer">
-                <div class="playerContainer2">
-                    <div class="player">
-                        <video class="videoPlayer" id="videoPlayer">
-                            na na
-                        </video>
-                    </div>
-                    <div class="controlContainer">
-                        <div class="controls" id="controls">
-                            <div class="timeDiv">
-                                &nbsp;&nbsp;<div class="current" id="current">00:00</div>&nbsp;/&nbsp;
-                                <div class="total" id="total">00:00</div>
-                            </div>
-                            <div id="watch_progress">
-                                <div id="progressed">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Anime Stream</title>
+        <link rel="stylesheet" href="../css/commons.css" />
+        <link rel="stylesheet" href="../css/watch.css" />
+        <link rel="stylesheet" href="../css/loader.css" />
+    </head>
+    <body draggable="false">
+        <div class="main" id="main">
+            <div class="back">
+                <button class="backBtn" id="backBtn">
+                    <img src="../Assets/Icons/arrow.png" />
+                </button>
+            </div>
+            <div class="nav"></div>
+            <div class="container" id="container">
+                <div class="playerContainer">
+                    <div class="playerContainer2">
+                        <div class="player">
+                            <video class="videoPlayer" id="videoPlayer">na na</video>
+                        </div>
+                        <div class="controlContainer">
+                            <div class="controls" id="controls">
+                                <div class="timeDiv">
+                                    &nbsp;&nbsp;
+                                    <div class="current" id="current">00:00</div>
+                                    &nbsp;/&nbsp;
+                                    <div class="total" id="total">00:00</div>
                                 </div>
-                                <div id="point"></div>
-                            </div>
-                            <div class="mediaButtons">
-                                <button class="play_pause" id="playPause"><img id="playPauseImg" src="../Assets/Icons/play.png"></button>
-                                <button class="fullScreen" id="fullScreen"><img id="fsImg" src="../Assets/Icons/full-screen.png"></button>
+                                <div id="watch_progress">
+                                    <div id="progressed"></div>
+                                    <div id="point"></div>
+                                </div>
+                                <div class="mediaButtons">
+                                    <button class="play_pause" id="playPause">
+                                        <img id="playPauseImg" src="../Assets/Icons/play.png" />
+                                    </button>
+                                    <button class="fullScreen" id="fullScreen">
+                                        <img id="fsImg" src="../Assets/Icons/full-screen.png" />
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="sourcesContainer">
-                <div class="srcLoader" id="srcLoader">
-                    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-                </div>
-                <div class="sources" id="sources">
+                <div class="sourcesContainer">
+                    <div class="srcLoader" id="srcLoader">
+                        <div class="lds-ellipsis">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <div class="sources" id="sources"></div>
                 </div>
             </div>
         </div>
-    </div>
-    <script>
-        require('../../dist/Render/renderWatch.js')
-    </script>
-</body>
+        <script>
+            require('../../dist/Render/renderWatch.js');
+        </script>
+    </body>
 </html>

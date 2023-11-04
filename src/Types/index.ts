@@ -1,2 +1,2 @@
-export * from './Types'
-export { Settings } from './Setting'
+export * from './Types';
+export { Settings } from './Setting';

@@ -1,11 +1,11 @@
 @font-face {
     font-family: NotoSans-Bold;
-    src: url('../Assets/Fonts/NotoSans-Bold.ttf')
+    src: url('../Assets/Fonts/NotoSans-Bold.ttf');
 }
 
 @font-face {
     font-family: Poppins-Bold;
-    src: url('../Assets/Fonts/Poppins-Bold.ttf')
+    src: url('../Assets/Fonts/Poppins-Bold.ttf');
 }
 
 body {
@@ -60,7 +60,7 @@ button:focus {
     background-color: transparent;
     border: 1px solid transparent;
     border-radius: 12px;
-    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
 
 .settingsBtn img {
@@ -203,9 +203,9 @@ button:focus {
 .no_act {
     color: rgba(92, 92, 92, 0.644);
     margin-left: 7rem;
-    font-size: 2rem; 
+    font-size: 2rem;
     font-family: Poppins-Bold;
-    margin-top: 7rem; 
+    margin-top: 7rem;
 }
 
 .buttons {
@@ -213,7 +213,7 @@ button:focus {
     margin-bottom: 2rem */
     position: absolute;
     margin-top: 20px;
-    margin-left: 15px
+    margin-left: 15px;
 }
 
 .searchButton {
@@ -258,5 +258,5 @@ button:focus {
 }
 
 .searchButton:active img {
-    filter: invert()
+    filter: invert();
 }

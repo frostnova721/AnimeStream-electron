@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings</title>
-    <link rel="stylesheet" href="../css/settings.css"/>
-</head>
-<body>
-    <div class="main">
-        <div class="left" id="left">
-            <div class="options selected" id="options" data-value="general">
-                <p>General</p>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Settings</title>
+        <link rel="stylesheet" href="../css/settings.css" />
+    </head>
+    <body>
+        <div class="main">
+            <div class="left" id="left">
+                <div class="options selected" id="options" data-value="general">
+                    <p>General</p>
+                </div>
+                <div class="options" id="options" data-value="cache">
+                    <p>Cache</p>
+                </div>
             </div>
-            <div class="options" id="options" data-value="cache">
-                <p>Cache</p>
+            <div class="right">
+                <div id="insidediv"></div>
             </div>
         </div>
-        <div class="right">
-            <div id="insidediv">
-            </div>
-        </div>
-    </div>
 
-    <script>
-        require('../../dist/Render/renderSettings.js')
-    </script>
-</body>
+        <script>
+            require('../../dist/Render/renderSettings.js');
+        </script>
+    </body>
 </html>

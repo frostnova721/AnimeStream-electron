@@ -1,11 +1,11 @@
 export interface IStreamOutput {
-    totalSources: number, 
+    totalSources: number;
     sources: {
-        resolution: string,
-        quality: string,
-        link: string
-    }[],
-    iframe: string
+        resolution: string;
+        quality: string;
+        link: string;
+    }[];
+    iframe: string;
 }
 
 export interface ISearchOutput {
@@ -20,7 +20,7 @@ export interface IMALSearch {
     name: string;
     id: number;
     infoLink: string;
-    image: string
+    image: string;
 }
 
 export type TChara = {
@@ -28,11 +28,11 @@ export type TChara = {
     role: string;
     image: string;
     va: {
-        name:string;
+        name: string;
         url: string;
         image: string;
-    }
-}
+    };
+};
 
 export interface IAnimeDetails {
     title: string;
@@ -43,7 +43,7 @@ export interface IAnimeDetails {
         german: string;
         spanish: string;
         french: string;
-    },
+    };
     cover: string;
     genres: string[];
     themes: string[];
@@ -66,11 +66,11 @@ export interface IAnimeDetails {
 }
 
 export type TGlobalVar = {
-    clickedResult: string ;
+    clickedResult: string;
     episodeId: string;
     subWindows: number;
     backTo: string;
-}
+};
 
 export interface ILatestAnimes {
     image: string;
@@ -85,10 +85,9 @@ export interface IAnilistResult {
     title: {
         english: string;
         romaji: string;
-    }
+    };
     coverImage: {
         extraLarge: string;
         large: string;
-    }
-
+    };
 }

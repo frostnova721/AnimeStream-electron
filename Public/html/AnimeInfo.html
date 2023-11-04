@@ -1,60 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/animeinfo.css">
-    <link rel="stylesheet" href="../css/commons.css">
-    <link rel="stylesheet" href="../css/loader.css">
-    <title>Anime Stream</title>
-</head>
-<body>
-    <div class="loader" id="loader"></div>
-    <div class="main" id="main">
-        <div class="back"><button class="backBtn" id="backBtn"><img src="../Assets/Icons/arrow.png"></button></div>
-        <div class="watch"><button class="watchBtn" id="watchBtn">watch</button></div>
-        <div class="nav">
-            <div class="animeName" id="animeName"></div>
-        </div>
-        <div class="container" id="container">
-            <div class="baseContainer">
-                <div class="coverImage" id="coverImage"></div>
-                <div class="basicInfo" id="basicInfo">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="../css/animeinfo.css" />
+        <link rel="stylesheet" href="../css/commons.css" />
+        <link rel="stylesheet" href="../css/loader.css" />
+        <title>Anime Stream</title>
+    </head>
+    <body>
+        <div class="loader" id="loader"></div>
+        <div class="main" id="main">
+            <div class="back">
+                <button class="backBtn" id="backBtn">
+                    <img src="../Assets/Icons/arrow.png" />
+                </button>
+            </div>
+            <div class="watch"><button class="watchBtn" id="watchBtn">watch</button></div>
+            <div class="nav">
+                <div class="animeName" id="animeName"></div>
+            </div>
+            <div class="container" id="container">
+                <div class="baseContainer">
+                    <div class="coverImage" id="coverImage"></div>
+                    <div class="basicInfo" id="basicInfo"></div>
+                </div>
+                <div class="subInfo">
+                    <div id="advancedInfo" class="advancedInfo"></div>
+                    <div class="miscInfo" id="miscInfo"></div>
+                </div>
+                <div class="charactersDiv">
+                    <div class="charaText"><p>Characters</p></div>
+                    <div class="characters" id="characters"></div>
                 </div>
             </div>
-            <div class="subInfo">
-                <div id="advancedInfo" class="advancedInfo">
-                </div>
-                <div class="miscInfo" id="miscInfo">
-                </div>
-            </div>
-            <div class="charactersDiv">
-                <div class="charaText"><p>Characters</p></div>
-                <div class="characters" id="characters">
-                </div>
-            </div>
-        </div>
-        <div class="episodeContainer" id="episodeCounter">
-            <div class="loaderContainer" id="loaderContainer">
-                <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-            </div>
-            <div class="episodes">
-                <div class="pages" id="pages">
-                    <div class="page">
-                        <p>1</p>
+            <div class="episodeContainer" id="episodeCounter">
+                <div class="loaderContainer" id="loaderContainer">
+                    <div class="lds-ellipsis">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
                     </div>
-                    <div class="close" id="close"><img src="../Assets/Icons/cancel.png"/></span></div>
                 </div>
-                <div class="episodeContent" id="episodeContent">
-                    <!-- <div class="episode">
+                <div class="episodes">
+                    <div class="pages" id="pages">
+                        <div class="page">
+                            <p>1</p>
+                        </div>
+                        <div class="close" id="close"><img src="../Assets/Icons/cancel.png" /></div>
+                    </div>
+                    <div class="episodeContent" id="episodeContent">
+                        <!-- <div class="episode">
                         <button class="epBtn">Ep 1</button>
                     </div> -->
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <script>
-        require('../../dist/Render/renderInfo.js')
-    </script>
-</body>
+        <script>
+            require('../../dist/Render/renderInfo.js');
+        </script>
+    </body>
 </html>
