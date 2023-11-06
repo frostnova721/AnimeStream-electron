@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
-import { MAL, GogoStreams, AniList } from '../Lib';
-import { IAnilistResult, IMALSearch, ISearchOutput, IStreamOutput, Settings } from '../Types';
+import { MAL, GogoStreams, AniList, Episodes } from '../Lib';
+import { IMALSearch, ISearchOutput, IStreamOutput, Settings } from '../Types';
 import Hls from 'hls.js';
 import * as fs from 'fs';
 import path from 'path';
@@ -8,19 +8,22 @@ import path from 'path';
 const mal = new MAL();
 const anilist = new AniList();
 
-export async function displayResults(searchTerm: string): Promise<IMALSearch[]> {
-    const results = await mal.searchForAnime(searchTerm);
-    return results;
-}
-
 export async function getAnimeInfo(link: string) {
     const results = mal.getAnimeDetails(link);
     return results;
 }
 
-export async function aniListSearch(searchTerm: string) {
-    const res = await anilist.searchAnime(searchTerm);
-    return res;
+export async function searchResults(searchTerm: string) {
+    const db = await getDataBase()
+    if(db ==='anilist') {
+        const res = await anilist.searchAnime(searchTerm);
+        return res;
+    }
+    if(db === 'mal') {
+        const res = await mal.jikanSearch(searchTerm);
+        return res;
+    }
+    throw new Error('Error Finding The DataBase')
 }
 
 export async function setClickableResult(link: string): Promise<void> {
@@ -113,7 +116,7 @@ export async function storeAnimeData(data: string) {
 }
 
 export async function getStoredAnimeData() {
-    const res: IAnilistResult = await ipcRenderer.invoke('getStoredAnimeData');
+    const res = await ipcRenderer.invoke('getStoredAnimeData');
     return res;
 }
 
@@ -127,4 +130,19 @@ export async function changeDataBase(db: 'mal' | 'anilist') {
     settings.database = db;
     console.log(settings);
     await writeSettings(settings);
+}
+
+export async function getEpisodes(infoLink: string) {
+    const ep = new Episodes()
+    const eps = await ep.getAiredEpisodes(infoLink, await getDataBase())
+    return eps;
+}
+
+export async function getAnilistLink() {
+    const res = await ipcRenderer.invoke('getStoredAnilistLink')
+    return res
+}
+
+export async function setAnilistLink(link: string) {
+    return void await ipcRenderer.invoke('setAnilistLink', link)
 }

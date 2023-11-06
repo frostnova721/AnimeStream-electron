@@ -7,7 +7,8 @@ import {
     getBackTo,
     getStoredAnimeData,
     getDataBase,
-    displayResults,
+    getEpisodes,
+    getAnilistLink,
 } from '../Core';
 import { IAnimeDetails } from '../Types';
 
@@ -60,16 +61,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
     }
 
-    if (db === 'mal' || (q.rel && q.rel === 'latest') || q.rel === 'recents' || q.rel === 'bwatch') {
-        link = await readClickedResult();
-        res = await getAnimeInfo(link);
-        await renderResult(res);
-    } else if (db === 'anilist') {
-        res = await getStoredAnimeData();
-        link = (await displayResults(res.title?.english))[0].infoLink;
-        const searchOnMal = await getAnimeInfo(link);
-        await renderResult(searchOnMal);
-    }
+    link = await readClickedResult();
+    res = await getAnimeInfo(link);
+    await renderResult(res);
 
     const epContent = document.getElementById('episodeContent');
     if (!epContent) throw new Error('No buttons');
@@ -170,52 +164,64 @@ async function renderResult(res: IAnimeDetails) {
     loader.style.display = 'none';
     main.style.display = 'flex';
 
-    // let name: string | undefined;
-
-    // if(res.synonyms.length > 1) name = res.synonyms
-
-    // if(name)
     return void (await appendEpisodes(
         res.title.replace(/[,|\.]/g, ''),
         res.names.english ?? res.names.japanese,
     ));
-    // else
-    //   return void await appendEpisodes(res.names.english)
 }
 
 async function appendEpisodes(term: string, term2?: string) {
-    let res;
-    try {
-        // console.log(`searching ${term}`)
-        res = (await gogoSearch(term))[0];
-    } catch (err) {
-        if (term2) {
-            // console.log(`searching ${term2}`)
-            res = (await gogoSearch(term2))[0];
-        } else throw new Error('Couldnt get any results :(');
+    const db = await getDataBase()
+    let l = await readClickedResult()
+    if(db === 'anilist') {
+        l = await getAnilistLink()
     }
+    console.log(l)
+    const res = await getEpisodes(l);
+    // try {
+    //     res = (await gogoSearch(term))[0];
+    // } catch (err) {
+    //     if (term2) {
+    //         res = (await gogoSearch(term2))[0];
+    //     } else throw new Error('Couldnt get any results :(');
+    // }
+
     const epContent = document.getElementById('episodeContent');
     const loaderContainer = document.getElementById('loaderContainer');
     if (!epContent || !loaderContainer) return;
     loaderContainer.style.display = 'none';
     epContent.style.display = 'flex';
     // console.log(res)
-    for (let i = 1; i <= res.episodes; i++) {
-        // if(i%20 === 0) createPage(i)
-        createEpisode(i, epContent, res.episodeLink);
+    for (let i = 1; i <= res.length; i++) {
+        createEpisode(i, epContent, res[i-1].episodeTitle, res[i-1].imageUrl);
     }
 }
 
-function createEpisode(number: number, div: HTMLElement, episodeId: string) {
+function createEpisode(number: number, div: HTMLElement, epName: string, img?: string,episodeId?: string) {
     const divElement = document.createElement('div');
     divElement.className = 'episode';
 
-    const button = document.createElement('button');
-    button.className = 'epBtn';
-    button.id = 'epBtn';
-    button.setAttribute('data-value', `${episodeId}${number}`);
-    button.textContent = `${number}`;
+    const episode = document.createElement('div');
+    episode.className = 'epBtn';
+    episode.id = 'epBtn';
 
-    divElement.appendChild(button);
+    if(img) {
+        console.log(img)
+        episode.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${img})`
+    }
+
+    const numberDiv = document.createElement('div')
+    numberDiv.className = 'epNumber'
+    numberDiv.textContent = `Episode ${number}`
+
+    const nameDiv = document.createElement('div')
+    nameDiv.className = 'epName'
+    nameDiv.textContent = epName
+
+    // button.setAttribute('data-value', `${episodeId}${number}`);
+
+    episode.appendChild(numberDiv);
+    episode.appendChild(nameDiv)
+    divElement.appendChild(episode);
     div.appendChild(divElement);
 }

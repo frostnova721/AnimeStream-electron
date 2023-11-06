@@ -70,6 +70,7 @@ export type TGlobalVar = {
     episodeId: string;
     subWindows: number;
     backTo: string;
+    clickedAnilistLink: string;
 };
 
 export interface ILatestAnimes {
@@ -79,9 +80,11 @@ export interface ILatestAnimes {
     infoLink: string;
 }
 
-export interface IAnilistResult {
+export interface IAnimeSearchResult {
     id: number;
     idMal: number;
+    infoAl?: string;
+    infoLink: string;
     title: {
         english: string;
         romaji: string;
@@ -90,4 +93,11 @@ export interface IAnilistResult {
         extraLarge: string;
         large: string;
     };
+}
+
+export interface IAiredEpisodes {
+    imageUrl?: string | undefined;
+    episodeNumber: number | string;
+    episodeTitle: string;
+    airedDate?: string | undefined;
 }

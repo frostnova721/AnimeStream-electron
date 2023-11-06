@@ -21,6 +21,7 @@ const globalVars: TGlobalVar = {
     episodeId: '',
     subWindows: 0,
     backTo: '',
+    clickedAnilistLink: ''
 };
 
 const anilistData = {
@@ -28,8 +29,6 @@ const anilistData = {
 };
 
 const createWindow = () => {
-    // const iconPath = path.join(__dirname, '../../Icons/animestream.ico')
-    // const appIcon = nativeImage.createFromPath(iconPath)
 
     const mainWindow = new BrowserWindow({
         width: 1200,
@@ -111,6 +110,15 @@ const createWindow = () => {
 
     ipcMain.handle('getStoredAnimeData', (e) => {
         return anilistData.data;
+    });
+
+    ipcMain.handle('getStoredAnilistLink', (e) => {
+        return globalVars.clickedAnilistLink;
+    });
+
+    ipcMain.handle('setAnilistLink', (e, link: string) => {
+        globalVars.clickedAnilistLink = link;
+        return null
     });
 };
 

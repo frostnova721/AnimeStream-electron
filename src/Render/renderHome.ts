@@ -4,7 +4,6 @@ import {
     setBackTo,
     setClickableResult,
     getLatestAnime,
-    aniListSearch,
     fetchLatestFromCache,
     storeLatestAnimeCache,
 } from '../Core';

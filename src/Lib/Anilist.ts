@@ -1,10 +1,10 @@
 import { request, gql } from 'graphql-request';
-import { IAnilistResult } from '../Types';
+import { IAnimeSearchResult } from '../Types';
 
 export class AniList {
     constructor() {}
 
-    public searchAnime = async (term: string): Promise<IAnilistResult[]> => {
+    public searchAnime = async (term: string): Promise<IAnimeSearchResult[]> => {
         const query = gql`
             query {
                 Page(perPage: 10) {
@@ -23,11 +23,15 @@ export class AniList {
                 }
             }
         `;
-        const response: { Page: { media: IAnilistResult[] } } = await request(
+        const response: { Page: { media: IAnimeSearchResult[] } } = await request(
             'https://graphql.anilist.co',
             query.replace('$TERM', term),
         );
         console.log(response);
+        for(const data of response.Page.media) {
+            data.infoLink = `https://myanimelist.net/anime/${data.idMal}`;
+            data.infoAl = `https://anilist.co/anime/${data.id}`
+        }
         return response.Page.media;
     };
 }

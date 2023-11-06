@@ -1,6 +1,6 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
-import { IAnimeDetails, ILatestAnimes, IMALSearch, TChara } from '../Types';
+import { IAnimeDetails, IAnimeSearchResult, ILatestAnimes, IMALSearch, TChara } from '../Types';
 
 export class MAL {
     constructor() {}
@@ -266,6 +266,36 @@ export class MAL {
 
         return results;
     };
+
+    public jikanSearch = async(searchTerm: string): Promise<IAnimeSearchResult[]> => {
+        const url = `https://api.jikan.moe/v4/anime?q=${searchTerm}`
+        const res = await (await this.fetch(url)).data
+        if(res.length < 1) throw new Error('Couldnt get any results for that search!')
+        const filteredResults: IAnimeSearchResult[] = []
+        for(const data of res) {
+            const filteredData: IAnimeSearchResult = {
+                id: data.mal_id,
+                idMal: data.mal_id,
+                infoLink: `https://myanimelist.net/anime/${data.mal_id}`,
+                title: {
+                    romaji: data.title,
+                    english: data.title_english
+                },
+                coverImage: {
+                    large: data.images.jpg.large_image_url ?? data.images.jpg.image_url,
+                    extraLarge: data.images.jpg.large_image_url ?? data.images.jpg.image_url,
+                },
+            }
+
+            filteredResults.push(filteredData)
+        }
+
+        return filteredResults
+    }
+
+    public jikanInfo = async(id: number) => {
+
+    }
 
     /**
      * Get the latest/currenly airing animes
