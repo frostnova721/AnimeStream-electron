@@ -1,4 +1,4 @@
-import { getGogoStreams, getStoredEpisodeId, stream } from '../Core';
+import { getGogoStreams, getStoredEpisodeId, gogoSearch, stream } from '../Core';
 
 let playState = false;
 let videoLoaded = false;
@@ -51,7 +51,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     fullScreenBtn.onclick = () => video.requestFullscreen();
 
     //append the sources (needs a rework)
-    const sources = (await getGogoStreams(await getStoredEpisodeId())).sources;
+    // const sources = (await getGogoStreams(await getStoredEpisodeId())).sources;
+    const queries = window.location.href.split('?')[1].split('&');
+
+    let anime: string | null = null, ep: string | null = null;
+
+    for(const query of queries) {
+        const key = query.split('=')
+        if(key[0] === 'watch') anime = key[1]
+        if(key[0] === 'ep') ep = key[1]
+    }
+
+    if(!anime) throw new Error('no anime name found')
+    const sources = await (await getGogoStreams((await gogoSearch(decodeURIComponent(anime)))[0].episodeLink+ep)).sources
+
     for (const source of sources) {
         const child = document.createElement('button');
         child.className = 'source';

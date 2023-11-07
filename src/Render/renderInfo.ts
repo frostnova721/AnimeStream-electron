@@ -70,12 +70,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     //goto watch page when clicked on a episode
     epContent.addEventListener('click', async (e) => {
         const target = e.target as HTMLElement;
-        if (target.id === 'epBtn') {
-            await storeEpisodeId(target.getAttribute('data-value') ?? '');
+        const epBtn = target.closest('#epBtn')
+        if (epBtn) {
+            // await storeEpisodeId(epContent.getAttribute('mal-title') ?? '');
             const img = res.cover;
             const title = res.names?.english || res.title?.english;
             await storeAnimeWatchedCache(title, img, link);
-            window.location.href = './Watch.html';
+            window.location.href = `./Watch.html?watch=${epContent.getAttribute('mal-title') ?? ''}&ep=${epBtn.getAttribute('episode')}`;
         }
     });
 });
@@ -99,7 +100,7 @@ async function renderResult(res: IAnimeDetails) {
     if (!titleDiv) return;
     const title = document.createElement('p');
     title.innerText =
-        res.names.english.length > 45 ? res.names.english.slice(0, 45) + '...' : res.names.english;
+        res.names.english.length>1 ? res.names.english.length > 45 ? res.names.english.slice(0, 45) + '...' : res.names.english : res.title.length>1 ? res.title.length> 45 ? res.title.slice(0,45) + '...' : res.title : '';
     titleDiv.appendChild(title);
 
     const basicInfo = document.getElementById('basicInfo');
@@ -176,7 +177,6 @@ async function appendEpisodes(term: string, term2?: string) {
     if(db === 'anilist') {
         l = await getAnilistLink()
     }
-    console.log(l)
     const res = await getEpisodes(l);
     // try {
     //     res = (await gogoSearch(term))[0];
@@ -190,7 +190,9 @@ async function appendEpisodes(term: string, term2?: string) {
     const loaderContainer = document.getElementById('loaderContainer');
     if (!epContent || !loaderContainer) return;
     loaderContainer.style.display = 'none';
-    epContent.style.display = 'flex';
+    epContent.style.display = 'grid';
+
+    epContent.setAttribute('mal-title', term)
     // console.log(res)
     for (let i = 1; i <= res.length; i++) {
         createEpisode(i, epContent, res[i-1].episodeTitle, res[i-1].imageUrl);
@@ -204,10 +206,10 @@ function createEpisode(number: number, div: HTMLElement, epName: string, img?: s
     const episode = document.createElement('div');
     episode.className = 'epBtn';
     episode.id = 'epBtn';
+    episode.setAttribute('episode', `${number}`)
 
     if(img) {
-        console.log(img)
-        episode.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${img})`
+        episode.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url(${img})`
     }
 
     const numberDiv = document.createElement('div')
