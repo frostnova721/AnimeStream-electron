@@ -1,11 +1,8 @@
 import {
     readClickedResult,
     getAnimeInfo,
-    gogoSearch,
-    storeEpisodeId,
     storeAnimeWatchedCache,
     getBackTo,
-    getStoredAnimeData,
     getDataBase,
     getEpisodes,
     getAnilistLink,
@@ -72,7 +69,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const target = e.target as HTMLElement;
         const epBtn = target.closest('#epBtn')
         if (epBtn) {
-            // await storeEpisodeId(epContent.getAttribute('mal-title') ?? '');
             const img = res.cover;
             const title = res.names?.english || res.title?.english;
             await storeAnimeWatchedCache(title, img, link);
@@ -178,13 +174,6 @@ async function appendEpisodes(term: string, term2?: string) {
         l = await getAnilistLink()
     }
     const res = await getEpisodes(l);
-    // try {
-    //     res = (await gogoSearch(term))[0];
-    // } catch (err) {
-    //     if (term2) {
-    //         res = (await gogoSearch(term2))[0];
-    //     } else throw new Error('Couldnt get any results :(');
-    // }
 
     const epContent = document.getElementById('episodeContent');
     const loaderContainer = document.getElementById('loaderContainer');
@@ -193,7 +182,6 @@ async function appendEpisodes(term: string, term2?: string) {
     epContent.style.display = 'grid';
 
     epContent.setAttribute('mal-title', term)
-    // console.log(res)
     for (let i = 1; i <= res.length; i++) {
         createEpisode(i, epContent, res[i-1].episodeTitle, res[i-1].imageUrl);
     }
@@ -219,8 +207,6 @@ function createEpisode(number: number, div: HTMLElement, epName: string, img?: s
     const nameDiv = document.createElement('div')
     nameDiv.className = 'epName'
     nameDiv.textContent = epName
-
-    // button.setAttribute('data-value', `${episodeId}${number}`);
 
     episode.appendChild(numberDiv);
     episode.appendChild(nameDiv)

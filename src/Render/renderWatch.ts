@@ -1,4 +1,4 @@
-import { getGogoStreams, getStoredEpisodeId, gogoSearch, stream } from '../Core';
+import { getGogoStreams, gogoSearch, stream } from '../Core';
 
 let playState = false;
 let videoLoaded = false;
@@ -51,7 +51,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     fullScreenBtn.onclick = () => video.requestFullscreen();
 
     //append the sources (needs a rework)
-    // const sources = (await getGogoStreams(await getStoredEpisodeId())).sources;
     const queries = window.location.href.split('?')[1].split('&');
 
     let anime: string | null = null, ep: string | null = null;
