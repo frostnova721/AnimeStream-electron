@@ -1,6 +1,7 @@
 import cheerio from 'cheerio'
 import axios from 'axios'
 import { IAiredEpisodes } from '../Types'
+import request, { gql } from 'graphql-request'
 
 export class Episodes {
     constructor() {} 
@@ -34,10 +35,34 @@ export class Episodes {
         return episodes
     }
 
-    private getAiredEpisodesFromAL = async(anilistEpLink: string): Promise<IAiredEpisodes[]> => {
-        const url = `${anilistEpLink}/watch`
-        const episodes = await this.fetch(`https://anime-stream-api-psi.vercel.app/anilistepisodes?link=${url}`)
-        return episodes
+    private getAiredEpisodesFromAL = async(id: string): Promise<IAiredEpisodes[]> => {
+        const query = gql`query {
+            Page(perPage: 1) {
+                media(id: $ID) {
+                    streamingEpisodes {
+                        title,
+                        thumbnail
+                    }
+                }
+            }
+        }`
+        
+        const response: { Page: { media: { streamingEpisodes: {title: string, thumbnail: string, url: string, site: string }[]}[]}} = await request(
+            'https://graphql.anilist.co',
+            query.replace('$ID', id)
+        )
+        const media = response.Page.media
+        const episodeArray: IAiredEpisodes[] = []
+        for(const data of media[0].streamingEpisodes) {
+            const ep = {
+                episodeNumber: data.title.split(' - ')[0].trim(),
+                episodeTitle: data.title.split(' - ')[1]?.trim() ?? '',
+                imageUrl: data.thumbnail ?? '',
+            }
+            episodeArray.push(ep)
+        }
+
+        return episodeArray
     }
 
     private fetch = async (url: string, options?: any): Promise<any> => {

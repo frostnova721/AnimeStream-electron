@@ -6,6 +6,7 @@ import {
     getDataBase,
     getEpisodes,
     getAnilistLink,
+    getMalIdWithAlId,
 } from '../Core';
 import { IAnimeDetails } from '../Types';
 
@@ -48,17 +49,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let res: any = '';
     let link: string = '';
-    let q: any = {};
-
-    //get the queries
-    const queries = window.location.href.split('?')[1]?.split('=');
-    if (queries) {
-        q = {
-            [queries[0]]: queries[1],
-        };
-    }
 
     link = await readClickedResult();
+    console.log(link)
+    // if(window.location.href.split('?')[1] !== 'rel=latest') 
+    if(db === 'anilist' && window.location.href.split('?')[1] === 'rel=latest') {
+        const data = await getMalIdWithAlId(link)
+        link = data.malLink
+    }
+    if(!link) throw new Error('Couldnt get the link') 
     res = await getAnimeInfo(link);
     await renderResult(res);
 
@@ -70,8 +69,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const epBtn = target.closest('#epBtn')
         if (epBtn) {
             const img = res.cover;
-            const title = res.names?.english || res.title?.english;
-            await storeAnimeWatchedCache(title, img, link);
+            const title = res.names.english.length > 1 ? res.names.english :  res.title;
+            await storeAnimeWatchedCache(title, img, link, await getAnilistLink());
             window.location.href = `./Watch.html?watch=${epContent.getAttribute('mal-title') ?? ''}&ep=${epBtn.getAttribute('episode')}`;
         }
     });
@@ -111,7 +110,7 @@ async function renderResult(res: IAnimeDetails) {
     if (!advancedInfo || !miscInfo || !characters) return;
     const info = document.createElement('p');
     info.innerHTML = [
-        `Title: ${res.names.english}`,
+        `Title: ${res.names.english.length > 1 ? res.names.english : res.title}`,
         `Japanese: ${res.names.japanese}`,
         `Episodes: ${res.episodes}`,
         `Type: ${res.type}`,
@@ -170,8 +169,9 @@ async function renderResult(res: IAnimeDetails) {
 async function appendEpisodes(term: string, term2?: string) {
     const db = await getDataBase()
     let l = await readClickedResult()
-    if(db === 'anilist') {
-        l = await getAnilistLink()
+    if(db === 'anilist' && window.location.href.split('?')[1] !== 'rel=latest') {
+        const link = await getAnilistLink()
+        l = link.split('/')[link.split('/').length - 1]
     }
     const res = await getEpisodes(l);
 

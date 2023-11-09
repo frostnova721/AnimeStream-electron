@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import path from 'path';
 import { Coder } from '../Coder/codeIt';
-import { ILatestAnimes } from '../Types';
+import { ILatestAnimes, ISeasonResponse } from '../Types';
 const cachePath = '../../Cache';
 const code = new Coder();
 
@@ -9,6 +9,7 @@ export async function storeAnimeWatchedCache(
     animeName: string,
     imageLink: string,
     infoLink: string,
+    anilistLink: string,
 ): Promise<Boolean> {
     try {
         const recPath = `${cachePath}/recents.mewmew`;
@@ -17,7 +18,7 @@ export async function storeAnimeWatchedCache(
         const data = fs.readFileSync(recPath, 'utf8');
         if (data.length === 0) fs.writeFileSync(recPath, await code.encode('{ "recents": [] }'));
         const currentData = JSON.parse(await code.decode(fs.readFileSync(recPath, 'utf8')));
-        currentData.recents.push({ name: animeName, img: imageLink, infoLink: infoLink });
+        currentData.recents.push({ name: animeName, img: imageLink, infoLink: infoLink, anilistLink: anilistLink });
         fs.writeFileSync(recPath, await code.encode(JSON.stringify(currentData, null, 2)));
         return true;
     } catch (err) {
@@ -40,7 +41,7 @@ export async function fetchRecentsFromCache(): Promise<
     }
 }
 
-export async function storeLatestAnimeCache(data: ILatestAnimes[]): Promise<Boolean> {
+export async function storeLatestAnimeCache(data: ILatestAnimes[] | ISeasonResponse[]): Promise<Boolean> {
     try {
         const recPath = `${cachePath}/runtime.mewmew`;
         if (!fs.existsSync(recPath))
@@ -57,7 +58,7 @@ export async function storeLatestAnimeCache(data: ILatestAnimes[]): Promise<Bool
     }
 }
 
-export async function fetchLatestFromCache(): Promise<ILatestAnimes[] | undefined> {
+export async function fetchLatestFromCache(): Promise<ILatestAnimes[] | ISeasonResponse[] | undefined> {
     try {
         const recPath = `${cachePath}/runtime.mewmew`;
         if (!fs.existsSync(recPath)) return undefined;

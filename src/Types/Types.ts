@@ -101,3 +101,10 @@ export interface IAiredEpisodes {
     episodeTitle: string;
     airedDate?: string | undefined;
 }
+
+export interface ISeasonResponse {
+    img: string;
+    url: string;
+    id: number;
+    title: string; 
+}

@@ -106,9 +106,14 @@ export async function getBackTo(): Promise<string> {
 
 export const Path = path;
 
-export async function getLatestAnime() {
+export async function getMALLatestAnime() {
     const res = await mal.fetchLatestAnime();
-    return res;
+    return res
+}
+
+export async function getALLatestAnime() {
+    const res = await anilist.getThisSeason();
+    return res
 }
 
 export async function storeAnimeData(data: string) {
@@ -145,4 +150,8 @@ export async function getAnilistLink() {
 
 export async function setAnilistLink(link: string) {
     return void await ipcRenderer.invoke('setAnilistLink', link)
+}
+
+export async function getMalIdWithAlId(id: string) {
+    return await anilist.getMalIdFromAlId(parseInt(id))
 }

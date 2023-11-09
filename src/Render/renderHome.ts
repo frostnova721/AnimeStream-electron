@@ -3,14 +3,17 @@ import {
     fetchRecentsFromCache,
     setBackTo,
     setClickableResult,
-    getLatestAnime,
     fetchLatestFromCache,
     storeLatestAnimeCache,
+    getDataBase,
+    getMALLatestAnime,
+    getALLatestAnime,
 } from '../Core';
-import { ILatestAnimes } from '../Types';
+import { ILatestAnimes, ISeasonResponse } from '../Types';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const connectedToAccount = false;
+    const db = await getDataBase()
 
     await setBackTo('../../Public/html/home.html');
 
@@ -123,36 +126,72 @@ async function loadRecentsFromCache() {
 }
 
 async function loadLatestAnimes() {
-    let latestAnimes: ILatestAnimes[] | undefined = undefined;
-    const cache = await fetchLatestFromCache();
-    if (cache) latestAnimes = cache;
-    else {
-        latestAnimes = await (await getLatestAnime()).slice(0, 50);
-        await storeLatestAnimeCache(latestAnimes);
-    }
-
-    if (!latestAnimes) return;
-    for (const latestAnime of latestAnimes) {
-        let name = '';
-        if (latestAnime.title.length >= 30) {
-            name = latestAnime.title.slice(0, 30) + '...';
-        } else {
-            name = latestAnime.title;
+    const db = await getDataBase()
+    if(db === 'mal') {
+        let latestAnimes: ILatestAnimes[];
+        const cache = await fetchLatestFromCache();
+        if (cache) latestAnimes = cache as ILatestAnimes[];
+        else {
+            latestAnimes = await (await getMALLatestAnime()).slice(0, 50);
+            await storeLatestAnimeCache(latestAnimes);
         }
-        const latestDiv = document.createElement('div');
-        const image = document.createElement('img');
-        const title = document.createElement('p');
-        latestDiv.className = 'latest_div';
-        latestDiv.setAttribute('data-value', latestAnime.infoLink);
-        image.src = latestAnime.image;
-        image.draggable = false;
-        image.className = 'recent_img';
-        title.textContent = name;
-        title.className = 'anime_title';
-        const parentDiv = document.getElementById('latest');
-        if (!parentDiv) return;
-        parentDiv.appendChild(latestDiv);
-        latestDiv.appendChild(image);
-        latestDiv.appendChild(title);
+
+        if (!latestAnimes) return;
+        for (const latestAnime of latestAnimes) {
+            let name = '';
+            if (latestAnime.title.length >= 30) {
+                name = latestAnime.title.slice(0, 30) + '...';
+            } else {
+                name = latestAnime.title;
+            }
+            const latestDiv = document.createElement('div');
+            const image = document.createElement('img');
+            const title = document.createElement('p');
+            latestDiv.className = 'latest_div';
+            latestDiv.setAttribute('data-value', latestAnime.infoLink);
+            image.src = latestAnime.image;
+            image.draggable = false;
+            image.className = 'recent_img';
+            title.textContent = name;
+            title.className = 'anime_title';
+            const parentDiv = document.getElementById('latest');
+            if (!parentDiv) return;
+            parentDiv.appendChild(latestDiv);
+            latestDiv.appendChild(image);
+            latestDiv.appendChild(title);
+        }
+    }
+    if(db === 'anilist') {
+        let latestAnimes: ISeasonResponse[];
+        const cache = await fetchLatestFromCache();
+        if (cache) latestAnimes = cache as ISeasonResponse[];
+        else {
+            latestAnimes = await (await getALLatestAnime()).slice(0, 50);
+            await storeLatestAnimeCache(latestAnimes);
+        }
+        if (!latestAnimes) return;
+        for (const latestAnime of latestAnimes) {
+            let name = '';
+            if (latestAnime.title.length >= 30) {
+                name = latestAnime.title.slice(0, 30) + '...';
+            } else {
+                name = latestAnime.title;
+            }
+            const latestDiv = document.createElement('div');
+            const image = document.createElement('img');
+            const title = document.createElement('p');
+            latestDiv.className = 'latest_div';
+            latestDiv.setAttribute('data-value', `${latestAnime.id}`);
+            image.src = latestAnime.img;
+            image.draggable = false;
+            image.className = 'recent_img';
+            title.textContent = name;
+            title.className = 'anime_title';
+            const parentDiv = document.getElementById('latest');
+            if (!parentDiv) return;
+            parentDiv.appendChild(latestDiv);
+            latestDiv.appendChild(image);
+            latestDiv.appendChild(title);
+        }
     }
 }
