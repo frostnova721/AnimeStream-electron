@@ -106,5 +106,5 @@ export interface ISeasonResponse {
     img: string;
     url: string;
     id: number;
-    title: string; 
+    title: string;
 }

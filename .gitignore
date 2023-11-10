@@ -126,6 +126,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 Tests/
+test/
 *.mewmew
 recents.mewmew
 runtime.mewmew

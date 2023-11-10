@@ -18,7 +18,12 @@ export async function storeAnimeWatchedCache(
         const data = fs.readFileSync(recPath, 'utf8');
         if (data.length === 0) fs.writeFileSync(recPath, await code.encode('{ "recents": [] }'));
         const currentData = JSON.parse(await code.decode(fs.readFileSync(recPath, 'utf8')));
-        currentData.recents.push({ name: animeName, img: imageLink, infoLink: infoLink, anilistLink: anilistLink });
+        currentData.recents.push({
+            name: animeName,
+            img: imageLink,
+            infoLink: infoLink,
+            anilistLink: anilistLink,
+        });
         fs.writeFileSync(recPath, await code.encode(JSON.stringify(currentData, null, 2)));
         return true;
     } catch (err) {
@@ -41,7 +46,9 @@ export async function fetchRecentsFromCache(): Promise<
     }
 }
 
-export async function storeLatestAnimeCache(data: ILatestAnimes[] | ISeasonResponse[]): Promise<Boolean> {
+export async function storeLatestAnimeCache(
+    data: ILatestAnimes[] | ISeasonResponse[],
+): Promise<Boolean> {
     try {
         const recPath = `${cachePath}/runtime.mewmew`;
         if (!fs.existsSync(recPath))
@@ -58,7 +65,9 @@ export async function storeLatestAnimeCache(data: ILatestAnimes[] | ISeasonRespo
     }
 }
 
-export async function fetchLatestFromCache(): Promise<ILatestAnimes[] | ISeasonResponse[] | undefined> {
+export async function fetchLatestFromCache(): Promise<
+    ILatestAnimes[] | ISeasonResponse[] | undefined
+> {
     try {
         const recPath = `${cachePath}/runtime.mewmew`;
         if (!fs.existsSync(recPath)) return undefined;

@@ -21,7 +21,7 @@ const globalVars: TGlobalVar = {
     episodeId: '',
     subWindows: 0,
     backTo: '',
-    clickedAnilistLink: ''
+    clickedAnilistLink: '',
 };
 
 const anilistData = {
@@ -29,7 +29,6 @@ const anilistData = {
 };
 
 const createWindow = () => {
-
     const mainWindow = new BrowserWindow({
         width: 1200,
         height: 850,
@@ -118,7 +117,7 @@ const createWindow = () => {
 
     ipcMain.handle('setAnilistLink', (e, link: string) => {
         globalVars.clickedAnilistLink = link;
-        return null
+        return null;
     });
 };
 

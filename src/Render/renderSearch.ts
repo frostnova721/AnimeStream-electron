@@ -1,9 +1,4 @@
-import {
-    searchResults,
-    setAnilistLink,
-    setBackTo,
-    setClickableResult,
-} from '../Core';
+import { searchResults, setAnilistLink, setBackTo, setClickableResult } from '../Core';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const btn = document.getElementById('searchBtn');
@@ -30,8 +25,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!link) throw new Error('Couldnt get the link');
         await setClickableResult(link);
         const alLink = target.closest('div')?.getAttribute('al-link');
-        if(alLink) {
-            await setAnilistLink(alLink)
+        if (alLink) {
+            await setAnilistLink(alLink);
         }
         window.location.href = './AnimeInfo.html';
     });
@@ -46,7 +41,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 });
-
 
 //functions
 
@@ -80,8 +74,8 @@ async function appendSearchResults(searchValue: string) {
         const textElement = document.createElement('p');
         textElement.innerText = result.title.english ?? result.title.romaji;
 
-        if(result.infoAl) {
-            newDiv.setAttribute('al-link', result.infoAl)
+        if (result.infoAl) {
+            newDiv.setAttribute('al-link', result.infoAl);
         }
 
         resultDiv.appendChild(newDiv);

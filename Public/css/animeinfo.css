@@ -10,7 +10,7 @@
 
 @font-face {
     font-family: NunitoSans-Bold;
-    src: url('../Assets/Fonts/NunitoSans_10pt-Medium.ttf')
+    src: url('../Assets/Fonts/NunitoSans_10pt-Medium.ttf');
 }
 
 body {
@@ -290,7 +290,7 @@ body {
     height: 80%;
     display: grid;
     grid-template-columns: repeat(2, 2fr);
-    grid-template-rows: repeat(2, 0.1fr);
+    grid-template-rows: repeat(0.5, 0.1fr);
     align-items: center;
     overflow-x: hidden;
     overflow-y: auto;

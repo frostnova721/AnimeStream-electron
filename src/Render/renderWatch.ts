@@ -53,16 +53,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     //append the sources (needs a rework)
     const queries = window.location.href.split('?')[1].split('&');
 
-    let anime: string | null = null, ep: string | null = null;
+    let anime: string | null = null,
+        ep: string | null = null;
 
-    for(const query of queries) {
-        const key = query.split('=')
-        if(key[0] === 'watch') anime = key[1]
-        if(key[0] === 'ep') ep = key[1]
+    for (const query of queries) {
+        const key = query.split('=');
+        if (key[0] === 'watch') anime = key[1];
+        if (key[0] === 'ep') ep = key[1];
     }
 
-    if(!anime) throw new Error('no anime name found')
-    const sources = await (await getGogoStreams((await gogoSearch(decodeURIComponent(anime)))[0].episodeLink+ep)).sources
+    if (!anime) throw new Error('no anime name found');
+    const sources = await (
+        await getGogoStreams((await gogoSearch(decodeURIComponent(anime)))[0].episodeLink + ep)
+    ).sources;
 
     for (const source of sources) {
         const child = document.createElement('button');

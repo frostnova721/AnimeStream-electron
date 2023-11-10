@@ -14,16 +14,16 @@ export async function getAnimeInfo(link: string) {
 }
 
 export async function searchResults(searchTerm: string) {
-    const db = await getDataBase()
-    if(db ==='anilist') {
+    const db = await getDataBase();
+    if (db === 'anilist') {
         const res = await anilist.searchAnime(searchTerm);
         return res;
     }
-    if(db === 'mal') {
+    if (db === 'mal') {
         const res = await mal.jikanSearch(searchTerm);
         return res;
     }
-    throw new Error('Error Finding The DataBase')
+    throw new Error('Error Finding The DataBase');
 }
 
 export async function setClickableResult(link: string): Promise<void> {
@@ -108,12 +108,12 @@ export const Path = path;
 
 export async function getMALLatestAnime() {
     const res = await mal.fetchLatestAnime();
-    return res
+    return res;
 }
 
 export async function getALLatestAnime() {
     const res = await anilist.getThisSeason();
-    return res
+    return res;
 }
 
 export async function storeAnimeData(data: string) {
@@ -138,20 +138,20 @@ export async function changeDataBase(db: 'mal' | 'anilist') {
 }
 
 export async function getEpisodes(infoLink: string) {
-    const ep = new Episodes()
-    const eps = await ep.getAiredEpisodes(infoLink, await getDataBase())
+    const ep = new Episodes();
+    const eps = await ep.getAiredEpisodes(infoLink, await getDataBase());
     return eps;
 }
 
 export async function getAnilistLink() {
-    const res = await ipcRenderer.invoke('getStoredAnilistLink')
-    return res
+    const res = await ipcRenderer.invoke('getStoredAnilistLink');
+    return res;
 }
 
 export async function setAnilistLink(link: string) {
-    return void await ipcRenderer.invoke('setAnilistLink', link)
+    return void (await ipcRenderer.invoke('setAnilistLink', link));
 }
 
 export async function getMalIdWithAlId(id: string) {
-    return await anilist.getMalIdFromAlId(parseInt(id))
+    return await anilist.getMalIdFromAlId(parseInt(id));
 }

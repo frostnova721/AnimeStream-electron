@@ -51,13 +51,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     let link: string = '';
 
     link = await readClickedResult();
-    console.log(link)
-    // if(window.location.href.split('?')[1] !== 'rel=latest') 
-    if(db === 'anilist' && window.location.href.split('?')[1] === 'rel=latest') {
-        const data = await getMalIdWithAlId(link)
-        link = data.malLink
+    console.log(link);
+    // if(window.location.href.split('?')[1] !== 'rel=latest')
+    if (
+        (db === 'anilist' && window.location.href.split('?')[1] === 'rel=latest') ||
+        window.location.href.split('?')[1] === 'rel=bwatch'
+    ) {
+        const data = await getMalIdWithAlId(link);
+        link = data.malLink;
     }
-    if(!link) throw new Error('Couldnt get the link') 
+    if (!link) throw new Error('Couldnt get the link');
     res = await getAnimeInfo(link);
     await renderResult(res);
 
@@ -66,12 +69,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     //goto watch page when clicked on a episode
     epContent.addEventListener('click', async (e) => {
         const target = e.target as HTMLElement;
-        const epBtn = target.closest('#epBtn')
+        const epBtn = target.closest('#epBtn');
         if (epBtn) {
             const img = res.cover;
-            const title = res.names.english.length > 1 ? res.names.english :  res.title;
+            const title = res.names.english.length > 1 ? res.names.english : res.title;
             await storeAnimeWatchedCache(title, img, link, await getAnilistLink());
-            window.location.href = `./Watch.html?watch=${epContent.getAttribute('mal-title') ?? ''}&ep=${epBtn.getAttribute('episode')}`;
+            window.location.href = `./Watch.html?watch=${
+                epContent.getAttribute('mal-title') ?? ''
+            }&ep=${epBtn.getAttribute('episode')}`;
         }
     });
 });
@@ -95,7 +100,15 @@ async function renderResult(res: IAnimeDetails) {
     if (!titleDiv) return;
     const title = document.createElement('p');
     title.innerText =
-        res.names.english.length>1 ? res.names.english.length > 45 ? res.names.english.slice(0, 45) + '...' : res.names.english : res.title.length>1 ? res.title.length> 45 ? res.title.slice(0,45) + '...' : res.title : '';
+        res.names.english.length > 1
+            ? res.names.english.length > 45
+                ? res.names.english.slice(0, 45) + '...'
+                : res.names.english
+            : res.title.length > 1
+            ? res.title.length > 45
+                ? res.title.slice(0, 45) + '...'
+                : res.title
+            : '';
     titleDiv.appendChild(title);
 
     const basicInfo = document.getElementById('basicInfo');
@@ -167,11 +180,11 @@ async function renderResult(res: IAnimeDetails) {
 }
 
 async function appendEpisodes(term: string, term2?: string) {
-    const db = await getDataBase()
-    let l = await readClickedResult()
-    if(db === 'anilist' && window.location.href.split('?')[1] !== 'rel=latest') {
-        const link = await getAnilistLink()
-        l = link.split('/')[link.split('/').length - 1]
+    const db = await getDataBase();
+    let l = await readClickedResult();
+    if (db === 'anilist' && window.location.href.split('?')[1] !== 'rel=latest') {
+        const link = await getAnilistLink();
+        l = link.split('/')[link.split('/').length - 1];
     }
     const res = await getEpisodes(l);
 
@@ -181,35 +194,41 @@ async function appendEpisodes(term: string, term2?: string) {
     loaderContainer.style.display = 'none';
     epContent.style.display = 'grid';
 
-    epContent.setAttribute('mal-title', term)
+    epContent.setAttribute('mal-title', term);
     for (let i = 1; i <= res.length; i++) {
-        createEpisode(i, epContent, res[i-1].episodeTitle, res[i-1].imageUrl);
+        createEpisode(i, epContent, res[i - 1].episodeTitle, res[i - 1].imageUrl);
     }
 }
 
-function createEpisode(number: number, div: HTMLElement, epName: string, img?: string,episodeId?: string) {
+function createEpisode(
+    number: number,
+    div: HTMLElement,
+    epName: string,
+    img?: string,
+    episodeId?: string,
+) {
     const divElement = document.createElement('div');
     divElement.className = 'episode';
 
     const episode = document.createElement('div');
     episode.className = 'epBtn';
     episode.id = 'epBtn';
-    episode.setAttribute('episode', `${number}`)
+    episode.setAttribute('episode', `${number}`);
 
-    if(img) {
-        episode.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url(${img})`
+    if (img) {
+        episode.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url(${img})`;
     }
 
-    const numberDiv = document.createElement('div')
-    numberDiv.className = 'epNumber'
-    numberDiv.textContent = `Episode ${number}`
+    const numberDiv = document.createElement('div');
+    numberDiv.className = 'epNumber';
+    numberDiv.textContent = `Episode ${number}`;
 
-    const nameDiv = document.createElement('div')
-    nameDiv.className = 'epName'
-    nameDiv.textContent = epName
+    const nameDiv = document.createElement('div');
+    nameDiv.className = 'epName';
+    nameDiv.textContent = epName;
 
     episode.appendChild(numberDiv);
-    episode.appendChild(nameDiv)
+    episode.appendChild(nameDiv);
     divElement.appendChild(episode);
     div.appendChild(divElement);
 }

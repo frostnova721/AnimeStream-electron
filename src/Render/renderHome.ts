@@ -13,7 +13,7 @@ import { ILatestAnimes, ISeasonResponse } from '../Types';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const connectedToAccount = false;
-    const db = await getDataBase()
+    const db = await getDataBase();
 
     await setBackTo('../../Public/html/home.html');
 
@@ -126,8 +126,8 @@ async function loadRecentsFromCache() {
 }
 
 async function loadLatestAnimes() {
-    const db = await getDataBase()
-    if(db === 'mal') {
+    const db = await getDataBase();
+    if (db === 'mal') {
         let latestAnimes: ILatestAnimes[];
         const cache = await fetchLatestFromCache();
         if (cache) latestAnimes = cache as ILatestAnimes[];
@@ -161,7 +161,7 @@ async function loadLatestAnimes() {
             latestDiv.appendChild(title);
         }
     }
-    if(db === 'anilist') {
+    if (db === 'anilist') {
         let latestAnimes: ISeasonResponse[];
         const cache = await fetchLatestFromCache();
         if (cache) latestAnimes = cache as ISeasonResponse[];

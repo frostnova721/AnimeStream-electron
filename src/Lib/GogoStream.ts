@@ -69,6 +69,7 @@ export class GogoStreams {
         episodeId: string,
         quality?: '360' | '480' | '720' | '1080',
     ): Promise<IStreamOutput> => {
+        //gives vidstreaming links
         if (!episodeId.startsWith(this.baseUrl)) {
             episodeId = `${this.baseUrl}/${episodeId}`;
         }
@@ -112,6 +113,8 @@ export class GogoStreams {
         }
 
         const concatedList: any[] = [].concat(...qualityList);
+
+        await this.getOtherLinks(episodeId)
 
         if (quality) {
             const specificArray = [];
@@ -181,6 +184,16 @@ export class GogoStreams {
         if (!link) return undefined;
         return link;
     };
+
+    private getOtherLinks = async(epUrl: string) => {
+        const res = await this.fetch(epUrl);
+        const $ = cheerio.load(res)
+        const otherLinks = $('.anime_muti_link').children('ul')
+        otherLinks.each((ind, ele) => {
+            const data = $(ele).children('a').attr('href')
+            console.log(data)
+        })
+    }
 
     private decrypt = async (streamLink: URL) => {
         const res = await this.fetch(streamLink.href);
