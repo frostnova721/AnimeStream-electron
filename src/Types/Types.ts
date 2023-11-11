@@ -108,3 +108,32 @@ export interface ISeasonResponse {
     id: number;
     title: string;
 }
+
+export interface AnimeEpisode {
+    id: number;
+    anime_id: number;
+    episode: number;
+    episode2: number;
+    edition: string;
+    title: string;
+    snapshot: string;
+    disc: string;
+    audio: string;
+    duration: string;
+    session: string;
+    filler: number;
+    created_at: string;
+}
+
+export interface AnimepaheSearch {
+    id: number;
+    title: string;
+    type: string;
+    episodes: number;
+    status: string;
+    season: string;
+    year: number;
+    score: number;
+    poster: string;
+    session: string;
+}

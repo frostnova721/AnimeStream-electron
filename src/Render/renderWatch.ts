@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         !fsImg ||
         !srcLoader
     )
-        throw new Error('err'); //useless check for typescript's OCD
+        throw new Error('err'); //typescript's OCD
 
     //to go back
     backBtn.onclick = () => (window.location.href = './AnimeInfo.html?rel=bwatch');
