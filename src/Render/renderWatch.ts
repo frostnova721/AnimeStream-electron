@@ -6,7 +6,7 @@ let videoLoaded = false;
 document.addEventListener('DOMContentLoaded', async () => {
     const backBtn = document.getElementById('backBtn');
     const video = <HTMLVideoElement>document.getElementById('videoPlayer');
-    const sourcesDiv = document.getElementById('sources');
+    // const sourcesDiv = document.getElementById('sources');
     const playPause = document.getElementById('playPause');
     const progressBar = document.getElementById('watch_progress');
     const progressed = document.getElementById('progressed');
@@ -18,10 +18,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const playPauseImg = <HTMLImageElement>document.getElementById('playPauseImg');
     const fsImg = <HTMLImageElement>document.getElementById('fsImg');
     const srcLoader = document.getElementById('srcLoader');
+    const serversBtn = document.getElementById('serversBtn')
+    const closeBtn = document.getElementById('close')
+    const overlay = document.getElementById('overlay')
+    const container = document.getElementById('container')
+    const streamDiv = document.getElementById('streams')
 
     if (
         !video ||
-        !sourcesDiv ||
+        // !sourcesDiv ||
         !backBtn ||
         !playPause ||
         !progressBar ||
@@ -33,7 +38,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         !point ||
         !playPauseImg ||
         !fsImg ||
-        !srcLoader
+        // !srcLoader ||
+        !serversBtn ||
+        !closeBtn ||
+        !overlay ||
+        !container ||
+        !streamDiv
     )
         throw new Error('err'); //typescript's OCD
 
@@ -49,6 +59,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     //get fullscreen for the video
     fullScreenBtn.onclick = () => video.requestFullscreen();
+
+    serversBtn.onclick = () => {
+        overlay.classList.toggle('show')
+        container.classList.toggle('hidden')
+    }
+
+    closeBtn.onclick = () => {
+        overlay.classList.toggle('show')
+        container.classList.toggle('hidden')
+    }
 
     //append the sources (needs a rework)
     const queries = window.location.href.split('?')[1].split('&');
@@ -74,14 +94,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         child.setAttribute('data-value', source.link);
         child.textContent = source.quality ?? '';
 
-        sourcesDiv.appendChild(child);
+        streamDiv.appendChild(child);
     }
 
     //hide the loader
-    srcLoader.style.display = 'none';
+    // srcLoader.style.display = 'none';
 
     //listen for the clicks on source to change the source
-    sourcesDiv.addEventListener('click', async (e) => {
+    streamDiv.addEventListener('click', async (e) => {
         const target = e.target as HTMLElement;
         if (target.id === 'source') {
             const src = target.getAttribute('data-value') ?? '';

@@ -12,12 +12,30 @@
         <div class="main" id="main">
             <div class="back">
                 <button class="backBtn" id="backBtn">
-                    <img src="../Assets/Icons/arrow.png" />
+                    <img draggable="false" src="../Assets/Icons/arrow.png" />
                 </button>
             </div>
             <div class="nav"></div>
+            <div class="overlay" id="overlay">
+                <div class="box">
+                    <div class="servers">
+                        <div class="gogo" id="gogo">Gogoanime</div>
+                        <div class="pahe" id="pahe">Animepahe</div>
+                        <div class="close" id="close">CLOSE</div>
+                    </div>
+                    <div class="stream">
+                        <div class="subStream">
+                            <div class="streamGroup">
+                                <div class="streamName">Vid Streaming</div>
+                                <div class="streams" id="streams">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="container" id="container">
-                <div class="playerContainer">
+                <div class="playerContainer" >
                     <div class="playerContainer2">
                         <div class="player">
                             <video class="videoPlayer" id="videoPlayer">na na</video>
@@ -46,16 +64,21 @@
                         </div>
                     </div>
                 </div>
+                <!-- <div class="h" style="height: 10px; border: 1px solid white; margin-top: 10px;"></div> -->
                 <div class="sourcesContainer">
-                    <div class="srcLoader" id="srcLoader">
-                        <div class="lds-ellipsis">
+                    <!-- <div class="srcLoader" id="srcLoader" >
+                        <div class="lds-ellipsis" >
                             <div></div>
                             <div></div>
                             <div></div>
                             <div></div>
                         </div>
+                    </div> -->
+                    <div class="sources">
+                        <button class="previousEp" id="previousEp"><img draggable="false" src="../Assets/Icons/back.png"></button>
+                        <button class="serversBtn" id="serversBtn">server</button>
+                        <button class="nextEp" id="nextEp"><img draggable="false" src="../Assets/Icons/back.png"></button>
                     </div>
-                    <div class="sources" id="sources"></div>
                 </div>
             </div>
         </div>

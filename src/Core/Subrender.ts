@@ -130,6 +130,11 @@ export async function getDataBase() {
     return settings.database;
 }
 
+export async function getDefaultStream() {
+    const settings = await readSettings();
+    return settings.defaultStream;
+} 
+
 export async function changeDataBase(db: 'mal' | 'anilist') {
     const settings = await readSettings();
     settings.database = db;

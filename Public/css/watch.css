@@ -34,9 +34,89 @@ button:focus {
     justify-content: center;
 }
 
+.overlay {
+    margin-top: 5rem;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index:10;
+}
+
+.overlay.show {
+    display: flex;
+}
+
+.box {
+    border: 1px solid white;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 900px;
+    height: 500px;
+    display: flex;
+}
+
 .container {
     margin-top: 20px;
     padding: 25px;
+}
+
+.container.hidden {
+    display: none;
+}
+
+.servers {
+    height: 100%;
+    width: 25%;
+    border-right: 1px solid white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.2rem;
+}
+
+.stream {
+    width: 75%;
+}
+
+.servers div {
+    height: 40px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.servers div:hover {
+    background-color: #caf979;
+    color: black
+}
+
+.streamGroup {
+    margin-bottom: 20px;
+}
+
+.subStream {
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.streamName {
+    margin-bottom: 20px;
+    font-size: 1.6rem;
+}
+
+.streams {
+    /* border: 1px solid white; */
+    border-radius: 12px;
+    width: 95%;
+    height: 4rem;
+    display: flex;
 }
 
 .playerContainer {
@@ -133,9 +213,11 @@ button:focus {
 }
 
 .sources {
-    border: 1px solid white;
+    /* border: 1px solid white; */
     border-radius: 12px;
     display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 5px;
     width: 50rem;
     height: 60px;
@@ -155,6 +237,55 @@ button:focus {
     font-family: Poppins-Bold;
     border-radius: 12px;
     transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.sources button {
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border: 1px solid white;
+    height: 100%;
+    width: 30%;
+    margin-left: 20px;
+    font-size: 1.4rem;
+    font-family: Poppins-Bold;
+    border-radius: 15px;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, filter 0.2s ease-in-out;
+}
+
+.sources button:hover {
+    background-color: #caf979;
+    color: black;
+    border-color: black;
+}
+
+.sources button:hover img {
+    filter: none;
+}
+
+.previousEp img {
+    filter: invert();
+    height: 70%;
+    width: 40px;
+}
+
+.nextEp img {
+    transform: scaleX(-1);
+    filter: invert();
+    height: 70%;
+    width: 40px;
+}
+
+.sources button:active {
+    background-color: black;
+    border-color: #caf979;
+    color: white
+}
+
+.sources button:active img {
+    filter: invert();
 }
 
 .source:hover {
