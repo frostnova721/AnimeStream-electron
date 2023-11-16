@@ -1,4 +1,4 @@
-import { getGogoStreams, gogoSearch, stream } from '../Core';
+import { getGogoStreams, gogoSearch, paheSearch, stream } from '../Core';
 
 let playState = false;
 let videoLoaded = false;

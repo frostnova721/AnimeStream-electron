@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { MAL, GogoStreams, AniList, Episodes } from '../Lib';
+import { MAL, GogoStreams, AniList, Episodes, Animepahe } from '../Lib';
 import { IMALSearch, ISearchOutput, IStreamOutput, Settings } from '../Types';
 import Hls from 'hls.js';
 import * as fs from 'fs';
@@ -49,12 +49,19 @@ export async function getGogoStreams(
 ): Promise<IStreamOutput> {
     const gogo = new GogoStreams();
     try {
-        const results = gogo.getStreams(episodeId, quality);
+        const results = await gogo.getStreams(episodeId, quality);
+        console.log(results)
         return results;
     } catch (err) {
         console.log(err);
         throw new Error('Couldnt get any results');
     }
+}
+
+export async function paheSearch(term: string) {
+    const pahe = new Animepahe()
+    const res = await pahe.searchPahe(term)
+    return res
 }
 
 export async function stream(videoElement: HTMLVideoElement, src: string) {

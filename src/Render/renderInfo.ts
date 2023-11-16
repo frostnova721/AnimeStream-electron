@@ -7,6 +7,7 @@ import {
     getEpisodes,
     getAnilistLink,
     getMalIdWithAlId,
+    setAnilistLink,
 } from '../Core';
 import { IAnimeDetails } from '../Types';
 
@@ -51,13 +52,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     let link: string = '';
 
     link = await readClickedResult();
-    console.log(link);
     // if(window.location.href.split('?')[1] !== 'rel=latest')
     if (
         (db === 'anilist' && window.location.href.split('?')[1] === 'rel=latest') ||
         window.location.href.split('?')[1] === 'rel=bwatch'
     ) {
         const data = await getMalIdWithAlId(link);
+        await setAnilistLink(`https://anilist.co/anime/${link}`)
         link = data.malLink;
     }
     if (!link) throw new Error('Couldnt get the link');
@@ -73,7 +74,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (epBtn) {
             const img = res.cover;
             const title = res.names.english.length > 1 ? res.names.english : res.title;
-            await storeAnimeWatchedCache(title, img, link, await getAnilistLink());
+            const al = await getAnilistLink()
+            await storeAnimeWatchedCache(title, img, link, al);
             window.location.href = `./Watch.html?watch=${
                 epContent.getAttribute('mal-title') ?? ''
             }&ep=${epBtn.getAttribute('episode')}`;

@@ -109,7 +109,7 @@ export class GogoStreams {
         }
 
         for (const src of parsedData.source_bk) {
-            qualityList.push(await this.generateQualitiesFromBaseStreamLink(src.file));
+            qualityList.push(await this.generateQualitiesFromBaseStreamLink(src.file, true));
         }
 
         const concatedList: any[] = [].concat(...qualityList);
@@ -139,7 +139,7 @@ export class GogoStreams {
     };
 
     private generateQualitiesFromBaseStreamLink = async (
-        streamLink: string,
+        streamLink: string, backup?: boolean
     ): Promise<{ resolution: string; quality: string; link: string }[]> => {
         const qualityArray = [];
         const streamMetadata: string = await this.fetch(streamLink);
@@ -154,6 +154,7 @@ export class GogoStreams {
                 resolution: edit[0],
                 quality: edit[1].replace(/"/g, ''),
                 link: `${streamLink.split('/').slice(0, -1).join('/')}/${edit[2]}`,
+                server: backup ? "vidstreaming" : "vidstreaming backup"
             };
             qualityArray.push(obj);
         }

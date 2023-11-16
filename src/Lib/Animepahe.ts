@@ -5,7 +5,7 @@ import { AnimeEpisode, AnimepaheSearch } from '../Types';
 export class Animepahe {
     constructor() {}
     protected sources: any[] = []
-    private extractKwik = async (videoUrl: URL) => {
+    public extractKwik = async (videoUrl: URL) => {
         try {
             const { data } = await axios.get(`${videoUrl.href}`, {
                 headers: { Referer: 'https://animepahe.ru' },
@@ -26,20 +26,20 @@ export class Animepahe {
         }
     };
 
-    public getAnimepaheStreams = async (episodeUrl: string): Promise<{stream: string, server: string, quality: string}[]> => {
+    public getAnimepaheStreams = async (episodeUrl: string): Promise<{link: string, server: string, quality: string}[]> => {
         const { data } = await axios.get(episodeUrl);
         const $ = load(data);
         const streams = $('div#resolutionMenu > button');
-        const links: any[] = [];
+        const links: {link: string, server: string, quality: string }[] = [];
 
         streams.each((ind, ele) => {
             const data = $(ele);
-            const link = data.attr('data-src');
+            const link = data.attr('data-src') ?? '';
             const text = data.text();
             const server = text.split('·')[0]?.trim() ?? '';
             const quality = text.split('·')[1]?.trim() ?? '';
             links.push({
-                stream: link,
+                link: link,
                 server: server,
                 quality: quality,
             });

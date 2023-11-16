@@ -8,6 +8,7 @@ import {
     getDataBase,
     getMALLatestAnime,
     getALLatestAnime,
+    setAnilistLink,
 } from '../Core';
 import { ILatestAnimes, ISeasonResponse } from '../Types';
 
@@ -67,6 +68,8 @@ recentDiv.addEventListener('click', async (e) => {
     const link = div?.getAttribute('data-value');
     if (link) {
         await setClickableResult(link);
+        const alLink = div?.getAttribute('al-link');
+        if(alLink) await setAnilistLink(alLink)
         window.location.href = './AnimeInfo.html?rel=recents';
     }
 });
@@ -112,6 +115,7 @@ async function loadRecentsFromCache() {
         const title = document.createElement('p');
         recentDiv.className = 'recent_div';
         recentDiv.setAttribute('data-value', data.infoLink);
+        recentDiv.setAttribute('al-link', data.anilistLink);
         image.src = data.img;
         image.draggable = false;
         image.className = 'recent_img';

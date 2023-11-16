@@ -38,6 +38,7 @@ const createWindow = () => {
         },
     });
 
+    process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
     mainWindow.loadFile(path.join(__dirname, '../../Public/html/Home.html'));
 
     // if(!app.isPackaged) {

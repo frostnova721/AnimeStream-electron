@@ -4,6 +4,7 @@ export interface IStreamOutput {
         resolution: string;
         quality: string;
         link: string;
+        server: string;
     }[];
     iframe: string;
 }
