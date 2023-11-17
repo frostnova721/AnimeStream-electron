@@ -6,6 +6,7 @@ import * as fs from 'fs';
 import path from 'path';
 
 const mal = new MAL();
+const pahe = new Animepahe()
 const anilist = new AniList();
 
 export async function getAnimeInfo(link: string) {
@@ -59,9 +60,19 @@ export async function getGogoStreams(
 }
 
 export async function paheSearch(term: string) {
-    const pahe = new Animepahe()
     const res = await pahe.searchPahe(term)
     return res
+}
+
+export async function paheStreamDetails(session: string, episode: number) {
+    const res = await pahe.getEpisodeInfo(session)
+    const data = await pahe.getAnimepaheStreams(`https://animepahe.ru/play/${session}/${res[episode-1].session}`)
+    return data
+}
+
+export async function getPaheStreams(streamLink: string) {
+    const streams = await pahe.extractKwik(new URL(streamLink))
+    return streams
 }
 
 export async function stream(videoElement: HTMLVideoElement, src: string) {

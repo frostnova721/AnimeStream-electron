@@ -4,7 +4,8 @@ import { AnimeEpisode, AnimepaheSearch } from '../Types';
 
 export class Animepahe {
     constructor() {}
-    protected sources: any[] = []
+    protected sources: {url: string, isM3U8: boolean}[] = []
+
     public extractKwik = async (videoUrl: URL) => {
         try {
             const { data } = await axios.get(`${videoUrl.href}`, {

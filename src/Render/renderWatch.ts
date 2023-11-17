@@ -1,7 +1,10 @@
-import { getGogoStreams, gogoSearch, paheSearch, stream } from '../Core';
+import { getGogoStreams, getPaheStreams, gogoSearch, paheSearch, paheStreamDetails, stream } from '../Core';
 
 let playState = false;
 let videoLoaded = false;
+let localMemory;
+let selectedProvider : 'animepahe' | 'gogoanime' = 'gogoanime';
+let playTime: number = 0
 
 document.addEventListener('DOMContentLoaded', async () => {
     const backBtn = document.getElementById('backBtn');
@@ -22,7 +25,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const closeBtn = document.getElementById('close')
     const overlay = document.getElementById('overlay')
     const container = document.getElementById('container')
-    const streamDiv = document.getElementById('streams')
+    // const streamDiv = document.getElementById('streams')
+    const subStream = document.getElementById('subStream')
+    const paheButton = document.getElementById('pahe')
+    const gogoButton = document.getElementById('gogo')
 
     if (
         !video ||
@@ -43,7 +49,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         !closeBtn ||
         !overlay ||
         !container ||
-        !streamDiv
+        !gogoButton ||
+        !paheButton ||
+        !subStream
+        // !streamDiv
     )
         throw new Error('err'); //typescript's OCD
 
@@ -73,8 +82,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     //append the sources (needs a rework)
     const queries = window.location.href.split('?')[1].split('&');
 
-    let anime: string | null = null,
-        ep: string | null = null;
+    let anime: string = '',
+        ep: string  = '';
 
     for (const query of queries) {
         const key = query.split('=');
@@ -82,26 +91,39 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (key[0] === 'ep') ep = key[1];
     }
 
-    if (!anime) throw new Error('no anime name found');
-    const sources = await (
-        await getGogoStreams((await gogoSearch(decodeURIComponent(anime)))[0].episodeLink + ep)
-    ).sources;
+    if (!anime || !ep) throw new Error('no anime name found');
 
-    for (const source of sources) {
-        const child = document.createElement('button');
-        child.className = 'source';
-        child.id = 'source';
-        child.setAttribute('data-value', source.link);
-        child.textContent = source.quality ?? '';
+    paheButton.onclick = async() => {
+        selectedProvider = 'animepahe'
+        await loadCorrespondingStreams(anime ?? '', parseInt(ep))
+   }
 
-        streamDiv.appendChild(child);
-    }
+   gogoButton.onclick = async() => {
+       selectedProvider = 'gogoanime'
+        await loadCorrespondingStreams(anime ?? '', parseInt(ep))
+   }
+
+    await loadCorrespondingStreams(anime ?? '', parseInt(ep))
+
+    // for (const source of sources) {
+    //     const child = document.createElement('button');
+    //     child.className = 'source';
+    //     child.id = 'source';
+    //     child.setAttribute('data-value', source.link);
+    //     child.textContent = source.quality ?? '';
+
+    //     streamDiv.appendChild(child);
+    // }
 
     //hide the loader
     // srcLoader.style.display = 'none';
+    const updateProgression = () => {
+        progressed.style.width = `${(video.currentTime / video.duration) * 100}%`;
+        point.style.marginLeft = `${(video.currentTime / video.duration) * 100 - 0.5}%`;
+    }
 
     //listen for the clicks on source to change the source
-    streamDiv.addEventListener('click', async (e) => {
+    subStream.addEventListener('click', async (e) => {
         const target = e.target as HTMLElement;
         if (target.id === 'source') {
             const src = target.getAttribute('data-value') ?? '';
@@ -110,6 +132,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 videoLoaded = true;
                 video.addEventListener('loadedmetadata', () => {
                     updateDuration(video, totalTime);
+                    if(playTime !== 0) video.currentTime = playTime
+                    updateProgression()
                 });
             } catch (err) {
                 console.log(err);
@@ -122,6 +146,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!isNaN(video.duration) && isFinite(video.duration)) {
             totalTime.textContent = `${secondsToTime(Math.floor(video.duration))}`;
             timeCurrent.textContent = secondsToTime(Math.floor(video.currentTime));
+            playTime = video.currentTime
             progressed.style.width = `${(video.currentTime / video.duration) * 100}%`;
             point.style.marginLeft = `${(video.currentTime / video.duration) * 100 - 0.5}%`;
         }
@@ -188,4 +213,64 @@ function secondsToTime(seconds: number) {
     const secondsStr = String(remainingSeconds).padStart(2, '0');
 
     return `${hours > 0 ? `${hoursStr}:` : ''}${minutesStr}:${secondsStr}`;
+}
+
+async function loadCorrespondingStreams(anime: string, ep: number) {
+    switch(selectedProvider) {
+        case 'gogoanime': 
+            return await loadGogoStreams(anime, ep);
+        case 'animepahe': 
+            return await loadPaheStreams(anime, ep);
+        default: 
+            return await loadGogoStreams(anime, ep);
+    }
+}
+
+async function loadGogoStreams(anime: string, ep: number) {
+    const sources = await (
+        await getGogoStreams((await gogoSearch(decodeURIComponent(anime)))[0].episodeLink + ep)
+    ).sources;
+
+    for (const source of sources) {
+        const child = document.createElement('button');
+        child.className = 'source';
+        child.id = 'source';
+        child.setAttribute('data-value', source.link);
+        child.textContent = source.quality ?? '';
+
+        (await createStreamGroup(source.server)).appendChild(child);
+    }
+}
+
+async function loadPaheStreams(anime: string, ep: number) {
+    const search = await paheSearch(anime)
+    const streamDetails = await paheStreamDetails(search[0].session, ep)
+    for (const source of streamDetails) {
+        const child = document.createElement('button');
+        child.className = 'source';
+        child.id = 'source';
+        child.setAttribute('data-value', source.link);
+        child.textContent = source.quality ?? '';
+
+        (await createStreamGroup(source.server)).appendChild(child);
+    }
+}
+
+function createStreamGroup (streamName: string) {
+    const mainDiv = document.createElement('div')
+    mainDiv.className = 'streamGroup'
+    const streamNameDiv = document.createElement('div')
+    streamNameDiv.className = 'streamName'
+    streamNameDiv.innerText = streamName
+    const streams = document.createElement('div')
+    streams.id = 'streams'
+    streams.className = 'streams'
+
+    mainDiv.appendChild(streamNameDiv)
+    mainDiv.appendChild(streams)
+
+    const subStream = document.getElementById('subStream')
+    subStream?.appendChild(mainDiv)
+
+    return streams
 }
