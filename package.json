@@ -22,6 +22,7 @@
         "axios": "^1.5.1",
         "cheerio": "^1.0.0-rc.12",
         "crypto-js": "^4.2.0",
+        "custom-electron-titlebar": "^4.2.7",
         "electron-squirrel-startup": "^1.0.0",
         "graphql": "^16.8.1",
         "graphql-request": "^6.1.0",

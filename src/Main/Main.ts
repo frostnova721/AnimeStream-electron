@@ -3,6 +3,7 @@ import path from 'path';
 import { TGlobalVar } from '../Types';
 import { clearRuntimeCache } from '../Core';
 import * as fs from 'fs';
+import { setupTitlebar, attachTitlebarToWindow } from 'custom-electron-titlebar/main'
 
 if (!fs.existsSync('../../Cache')) {
     fs.mkdirSync('../../Cache');
@@ -28,15 +29,22 @@ const anilistData = {
     data: '' as any,
 };
 
+setupTitlebar()
+
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
         width: 1200,
         height: 850,
+        titleBarStyle: 'hidden',
+        frame: false,
+        titleBarOverlay: true,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
         },
     });
+
+    attachTitlebarToWindow(mainWindow)
 
     process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
     mainWindow.loadFile(path.join(__dirname, '../../Public/html/Home.html'));
@@ -78,11 +86,16 @@ const createWindow = () => {
                 height: 600,
                 maxHeight: 600,
                 maxWidth: 800,
+                frame: false,
+                titleBarStyle: 'hidden',
+                titleBarOverlay: true,
                 webPreferences: {
                     nodeIntegration: true,
                     contextIsolation: false,
                 },
             });
+
+            attachTitlebarToWindow(newWindow)
 
             newWindow.loadFile(path.join(__dirname, '../../Public/html/Settings.html'));
 

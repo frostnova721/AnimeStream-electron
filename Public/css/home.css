@@ -94,7 +94,7 @@ button:focus {
     flex-direction: column;
     /* border: 1px solid white; */
     margin-left: -10px;
-    margin-top: 2.5rem;
+    /* margin-top: 1rem; */
     font-size: 1.4rem;
 }
 

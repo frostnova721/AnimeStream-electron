@@ -71,7 +71,7 @@ export async function paheStreamDetails(session: string, episode: number) {
 }
 
 export async function getPaheStreams(streamLink: string) {
-    const streams = await pahe.extractKwik(new URL(streamLink))
+    const streams = await pahe.extractKwik(streamLink)
     return streams
 }
 

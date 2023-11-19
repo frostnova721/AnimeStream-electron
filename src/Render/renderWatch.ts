@@ -216,6 +216,9 @@ function secondsToTime(seconds: number) {
 }
 
 async function loadCorrespondingStreams(anime: string, ep: number) {
+    const subStream = document.getElementById('subStream')
+    if(!subStream) throw new Error('E_NO_SUBSTREAM_DIV')
+    subStream.innerHTML = ''
     switch(selectedProvider) {
         case 'gogoanime': 
             return await loadGogoStreams(anime, ep);
@@ -249,7 +252,8 @@ async function loadPaheStreams(anime: string, ep: number) {
         const child = document.createElement('button');
         child.className = 'source';
         child.id = 'source';
-        child.setAttribute('data-value', source.link);
+        const data = await getPaheStreams(source.link)
+        child.setAttribute('data-value', data.url);
         child.textContent = source.quality ?? '';
 
         (await createStreamGroup(source.server)).appendChild(child);
@@ -270,7 +274,8 @@ function createStreamGroup (streamName: string) {
     mainDiv.appendChild(streams)
 
     const subStream = document.getElementById('subStream')
-    subStream?.appendChild(mainDiv)
+    if(!subStream) throw new Error('E_No_SUBSTREAM_FOUND');
+    subStream.appendChild(mainDiv)
 
     return streams
 }

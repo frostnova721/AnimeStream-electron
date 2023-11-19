@@ -4,27 +4,29 @@ import { AnimeEpisode, AnimepaheSearch } from '../Types';
 
 export class Animepahe {
     constructor() {}
-    protected sources: {url: string, isM3U8: boolean}[] = []
 
-    public extractKwik = async (videoUrl: URL) => {
-        try {
-            const { data } = await axios.get(`${videoUrl.href}`, {
-                headers: { Referer: 'https://animepahe.ru' },
-            });
+    public extractKwik = async (videoUrl: string): Promise<{ url: string, isM3U8: boolean }> => {
+        //run on api due to issues with electron ig  (code from consumet)
+        // try {
+        //     const { data } = await axios.get(`${videoUrl.href}`, {
+        //         headers: { Referer: 'https://animepahe.ru' },
+        //     });
 
-            const source = eval(
-                /(eval)(\(f.*?)(\n<\/script>)/s.exec(data)![2].replace('eval', ''),
-            ).match(/https.*?m3u8/);
+        //     const source = eval(
+        //         /(eval)(\(f.*?)(\n<\/script>)/s.exec(data)![2].replace('eval', ''),
+        //     ).match(/https.*?m3u8/);
 
-            this.sources.push({
-                url: source[0],
-                isM3U8: source[0].includes('.m3u8'),
-            });
+        //     const sources = {
+        //         url: source[0],
+        //         isM3U8: source[0].includes('.m3u8'),
+        //     };
 
-            return this.sources;
-        } catch (err) {
-            throw new Error(err as string);
-        }
+        //     return sources;
+        // } catch (err) {
+        //     throw new Error(err as string);
+        // }
+        const data = (await axios.get(`https://anime-stream-api-psi.vercel.app/kwik?link=${videoUrl}`)).data
+        return data
     };
 
     public getAnimepaheStreams = async (episodeUrl: string): Promise<{link: string, server: string, quality: string}[]> => {

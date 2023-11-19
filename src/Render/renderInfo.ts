@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     link = await readClickedResult();
     // if(window.location.href.split('?')[1] !== 'rel=latest')
     if (
-        (db === 'anilist' && window.location.href.split('?')[1] === 'rel=latest') ||
-        window.location.href.split('?')[1] === 'rel=bwatch'
+        (db === 'anilist' && window.location.href.split('?')[1] === 'rel=latest') 
+        // window.location.href.split('?')[1] === 'rel=bwatch'
     ) {
         const data = await getMalIdWithAlId(link);
         await setAnilistLink(`https://anilist.co/anime/${link}`)
@@ -166,7 +166,7 @@ async function renderResult(res: IAnimeDetails) {
 
         characters.addEventListener('wheel', (event) => {
             if (event.deltaY !== 0) {
-                characters.scrollLeft += event.deltaY / 1.8;
+                characters.scrollLeft += event.deltaY / 3.5;
                 event.preventDefault();
             }
         });
