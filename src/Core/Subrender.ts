@@ -1,9 +1,10 @@
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, session } from 'electron';
 import { MAL, GogoStreams, AniList, Episodes, Animepahe } from '../Lib';
 import { IMALSearch, ISearchOutput, IStreamOutput, Settings } from '../Types';
 import Hls from 'hls.js';
 import * as fs from 'fs';
 import path from 'path';
+import axios from 'axios';
 
 const mal = new MAL();
 const pahe = new Animepahe()
@@ -51,7 +52,6 @@ export async function getGogoStreams(
     const gogo = new GogoStreams();
     try {
         const results = await gogo.getStreams(episodeId, quality);
-        console.log(results)
         return results;
     } catch (err) {
         console.log(err);
@@ -73,6 +73,12 @@ export async function paheStreamDetails(session: string, episode: number) {
 export async function getPaheStreams(streamLink: string) {
     const streams = await pahe.extractKwik(streamLink)
     return streams
+}
+
+async function kwikReq (url: string) {
+    console.log('Called')
+    const { data } = await axios.get(`https://anime-stream-api-psi.vercel.app/request?link=${url}&ref=https://kwik.cx`)
+    return data
 }
 
 export async function stream(videoElement: HTMLVideoElement, src: string) {

@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             point.style.marginLeft = `${(video.currentTime / video.duration) * 100 - 0.5}%`;
         }
     });
-
+    
     //update the progressbar on click
     progressBar.addEventListener('click', (e) => {
         const currentTarget = e.currentTarget as HTMLElement;
