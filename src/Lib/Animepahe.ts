@@ -6,7 +6,7 @@ export class Animepahe {
     constructor() {}
 
     public extractKwik = async (videoUrl: string): Promise<{ url: string, isM3U8: boolean }> => {
-        //run on api due to issues with electron ig  (code from consumet)
+        //run on api due to issues with electron ig 
         // try {
         //     const { data } = await axios.get(`${videoUrl.href}`, {
         //         headers: { Referer: 'https://animepahe.ru' },

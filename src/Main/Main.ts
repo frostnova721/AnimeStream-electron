@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu, ipcMain, dialog } from 'electron';
+import { app, BrowserWindow, Menu, ipcMain, dialog, nativeImage } from 'electron';
 import path from 'path';
 import { TGlobalVar } from '../Types';
 import { clearRuntimeCache } from '../Core';
@@ -33,9 +33,10 @@ setupTitlebar()
 
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
-        width: 1200,
-        height: 850,
+        width: 1440,
+        height: 980,
         titleBarStyle: 'hidden',
+        icon: appIcon,
         frame: false,
         titleBarOverlay: true,
         webPreferences: {
@@ -134,6 +135,9 @@ const createWindow = () => {
         return null;
     });
 };
+
+const icoPath = path.join(__dirname, '../../Icons/png.png')
+const appIcon = nativeImage.createFromPath(icoPath)
 
 app.on('ready', createWindow);
 

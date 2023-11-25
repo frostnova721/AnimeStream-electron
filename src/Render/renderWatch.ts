@@ -29,6 +29,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const subStream = document.getElementById('subStream')
     const paheButton = document.getElementById('pahe')
     const gogoButton = document.getElementById('gogo')
+    const previousBtn = document.getElementById('previousEp')
+    const nextBtn = document.getElementById('nextEp')
 
     if (
         !video ||
@@ -51,8 +53,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         !container ||
         !gogoButton ||
         !paheButton ||
-        !subStream
+        !subStream ||
         // !streamDiv
+        !previousBtn ||
+        !nextBtn
     )
         throw new Error('err'); //typescript's OCD
 
@@ -90,8 +94,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (key[0] === 'watch') anime = key[1];
         if (key[0] === 'ep') ep = key[1];
     }
+    
 
     if (!anime || !ep) throw new Error('no anime name found');
+
+    previousBtn.onclick = () => {
+        //yet to implement
+    }
+
+    nextBtn.onclick = () => {
+        //yet to implement
+    }
 
     paheButton.onclick = async() => {
         selectedProvider = 'animepahe'
@@ -105,18 +118,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await loadCorrespondingStreams(anime ?? '', parseInt(ep))
 
-    // for (const source of sources) {
-    //     const child = document.createElement('button');
-    //     child.className = 'source';
-    //     child.id = 'source';
-    //     child.setAttribute('data-value', source.link);
-    //     child.textContent = source.quality ?? '';
-
-    //     streamDiv.appendChild(child);
-    // }
-
-    //hide the loader
-    // srcLoader.style.display = 'none';
     const updateProgression = () => {
         progressed.style.width = `${(video.currentTime / video.duration) * 100}%`;
         point.style.marginLeft = `${(video.currentTime / video.duration) * 100 - 0.5}%`;
@@ -197,7 +198,7 @@ function updatePlayButton(playState: boolean, video: HTMLVideoElement, img: HTML
     }
 }
 
-//hide the controls when mouse isnt moved while inside the video element
+//hide the controls when mouse isnt moved while inside the video element (couldnt figure out the logic :( )
 function showControlsWithState(control: HTMLElement, state: boolean) {
     if (!state) control.style.opacity = '0';
     else control.style.opacity = '1';
@@ -234,20 +235,29 @@ async function loadGogoStreams(anime: string, ep: number) {
         await getGogoStreams((await gogoSearch(decodeURIComponent(anime)))[0].episodeLink + ep)
     ).sources;
 
+    const arr: {child: HTMLElement, source: string}[] = []
+
     for (const source of sources) {
         const child = document.createElement('button');
         child.className = 'source';
         child.id = 'source';
         child.setAttribute('data-value', source.link);
         child.textContent = source.quality ?? '';
-
-        (await createStreamGroup(source.server)).appendChild(child);
+        arr.push({ child: child, source: source.server })  
     }
+    
+    //group the children- we can hardcode it since there are only 2 streams
+    const vidstream = arr.filter((obj) => obj.source === 'vidstreaming')
+    const backup = arr.filter((obj) => obj.source === 'vidstreaming backup')
+
+    createStreamGroup(vidstream[0].source, vidstream)
+    createStreamGroup(backup[0].source,  backup)
 }
 
 async function loadPaheStreams(anime: string, ep: number) {
     const search = await paheSearch(anime)
     const streamDetails = await paheStreamDetails(search[0].session, ep)
+    const arr: { child: HTMLElement, source: string }[] = []
     for (const source of streamDetails) {
         const child = document.createElement('button');
         child.className = 'source';
@@ -255,12 +265,17 @@ async function loadPaheStreams(anime: string, ep: number) {
         const data = await getPaheStreams(source.link)
         child.setAttribute('data-value', data.url);
         child.textContent = source.quality ?? '';
+        arr.push({ child: child, source: source.server })
+    }
 
-        (await createStreamGroup(source.server)).appendChild(child);
+    const srcs = Array.from(new Set(arr.map(obj => obj.source)))
+    for(const source of srcs) {
+        const filteredArray = arr.filter((obj) => obj.source === source)
+        createStreamGroup(source, filteredArray)
     }
 }
 
-function createStreamGroup (streamName: string) {
+function createStreamGroup (streamName: string, children: { child: HTMLElement, source: string}[]) {
     const mainDiv = document.createElement('div')
     mainDiv.className = 'streamGroup'
     const streamNameDiv = document.createElement('div')
@@ -269,12 +284,15 @@ function createStreamGroup (streamName: string) {
     const streams = document.createElement('div')
     streams.id = 'streams'
     streams.className = 'streams'
+    for(const child of children) {
+        streams.appendChild(child.child)
+    }
 
     mainDiv.appendChild(streamNameDiv)
     mainDiv.appendChild(streams)
 
     const subStream = document.getElementById('subStream')
-    if(!subStream) throw new Error('E_No_SUBSTREAM_FOUND');
+    if(!subStream) throw new Error('E_NO_SUBSTREAM_FOUND');
     subStream.appendChild(mainDiv)
 
     return streams

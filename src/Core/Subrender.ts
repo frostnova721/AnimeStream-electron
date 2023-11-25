@@ -28,23 +28,27 @@ export async function searchResults(searchTerm: string) {
     throw new Error('Error Finding The DataBase');
 }
 
+//set the link of clicked search result
 export async function setClickableResult(link: string): Promise<void> {
     ipcRenderer.invoke('setCR', link);
     return;
 }
 
+//get clicked search result
 export async function readClickedResult(): Promise<string> {
     const res: string = await ipcRenderer.invoke('readCR');
     if (!res) throw new Error('couldnt read shit get a life mf');
     return res;
 }
 
+//gogo search
 export async function gogoSearch(term: string): Promise<ISearchOutput[]> {
     const gogo = new GogoStreams();
     const results = gogo.searchForAnime(term);
     return results;
 }
 
+//get gogo streams
 export async function getGogoStreams(
     episodeId: string,
     quality?: '360' | '480' | '720' | '1080',
@@ -59,6 +63,7 @@ export async function getGogoStreams(
     }
 }
 
+//animepahe search
 export async function paheSearch(term: string) {
     const res = await pahe.searchPahe(term)
     return res
@@ -75,12 +80,7 @@ export async function getPaheStreams(streamLink: string) {
     return streams
 }
 
-async function kwikReq (url: string) {
-    console.log('Called')
-    const { data } = await axios.get(`https://anime-stream-api-psi.vercel.app/request?link=${url}&ref=https://kwik.cx`)
-    return data
-}
-
+//having issues with subplease server for animepahe
 export async function stream(videoElement: HTMLVideoElement, src: string) {
     if (!videoElement) throw new Error('ERRRRRRR');
     try {
