@@ -11,7 +11,7 @@
         "dev": "nodemon",
         "prepack": "npm run build && node prepare.js",
         "package": "npm run prepack && electron-forge package",
-        "make": "npm run prepack electron-forge make",
+        "make": "npm run prepack && electron-forge make",
         "format": "prettier --write \"**/*.{ts,css,html}\""
     },
     "keywords": [],
