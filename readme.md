@@ -16,3 +16,5 @@
 
 ![sample3.png](Assets/samples/sample3.png)
 
+## LICENSE
+### GNU AFFERO PUBLIC LICENSE VERSION 3.0
