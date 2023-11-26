@@ -14,9 +14,18 @@
         "make": "npm run prepack && electron-forge make",
         "format": "prettier --write \"**/*.{ts,css,html}\""
     },
-    "keywords": [],
+    "keywords": [
+        "anime",
+        "streaming",
+        "anime app",
+        "anime downloader"
+    ],
     "author": "FrostNova",
-    "license": "ISC",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/frostnova721/AnimeStream"
+    },
+    "license": "AGPL-3.0 license",
     "dependencies": {
         "anilist-node": "^1.14.0",
         "axios": "^1.5.1",
