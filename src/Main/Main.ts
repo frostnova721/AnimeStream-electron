@@ -136,7 +136,7 @@ const createWindow = () => {
     });
 };
 
-const icoPath = path.join(__dirname, '../../Assets/Icons/png.png')
+const icoPath = path.join(__dirname, '../../Assets/Icons/ICO.ico')
 const appIcon = nativeImage.createFromPath(icoPath)
 
 app.on('ready', createWindow);

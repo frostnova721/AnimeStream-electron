@@ -83,7 +83,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         container.classList.toggle('hidden')
     }
 
-    //append the sources (needs a rework)
     const queries = window.location.href.split('?')[1].split('&');
 
     let anime: string = '',
@@ -152,13 +151,39 @@ document.addEventListener('DOMContentLoaded', async () => {
             point.style.marginLeft = `${(video.currentTime / video.duration) * 100 - 0.5}%`;
         }
     });
-    
-    //update the progressbar on click
+
+    //to determine wether the left mouse is held
+    // let draggable = false
+    // progressBar.addEventListener('mousedown', (e) => {
+    //     draggable = true
+    // })
+    // progressBar.addEventListener('mouseup', (e) => {
+    //     draggable = false
+    // })
+
+    // progressBar.addEventListener('mouseout', (e) => {
+    //     draggable = false
+    // })
+
+    //update the video progress on click
     progressBar.addEventListener('click', (e) => {
         const currentTarget = e.currentTarget as HTMLElement;
         const clickPercent = e.offsetX / currentTarget.offsetWidth;
+        progressed.style.width = `${(video.duration * clickPercent / video.duration) * 100}%`;
+        point.style.marginLeft = `${(video.duration * clickPercent / video.duration) * 100 - 0.5}%`;
         video.currentTime = video.duration * clickPercent;
-    });
+    })
+    
+    //update the progressbar on cursor move
+    // progressBar.addEventListener('mousemove', (e) => {
+    //     if(draggable) {
+    //         const currentTarget = e.currentTarget as HTMLElement;
+    //         const clickPercent = e.offsetX / currentTarget.offsetWidth;
+    //         progressed.style.width = `${(video.duration * clickPercent / video.duration) * 100}%`;
+    //         point.style.marginLeft = `${(video.duration * clickPercent / video.duration) * 100 - 0.5}%`;
+    //         video.currentTime = video.duration * clickPercent;
+    //     }
+    // });
 
     //pause or play when space key is pressed
     document.addEventListener('keydown', (event) => {

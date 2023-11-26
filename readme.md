@@ -1,20 +1,47 @@
-<h1>Anime Stream</h1>
+# Anime Stream Project
 
-<h3>Just a simple project made to <i>Stream</i> and <i>Download</i> Anime!</h3>
+Welcome to the Anime Stream project—a simple project designed for streaming and downloading your favorite anime!
 
-<h3><strong>Written in Typescript</strong></h3>
+![Project Logo](Assets/Icons/ICO.ico)
 
-[![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.png?v=101)](https://github.com/ellerbrock/typescript-badges/)
+*(Note: Logo redesign in progress)*
 
-<h4>I'm new to making apps like this. So the amount of errors in this "Project" is too high<h4>
+## Tech Stack
 
-## Here are some screenshots
+Built with ❤️ using TypeScript
 
-![sample1.png](Assets/samples/sample1.png)
+![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.png?v=101)
 
-![sample2.png](Assets/samples/sample2.png)
 
-![sample3.png](Assets/samples/sample3.png)
+## Introduction
 
-## LICENSE
-### GNU AFFERO PUBLIC LICENSE VERSION 3.0
+This project is made to just test my skills (im still kind of new). While this is a work in progress, I'm excited to share my journey with you. Expect some hiccups along the way—I'm still learning! Making this app has taught me many things(mainly to cope with depression and rage). I will be making updates and fixing issues and bugs in my free time!
+
+## Screenshots Showcase
+
+![Sample 1](Assets/samples/sample1.png)
+
+![Sample 2](Assets/samples/sample2.png)
+
+![Sample 3](Assets/samples/sample3.png)
+
+## Available Sources
+
+Currently, you can enjoy anime content from the following sources:
+
+- **Gogo**
+- **Animepahe**
+
+## Known Issues
+
+Ofcourse there are issues(a lot) some of the major stuffs are:
+
+- **Subsplease Server Error:** Subsplease server is currently giving a 403 error. I'm actively working on resolving this issue.
+
+- **Episode Selection Glitch:** Occasionally, the wrong anime gets selected when choosing an episode. This issue will be fixed soon!.
+
+*Pro Tip: Dont use MAL as database(It doesnt work well with my concept).*
+
+## License
+
+This project is licensed under the **GNU Affero Public License version 3.0**.

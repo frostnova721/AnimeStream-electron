@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const connectedToAccount = false;
     const db = await getDataBase();
 
-    await setBackTo('../../Public/html/home.html');
+    await setBackTo('./Home.html');
 
     const recentContainer = document.getElementById('recents');
     const latestContainer = document.getElementById('latest');

@@ -1,6 +1,6 @@
 module.exports = {
     packagerConfig: {
-        icon: 'Assets/Icons/ICO.ico',
+        icon: 'Assets/Icons/ICO',
         asar: true,
     },
     rebuildConfig: {},
@@ -8,7 +8,7 @@ module.exports = {
         {
             name: '@electron-forge/maker-squirrel',
             config: {
-                setupIcon: "Assets/Icons/ICO.ico"
+                setupIcon: 'Assets/Icons/ICO.ico'
             },
         },
         {
