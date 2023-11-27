@@ -3,6 +3,7 @@ import { getGogoStreams, getPaheStreams, gogoSearch, paheSearch, paheStreamDetai
 let playState = false;
 let videoLoaded = false;
 let localMemory;
+let alreadyLoading = false
 let selectedProvider : 'animepahe' | 'gogoanime' = 'gogoanime';
 let playTime: number = 0
 
@@ -107,11 +108,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     paheButton.onclick = async() => {
         selectedProvider = 'animepahe'
+        streamsLoading('enable')
         await loadCorrespondingStreams(anime ?? '', parseInt(ep))
    }
 
    gogoButton.onclick = async() => {
        selectedProvider = 'gogoanime'
+       streamsLoading('enable')
         await loadCorrespondingStreams(anime ?? '', parseInt(ep))
    }
 
@@ -242,9 +245,7 @@ function secondsToTime(seconds: number) {
 }
 
 async function loadCorrespondingStreams(anime: string, ep: number) {
-    const subStream = document.getElementById('subStream')
-    if(!subStream) throw new Error('E_NO_SUBSTREAM_DIV')
-    subStream.innerHTML = ''
+    alreadyLoading = true
     switch(selectedProvider) {
         case 'gogoanime': 
             return await loadGogoStreams(anime, ep);
@@ -274,9 +275,9 @@ async function loadGogoStreams(anime: string, ep: number) {
     //group the children- we can hardcode it since there are only 2 streams
     const vidstream = arr.filter((obj) => obj.source === 'vidstreaming')
     const backup = arr.filter((obj) => obj.source === 'vidstreaming backup')
-
     createStreamGroup(vidstream[0].source, vidstream)
     createStreamGroup(backup[0].source,  backup)
+    streamsLoading('disable')
 }
 
 async function loadPaheStreams(anime: string, ep: number) {
@@ -297,6 +298,23 @@ async function loadPaheStreams(anime: string, ep: number) {
     for(const source of srcs) {
         const filteredArray = arr.filter((obj) => obj.source === source)
         createStreamGroup(source, filteredArray)
+    }
+    streamsLoading('disable')
+}
+
+function streamsLoading(action: 'disable' | 'enable') {
+    const stream = document.getElementById('stream')
+    const subStream = document.getElementById('subStream')
+    const streamLoader = document.getElementById('streamLoader')
+    if(!stream || !subStream || !streamLoader) throw new Error('hmmmm');
+    if(action === 'disable') {
+        stream.classList.remove('loading')
+        subStream.style.display = 'block'
+        streamLoader.style.display = 'none'
+    } else {
+        stream.classList.add('loading')
+        subStream.style.display = 'none'
+        streamLoader.style.display = 'block'
     }
 }
 

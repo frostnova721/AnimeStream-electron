@@ -77,7 +77,27 @@ button:focus {
 
 .stream {
     width: 75%;
-    overflow-y: scroll;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.stream.loading {
+    align-items: center;
+    justify-content: center;
+}
+
+.streamsLoader {
+    width: 75px;
+    height: 60px;
+}
+
+.loadText {
+    width: 200px;
+    text-align: center;
+    transform: translateX(-65px);
+    font-family: Poppins-Bold;
+    font-size: 1.2rem;
 }
 
 .servers div {
@@ -103,7 +123,7 @@ button:focus {
     overflow-y: auto;
     overflow-x: hidden;
     margin: 20px;
-    display: flex;
+    display: none;
     flex-direction: column;
 }
 

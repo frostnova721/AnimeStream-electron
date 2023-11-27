@@ -42,6 +42,21 @@ Ofcourse there are issues(a lot) some of the major stuffs are:
 
 *Pro Tip: Dont use MAL as database(It doesnt work well with my concept).*
 
+## Commands
+
+To run the program, use the following command:
+
+```bash
+npm run test
+```
+
+To make the setup executable file, use the following command:
+
+```
+npm run make
+```
+The setup file will be situated in the out folder in the project root after using the make command.
+
 ## License
 
 This project is licensed under the **GNU Affero Public License version 3.0**.
