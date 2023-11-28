@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const title = res.names.english.length > 1 ? res.names.english : res.title;
             const al = await getAnilistLink()
             await storeAnimeWatchedCache(title, img, link, al);
-            window.location.href = `./watch.html?watch=${
+            window.location.href = `./Watch.html?watch=${
                 epContent.getAttribute('mal-title') ?? ''
             }&ep=${epBtn.getAttribute('episode')}`;
         }

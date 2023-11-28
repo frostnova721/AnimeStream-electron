@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         throw new Error('err'); //typescript's OCD
 
     //to go back
-    backBtn.onclick = () => (window.location.href = './animeinfo.html?rel=bwatch');
+    backBtn.onclick = () => (window.location.href = './AnimeInfo.html?rel=bwatch');
 
     //pause or play the video when play-pause icon is clicked
     playPause.onclick = () => {
@@ -217,12 +217,12 @@ function updateDuration(videoElement: HTMLVideoElement, totalTime: HTMLElement) 
 function updatePlayButton(playState: boolean, video: HTMLVideoElement, img: HTMLImageElement) {
     if (!playState) {
         video.play();
-        img.src = '../assets/icons/pause-button.png';
+        img.src = '../Assets/Icons/pause-button.png';
         playState = true;
         return playState;
     } else {
         video.pause();
-        img.src = '../assets/icons/play.png';
+        img.src = '../Assets/Icons/play.png';
         playState = false;
         return playState;
     }

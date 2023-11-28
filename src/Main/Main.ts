@@ -48,11 +48,11 @@ const createWindow = () => {
     attachTitlebarToWindow(mainWindow)
 
     process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
-    mainWindow.loadFile(path.join(__dirname, '../../public/html/home.html'));
+    mainWindow.loadFile(path.join(__dirname, '../../Public/html/Home.html'));
 
-    if(!app.isPackaged) {
+    // if(!app.isPackaged) {
     mainWindow.webContents.openDevTools();
-    }
+    // }
 
     Menu.setApplicationMenu(null);
 
@@ -98,7 +98,7 @@ const createWindow = () => {
 
             attachTitlebarToWindow(newWindow)
 
-            newWindow.loadFile(path.join(__dirname, '../../public/html/settings.html'));
+            newWindow.loadFile(path.join(__dirname, '../../Public/html/Settings.html'));
 
             newWindow.on('close', () => {
                 globalVars.subWindows--;
