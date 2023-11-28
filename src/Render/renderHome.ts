@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const connectedToAccount = false;
     const db = await getDataBase();
 
-    await setBackTo('./Home.html');
+    await setBackTo('./home.html');
 
     const recentContainer = document.getElementById('recents');
     const latestContainer = document.getElementById('latest');
@@ -70,7 +70,7 @@ recentDiv.addEventListener('click', async (e) => {
         await setClickableResult(link);
         const alLink = div?.getAttribute('al-link');
         if(alLink) await setAnilistLink(alLink)
-        window.location.href = './AnimeInfo.html?rel=recents';
+        window.location.href = './animeinfo.html?rel=recents';
     }
 });
 

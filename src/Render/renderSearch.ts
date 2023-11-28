@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const btn = document.getElementById('searchBtn');
     if (!btn) throw new Error('No btn');
 
-    await setBackTo('../../Public/html/search.html');
+    await setBackTo('../../public/html/search.html');
 
     btn.onclick = async () => {
         const searchbar = <HTMLInputElement>document.getElementById('searchBar');
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const backBtn = document.getElementById('backBtn');
     if (!backBtn) return;
-    backBtn.onclick = () => (window.location.href = './Home.html');
+    backBtn.onclick = () => (window.location.href = './home.html');
 
     const resDiv = document.getElementById('results');
     if (!resDiv) throw new Error('haaa'); //error wont happen
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (alLink) {
             await setAnilistLink(alLink);
         }
-        window.location.href = './AnimeInfo.html';
+        window.location.href = './animeinfo.html';
     });
 
     const searchBar = <HTMLInputElement>document.getElementById('searchBar');

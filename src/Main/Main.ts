@@ -48,7 +48,7 @@ const createWindow = () => {
     attachTitlebarToWindow(mainWindow)
 
     process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
-    mainWindow.loadFile(path.join(__dirname, '../../Public/html/Home.html'));
+    mainWindow.loadFile(path.join(__dirname, '../../public/html/home.html'));
 
     if(!app.isPackaged) {
     mainWindow.webContents.openDevTools();
@@ -98,7 +98,7 @@ const createWindow = () => {
 
             attachTitlebarToWindow(newWindow)
 
-            newWindow.loadFile(path.join(__dirname, '../../Public/html/Settings.html'));
+            newWindow.loadFile(path.join(__dirname, '../../public/html/settings.html'));
 
             newWindow.on('close', () => {
                 globalVars.subWindows--;
@@ -137,7 +137,7 @@ const createWindow = () => {
     });
 };
 
-const icoPath = path.join(__dirname, '../../Assets/Icons/ICO.ico')
+const icoPath = path.join(__dirname, '../../assets/icons/ICO.ico')
 const appIcon = nativeImage.createFromPath(icoPath)
 
 app.on('ready', createWindow);

@@ -1,10 +1,10 @@
-import { getGogoStreams, getPaheStreams, gogoSearch, paheSearch, paheStreamDetails, stream } from '../Core';
+import { getDefaultStream, getGogoStreams, getPaheStreams, gogoSearch, paheSearch, paheStreamDetails, stream } from '../Core';
 
 let playState = false;
 let videoLoaded = false;
 let localMemory;
 let alreadyLoading = false
-let selectedProvider : 'animepahe' | 'gogoanime' = 'gogoanime';
+let selectedProvider: 'animepahe' | 'gogoanime' = 'gogoanime';
 let playTime: number = 0
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         throw new Error('err'); //typescript's OCD
 
     //to go back
-    backBtn.onclick = () => (window.location.href = './AnimeInfo.html?rel=bwatch');
+    backBtn.onclick = () => (window.location.href = './animeinfo.html?rel=bwatch');
 
     //pause or play the video when play-pause icon is clicked
     playPause.onclick = () => {
@@ -105,6 +105,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     nextBtn.onclick = () => {
         //yet to implement
     }
+
+    selectedProvider = await getDefaultStream()
 
     paheButton.onclick = async() => {
         selectedProvider = 'animepahe'
@@ -215,12 +217,12 @@ function updateDuration(videoElement: HTMLVideoElement, totalTime: HTMLElement) 
 function updatePlayButton(playState: boolean, video: HTMLVideoElement, img: HTMLImageElement) {
     if (!playState) {
         video.play();
-        img.src = '../Assets/Icons/pause-button.png';
+        img.src = '../assets/icons/pause-button.png';
         playState = true;
         return playState;
     } else {
         video.pause();
-        img.src = '../Assets/Icons/play.png';
+        img.src = '../assets/icons/play.png';
         playState = false;
         return playState;
     }
@@ -245,7 +247,6 @@ function secondsToTime(seconds: number) {
 }
 
 async function loadCorrespondingStreams(anime: string, ep: number) {
-    alreadyLoading = true
     switch(selectedProvider) {
         case 'gogoanime': 
             return await loadGogoStreams(anime, ep);
@@ -257,49 +258,63 @@ async function loadCorrespondingStreams(anime: string, ep: number) {
 }
 
 async function loadGogoStreams(anime: string, ep: number) {
-    const sources = await (
-        await getGogoStreams((await gogoSearch(decodeURIComponent(anime)))[0].episodeLink + ep)
-    ).sources;
+    try {
+        const sources = await (
+            await getGogoStreams((await gogoSearch(decodeURIComponent(anime)))[0].episodeLink + ep)
+        ).sources;
 
-    const arr: {child: HTMLElement, source: string}[] = []
+        const arr: {child: HTMLElement, source: string}[] = []
 
-    for (const source of sources) {
-        const child = document.createElement('button');
-        child.className = 'source';
-        child.id = 'source';
-        child.setAttribute('data-value', source.link);
-        child.textContent = source.quality ?? '';
-        arr.push({ child: child, source: source.server })  
+        for (const source of sources) {
+            const child = document.createElement('button');
+            child.className = 'source';
+            child.id = 'source';
+            child.setAttribute('data-value', source.link);
+            child.textContent = source.quality ?? '';
+            arr.push({ child: child, source: source.server })  
+        }
+        
+        //group the children- we can hardcode it since there are only 2 streams
+        const vidstream = arr.filter((obj) => obj.source === 'vidstreaming')
+        const backup = arr.filter((obj) => obj.source === 'vidstreaming backup')
+        const subStream = document.getElementById('subStream')
+        if(subStream) subStream.innerHTML = ''
+        createStreamGroup(vidstream[0].source, vidstream)
+        createStreamGroup(backup[0].source,  backup)
+        streamsLoading('disable')
+    } catch(err) {
+        //todo: implement error screen
+        console.log(err)
     }
-    
-    //group the children- we can hardcode it since there are only 2 streams
-    const vidstream = arr.filter((obj) => obj.source === 'vidstreaming')
-    const backup = arr.filter((obj) => obj.source === 'vidstreaming backup')
-    createStreamGroup(vidstream[0].source, vidstream)
-    createStreamGroup(backup[0].source,  backup)
-    streamsLoading('disable')
 }
 
 async function loadPaheStreams(anime: string, ep: number) {
-    const search = await paheSearch(anime)
-    const streamDetails = await paheStreamDetails(search[0].session, ep)
-    const arr: { child: HTMLElement, source: string }[] = []
-    for (const source of streamDetails) {
-        const child = document.createElement('button');
-        child.className = 'source';
-        child.id = 'source';
-        const data = await getPaheStreams(source.link)
-        child.setAttribute('data-value', data.url);
-        child.textContent = source.quality ?? '';
-        arr.push({ child: child, source: source.server })
-    }
+    try {
+        const search = await paheSearch(anime)
+        const streamDetails = await paheStreamDetails(search[0].session, ep)
+        const arr: { child: HTMLElement, source: string }[] = []
+        for (const source of streamDetails) {
+            const child = document.createElement('button');
+            child.className = 'source';
+            child.id = 'source';
+            const data = await getPaheStreams(source.link)
+            child.setAttribute('data-value', data.url);
+            child.textContent = source.quality ?? '';
+            arr.push({ child: child, source: source.server })
+        }
 
-    const srcs = Array.from(new Set(arr.map(obj => obj.source)))
-    for(const source of srcs) {
-        const filteredArray = arr.filter((obj) => obj.source === source)
-        createStreamGroup(source, filteredArray)
+        const srcs = Array.from(new Set(arr.map(obj => obj.source)))
+        const subStream = document.getElementById('subStream')
+        if(subStream) subStream.innerHTML = ''
+        for(const source of srcs) {
+            const filteredArray = arr.filter((obj) => obj.source === source)
+            createStreamGroup(source, filteredArray)
+        }
+        streamsLoading('disable')
+    } catch(err) {
+        //todo: implement error screen
+        console.log(err)
     }
-    streamsLoading('disable')
 }
 
 function streamsLoading(action: 'disable' | 'enable') {

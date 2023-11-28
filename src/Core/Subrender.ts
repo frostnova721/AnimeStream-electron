@@ -1,10 +1,9 @@
-import { ipcRenderer, session } from 'electron';
+import { ipcRenderer } from 'electron';
 import { MAL, GogoStreams, AniList, Episodes, Animepahe } from '../Lib';
 import { IMALSearch, ISearchOutput, IStreamOutput, Settings } from '../Types';
 import Hls from 'hls.js';
 import * as fs from 'fs';
 import path from 'path';
-import axios from 'axios';
 
 const mal = new MAL();
 const pahe = new Animepahe()
