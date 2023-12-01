@@ -1,4 +1,4 @@
-import { Titlebar, TitlebarColor } from "custom-electron-titlebar"
+import { Titlebar, TitlebarColor } from 'custom-electron-titlebar';
 
 document.addEventListener('DOMContentLoaded', () => {
     new Titlebar({
@@ -11,8 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
             minimize: 'minimize',
             maximize: 'maximize',
             close: 'close',
-            restoreDown: 'restore'
+            restoreDown: 'restore',
         },
-
-    })
-})
+    });
+});

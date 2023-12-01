@@ -1,11 +1,20 @@
-import { getDefaultStream, getGogoStreams, getPaheStreams, gogoSearch, paheSearch, paheStreamDetails, stream } from '../Core';
+import {
+    getDefaultStream,
+    getEpisodeLink,
+    getGogoStreams,
+    getPaheStreams,
+    gogoSearch,
+    paheSearch,
+    paheStreamDetails,
+    stream,
+} from '../Core';
 
 let playState = false;
 let videoLoaded = false;
 let localMemory;
-let alreadyLoading = false
+let autoLoadLink = '';
 let selectedProvider: 'animepahe' | 'gogoanime' = 'gogoanime';
-let playTime: number = 0
+let playTime: number = 0;
 
 document.addEventListener('DOMContentLoaded', async () => {
     const backBtn = document.getElementById('backBtn');
@@ -22,16 +31,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const playPauseImg = <HTMLImageElement>document.getElementById('playPauseImg');
     const fsImg = <HTMLImageElement>document.getElementById('fsImg');
     const srcLoader = document.getElementById('srcLoader');
-    const serversBtn = document.getElementById('serversBtn')
-    const closeBtn = document.getElementById('close')
-    const overlay = document.getElementById('overlay')
-    const container = document.getElementById('container')
+    const serversBtn = document.getElementById('serversBtn');
+    const closeBtn = document.getElementById('close');
+    const overlay = document.getElementById('overlay');
+    const container = document.getElementById('container');
     // const streamDiv = document.getElementById('streams')
-    const subStream = document.getElementById('subStream')
-    const paheButton = document.getElementById('pahe')
-    const gogoButton = document.getElementById('gogo')
-    const previousBtn = document.getElementById('previousEp')
-    const nextBtn = document.getElementById('nextEp')
+    const subStream = document.getElementById('subStream');
+    const paheButton = document.getElementById('pahe');
+    const gogoButton = document.getElementById('gogo');
+    const previousBtn = document.getElementById('previousEp');
+    const nextBtn = document.getElementById('nextEp');
+    const playerTitle = document.getElementById('playerTitle');
+    const videoLoaderContainer = document.getElementById('videoLoaderContainer');
 
     if (
         !video ||
@@ -57,7 +68,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         !subStream ||
         // !streamDiv
         !previousBtn ||
-        !nextBtn
+        !nextBtn ||
+        !playerTitle ||
+        !videoLoaderContainer
     )
         throw new Error('err'); //typescript's OCD
 
@@ -75,56 +88,82 @@ document.addEventListener('DOMContentLoaded', async () => {
     fullScreenBtn.onclick = () => video.requestFullscreen();
 
     serversBtn.onclick = () => {
-        overlay.classList.toggle('show')
-        container.classList.toggle('hidden')
-    }
+        overlay.classList.toggle('show');
+        container.classList.toggle('hidden');
+    };
 
     closeBtn.onclick = () => {
-        overlay.classList.toggle('show')
-        container.classList.toggle('hidden')
-    }
+        overlay.classList.toggle('show');
+        container.classList.toggle('hidden');
+    };
 
     const queries = window.location.href.split('?')[1].split('&');
 
     let anime: string = '',
-        ep: string  = '';
+        ep: string = '';
 
     for (const query of queries) {
         const key = query.split('=');
         if (key[0] === 'watch') anime = key[1];
         if (key[0] === 'ep') ep = key[1];
     }
-    
 
     if (!anime || !ep) throw new Error('no anime name found');
 
+    playerTitle.innerText = decodeURIComponent(`${anime} - Episode ${ep}`);
+
     previousBtn.onclick = () => {
-        //yet to implement
-    }
+        if (parseInt(ep) === 1) {
+            return;
+        }
+        window.location.href = `./Watch.html?watch=${anime ?? ''}&ep=${parseInt(ep) - 1 ?? ''}`;
+    };
 
     nextBtn.onclick = () => {
-        //yet to implement
-    }
+        window.location.href = `./Watch.html?watch=${anime ?? ''}&ep=${parseInt(ep) + 1 ?? ''}`;
+    };
 
-    selectedProvider = await getDefaultStream()
+    selectedProvider = await getDefaultStream();
 
-    paheButton.onclick = async() => {
-        selectedProvider = 'animepahe'
-        streamsLoading('enable')
-        await loadCorrespondingStreams(anime ?? '', parseInt(ep))
-   }
+    paheButton.onclick = async () => {
+        selectedProvider = 'animepahe';
+        streamsLoading('enable');
+        await loadCorrespondingStreams(anime ?? '', parseInt(ep));
+    };
 
-   gogoButton.onclick = async() => {
-       selectedProvider = 'gogoanime'
-       streamsLoading('enable')
-        await loadCorrespondingStreams(anime ?? '', parseInt(ep))
-   }
+    gogoButton.onclick = async () => {
+        selectedProvider = 'gogoanime';
+        streamsLoading('enable');
+        await loadCorrespondingStreams(anime ?? '', parseInt(ep));
+    };
 
-    await loadCorrespondingStreams(anime ?? '', parseInt(ep))
+    await loadCorrespondingStreams(anime ?? '', parseInt(ep));
 
     const updateProgression = () => {
         progressed.style.width = `${(video.currentTime / video.duration) * 100}%`;
         point.style.marginLeft = `${(video.currentTime / video.duration) * 100 - 0.5}%`;
+    };
+
+    const streamEpisode = async (src: string) => {
+        try {
+            await stream(video, src);
+            videoLoaded = true;
+            video.addEventListener('loadedmetadata', () => {
+                videoLoaderContainer.style.display = 'none';
+                updateDuration(video, totalTime);
+                if (playTime !== 0) video.currentTime = playTime;
+                updateProgression();
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    //autoload 720p or 480p
+    try {
+        await streamEpisode(autoLoadLink);
+    } catch (err) {
+        console.log('Error while performing autoload');
     }
 
     //listen for the clicks on source to change the source
@@ -132,17 +171,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         const target = e.target as HTMLElement;
         if (target.id === 'source') {
             const src = target.getAttribute('data-value') ?? '';
-            try {
-                await stream(video, src);
-                videoLoaded = true;
-                video.addEventListener('loadedmetadata', () => {
-                    updateDuration(video, totalTime);
-                    if(playTime !== 0) video.currentTime = playTime
-                    updateProgression()
-                });
-            } catch (err) {
-                console.log(err);
-            }
+            await streamEpisode(src);
+            // try {
+            //     await stream(video, src);
+            //     videoLoaded = true;
+            //     video.addEventListener('loadedmetadata', () => {
+            //         updateDuration(video, totalTime);
+            //         if (playTime !== 0) video.currentTime = playTime;
+            //         updateProgression();
+            //     });
+            // } catch (err) {
+            //     console.log(err);
+            // }
         }
     });
 
@@ -151,7 +191,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!isNaN(video.duration) && isFinite(video.duration)) {
             totalTime.textContent = `${secondsToTime(Math.floor(video.duration))}`;
             timeCurrent.textContent = secondsToTime(Math.floor(video.currentTime));
-            playTime = video.currentTime
+            playTime = video.currentTime;
             progressed.style.width = `${(video.currentTime / video.duration) * 100}%`;
             point.style.marginLeft = `${(video.currentTime / video.duration) * 100 - 0.5}%`;
         }
@@ -174,11 +214,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     progressBar.addEventListener('click', (e) => {
         const currentTarget = e.currentTarget as HTMLElement;
         const clickPercent = e.offsetX / currentTarget.offsetWidth;
-        progressed.style.width = `${(video.duration * clickPercent / video.duration) * 100}%`;
-        point.style.marginLeft = `${(video.duration * clickPercent / video.duration) * 100 - 0.5}%`;
+        progressed.style.width = `${((video.duration * clickPercent) / video.duration) * 100}%`;
+        point.style.marginLeft = `${
+            ((video.duration * clickPercent) / video.duration) * 100 - 0.5
+        }%`;
         video.currentTime = video.duration * clickPercent;
-    })
-    
+    });
+
     //update the progressbar on cursor move
     // progressBar.addEventListener('mousemove', (e) => {
     //     if(draggable) {
@@ -247,23 +289,30 @@ function secondsToTime(seconds: number) {
 }
 
 async function loadCorrespondingStreams(anime: string, ep: number) {
-    switch(selectedProvider) {
-        case 'gogoanime': 
+    switch (selectedProvider) {
+        case 'gogoanime':
             return await loadGogoStreams(anime, ep);
-        case 'animepahe': 
+        case 'animepahe':
             return await loadPaheStreams(anime, ep);
-        default: 
+        default:
             return await loadGogoStreams(anime, ep);
     }
 }
 
 async function loadGogoStreams(anime: string, ep: number) {
     try {
+        const search = await gogoSearch(decodeURIComponent(anime));
+        const link = await getEpisodeLink(search[0].alias);
         const sources = await (
-            await getGogoStreams((await gogoSearch(decodeURIComponent(anime)))[0].episodeLink + ep)
+            await getGogoStreams(`https://gogoanime3.net${link.link.trim()}` + ep)
         ).sources;
 
-        const arr: {child: HTMLElement, source: string}[] = []
+        const arr: { child: HTMLElement; source: string }[] = [];
+
+        if (autoLoadLink.length < 1) {
+            const src = sources.find((item) => item.quality === '720p');
+            autoLoadLink = src?.link ?? '';
+        }
 
         for (const source of sources) {
             const child = document.createElement('button');
@@ -271,87 +320,91 @@ async function loadGogoStreams(anime: string, ep: number) {
             child.id = 'source';
             child.setAttribute('data-value', source.link);
             child.textContent = source.quality ?? '';
-            arr.push({ child: child, source: source.server })  
+            arr.push({ child: child, source: source.server });
         }
-        
+
         //group the children- we can hardcode it since there are only 2 streams
-        const vidstream = arr.filter((obj) => obj.source === 'vidstreaming')
-        const backup = arr.filter((obj) => obj.source === 'vidstreaming backup')
-        const subStream = document.getElementById('subStream')
-        if(subStream) subStream.innerHTML = ''
-        createStreamGroup(vidstream[0].source, vidstream)
-        createStreamGroup(backup[0].source,  backup)
-        streamsLoading('disable')
-    } catch(err) {
+        const vidstream = arr.filter((obj) => obj.source === 'vidstreaming');
+        const backup = arr.filter((obj) => obj.source === 'vidstreaming backup');
+        const subStream = document.getElementById('subStream');
+        if (subStream) subStream.innerHTML = '';
+        createStreamGroup(vidstream[0].source, vidstream);
+        createStreamGroup(backup[0].source, backup);
+        streamsLoading('disable');
+    } catch (err) {
         //todo: implement error screen
-        console.log(err)
+        console.log(err);
     }
 }
 
 async function loadPaheStreams(anime: string, ep: number) {
     try {
-        const search = await paheSearch(anime)
-        const streamDetails = await paheStreamDetails(search[0].session, ep)
-        const arr: { child: HTMLElement, source: string }[] = []
+        const search = await paheSearch(anime);
+        const streamDetails = await paheStreamDetails(search[0].session, ep);
+        const arr: { child: HTMLElement; source: string }[] = [];
         for (const source of streamDetails) {
             const child = document.createElement('button');
             child.className = 'source';
             child.id = 'source';
-            const data = await getPaheStreams(source.link)
+            const data = await getPaheStreams(source.link);
             child.setAttribute('data-value', data.url);
             child.textContent = source.quality ?? '';
-            arr.push({ child: child, source: source.server })
+            arr.push({ child: child, source: source.server });
         }
 
-        const srcs = Array.from(new Set(arr.map(obj => obj.source)))
-        const subStream = document.getElementById('subStream')
-        if(subStream) subStream.innerHTML = ''
-        for(const source of srcs) {
-            const filteredArray = arr.filter((obj) => obj.source === source)
-            createStreamGroup(source, filteredArray)
+        const srcs = Array.from(new Set(arr.map((obj) => obj.source)));
+        if (autoLoadLink.length < 1) {
+            const src = streamDetails.find((item) => item.quality === '720p');
+            autoLoadLink = src?.link ?? '';
         }
-        streamsLoading('disable')
-    } catch(err) {
+        const subStream = document.getElementById('subStream');
+        if (subStream) subStream.innerHTML = '';
+        for (const source of srcs) {
+            const filteredArray = arr.filter((obj) => obj.source === source);
+            createStreamGroup(source, filteredArray);
+        }
+        streamsLoading('disable');
+    } catch (err) {
         //todo: implement error screen
-        console.log(err)
+        console.log(err);
     }
 }
 
 function streamsLoading(action: 'disable' | 'enable') {
-    const stream = document.getElementById('stream')
-    const subStream = document.getElementById('subStream')
-    const streamLoader = document.getElementById('streamLoader')
-    if(!stream || !subStream || !streamLoader) throw new Error('hmmmm');
-    if(action === 'disable') {
-        stream.classList.remove('loading')
-        subStream.style.display = 'block'
-        streamLoader.style.display = 'none'
+    const stream = document.getElementById('stream');
+    const subStream = document.getElementById('subStream');
+    const streamLoader = document.getElementById('streamLoader');
+    if (!stream || !subStream || !streamLoader) throw new Error('hmmmm');
+    if (action === 'disable') {
+        stream.classList.remove('loading');
+        subStream.style.display = 'block';
+        streamLoader.style.display = 'none';
     } else {
-        stream.classList.add('loading')
-        subStream.style.display = 'none'
-        streamLoader.style.display = 'block'
+        stream.classList.add('loading');
+        subStream.style.display = 'none';
+        streamLoader.style.display = 'block';
     }
 }
 
-function createStreamGroup (streamName: string, children: { child: HTMLElement, source: string}[]) {
-    const mainDiv = document.createElement('div')
-    mainDiv.className = 'streamGroup'
-    const streamNameDiv = document.createElement('div')
-    streamNameDiv.className = 'streamName'
-    streamNameDiv.innerText = streamName
-    const streams = document.createElement('div')
-    streams.id = 'streams'
-    streams.className = 'streams'
-    for(const child of children) {
-        streams.appendChild(child.child)
+function createStreamGroup(streamName: string, children: { child: HTMLElement; source: string }[]) {
+    const mainDiv = document.createElement('div');
+    mainDiv.className = 'streamGroup';
+    const streamNameDiv = document.createElement('div');
+    streamNameDiv.className = 'streamName';
+    streamNameDiv.innerText = streamName;
+    const streams = document.createElement('div');
+    streams.id = 'streams';
+    streams.className = 'streams';
+    for (const child of children) {
+        streams.appendChild(child.child);
     }
 
-    mainDiv.appendChild(streamNameDiv)
-    mainDiv.appendChild(streams)
+    mainDiv.appendChild(streamNameDiv);
+    mainDiv.appendChild(streams);
 
-    const subStream = document.getElementById('subStream')
-    if(!subStream) throw new Error('E_NO_SUBSTREAM_FOUND');
-    subStream.appendChild(mainDiv)
+    const subStream = document.getElementById('subStream');
+    if (!subStream) throw new Error('E_NO_SUBSTREAM_FOUND');
+    subStream.appendChild(mainDiv);
 
-    return streams
+    return streams;
 }

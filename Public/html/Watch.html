@@ -28,18 +28,28 @@
                     </div>
                     <div class="stream loading" id="stream">
                         <div class="streamsLoader" id="streamLoader">
-                            <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                            <div class="lds-ellipsis">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
                             <div class="loadText">getting streams</div>
                         </div>
-                        <div class="subStream" id="subStream">
-                        </div>
+                        <div class="subStream" id="subStream"></div>
                     </div>
                 </div>
             </div>
             <div class="container" id="container">
-                <div class="playerContainer" >
+                <div class="playerContainer">
+                    <div class="playerTitle" id="playerTitle">
+                        <!-- Oreshura - Episode 12<br> -->
+                    </div>
                     <div class="playerContainer2">
                         <div class="player">
+                            <div class="videoLoaderContainer" id="videoLoaderContainer">
+                                <div class="videoLoader"></div>
+                            </div>
                             <video class="videoPlayer" id="videoPlayer">na na</video>
                         </div>
                         <div class="controlContainer">
@@ -56,10 +66,18 @@
                                 </div>
                                 <div class="mediaButtons">
                                     <button class="play_pause" id="playPause">
-                                        <img id="playPauseImg" src="../Assets/Icons/play.png" />
+                                        <img
+                                            id="playPauseImg"
+                                            src="../Assets/Icons/play.png"
+                                            draggable="false"
+                                        />
                                     </button>
                                     <button class="fullScreen" id="fullScreen">
-                                        <img id="fsImg" src="../Assets/Icons/full-screen.png" />
+                                        <img
+                                            id="fsImg"
+                                            draggable="false"
+                                            src="../Assets/Icons/full-screen.png"
+                                        />
                                     </button>
                                 </div>
                             </div>
@@ -68,9 +86,13 @@
                 </div>
                 <div class="sourcesContainer">
                     <div class="sources">
-                        <button class="previousEp" id="previousEp"><img draggable="false" src="../Assets/Icons/back.png"></button>
+                        <button class="previousEp" id="previousEp">
+                            <img draggable="false" src="../Assets/Icons/back.png" />
+                        </button>
                         <button class="serversBtn" id="serversBtn">server</button>
-                        <button class="nextEp" id="nextEp"><img draggable="false" src="../Assets/Icons/back.png"></button>
+                        <button class="nextEp" id="nextEp">
+                            <img draggable="false" src="../Assets/Icons/back.png" />
+                        </button>
                     </div>
                 </div>
             </div>

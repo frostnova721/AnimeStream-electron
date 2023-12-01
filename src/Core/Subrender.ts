@@ -6,7 +6,7 @@ import * as fs from 'fs';
 import path from 'path';
 
 const mal = new MAL();
-const pahe = new Animepahe()
+const pahe = new Animepahe();
 const anilist = new AniList();
 
 export async function getAnimeInfo(link: string) {
@@ -43,7 +43,7 @@ export async function readClickedResult(): Promise<string> {
 //gogo search
 export async function gogoSearch(term: string): Promise<ISearchOutput[]> {
     const gogo = new GogoStreams();
-    const results = gogo.searchForAnime(term);
+    const results = gogo.searchForAnime(term, true);
     return results;
 }
 
@@ -64,19 +64,21 @@ export async function getGogoStreams(
 
 //animepahe search
 export async function paheSearch(term: string) {
-    const res = await pahe.searchPahe(term)
-    return res
+    const res = await pahe.searchPahe(term);
+    return res;
 }
 
 export async function paheStreamDetails(session: string, episode: number) {
-    const res = await pahe.getEpisodeInfo(session)
-    const data = await pahe.getAnimepaheStreams(`https://animepahe.ru/play/${session}/${res[episode-1].session}`)
-    return data
+    const res = await pahe.getEpisodeInfo(session);
+    const data = await pahe.getAnimepaheStreams(
+        `https://animepahe.ru/play/${session}/${res[episode - 1].session}`,
+    );
+    return data;
 }
 
 export async function getPaheStreams(streamLink: string) {
-    const streams = await pahe.extractKwik(streamLink)
-    return streams
+    const streams = await pahe.extractKwik(streamLink);
+    return streams;
 }
 
 //having issues with subplease server for animepahe
@@ -156,7 +158,13 @@ export async function getDataBase() {
 export async function getDefaultStream() {
     const settings = await readSettings();
     return settings.defaultStream;
-} 
+}
+
+export async function getEpisodeLink(aliasId: string) {
+    const gogo = new GogoStreams();
+    const res = await gogo.getAnimeEpisodeLink(aliasId);
+    return res;
+}
 
 export async function changeDataBase(db: 'mal' | 'anilist') {
     const settings = await readSettings();

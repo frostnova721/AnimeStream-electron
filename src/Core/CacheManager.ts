@@ -33,7 +33,7 @@ export async function storeAnimeWatchedCache(
 }
 
 export async function fetchRecentsFromCache(): Promise<
-    { name: string; img: string; infoLink: string, anilistLink: string }[] | undefined
+    { name: string; img: string; infoLink: string; anilistLink: string }[] | undefined
 > {
     try {
         const recPath = `${cachePath}/recents.mewmew`;

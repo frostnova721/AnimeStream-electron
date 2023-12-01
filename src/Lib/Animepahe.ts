@@ -1,12 +1,12 @@
-import axios from 'axios'
-import { load } from 'cheerio'
+import axios from 'axios';
+import { load } from 'cheerio';
 import { AnimeEpisode, AnimepaheSearch } from '../Types';
 
 export class Animepahe {
     constructor() {}
 
-    public extractKwik = async (videoUrl: string): Promise<{ url: string, isM3U8: boolean }> => {
-        //run on api due to issues with electron ig 
+    public extractKwik = async (videoUrl: string): Promise<{ url: string; isM3U8: boolean }> => {
+        //run on api due to issues with electron ig
         // try {
         //     const { data } = await axios.get(`${videoUrl.href}`, {
         //         headers: { Referer: 'https://animepahe.ru' },
@@ -25,15 +25,19 @@ export class Animepahe {
         // } catch (err) {
         //     throw new Error(err as string);
         // }
-        const data = (await axios.get(`https://anime-stream-api-psi.vercel.app/kwik?link=${videoUrl}`)).data
-        return data
+        const data = (
+            await axios.get(`https://anime-stream-api-psi.vercel.app/kwik?link=${videoUrl}`)
+        ).data;
+        return data;
     };
 
-    public getAnimepaheStreams = async (episodeUrl: string): Promise<{link: string, server: string, quality: string}[]> => {
+    public getAnimepaheStreams = async (
+        episodeUrl: string,
+    ): Promise<{ link: string; server: string; quality: string }[]> => {
         const { data } = await axios.get(episodeUrl);
         const $ = load(data);
         const streams = $('div#resolutionMenu > button');
-        const links: {link: string, server: string, quality: string }[] = [];
+        const links: { link: string; server: string; quality: string }[] = [];
 
         streams.each((ind, ele) => {
             const data = $(ele);

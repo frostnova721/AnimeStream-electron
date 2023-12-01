@@ -15,7 +15,10 @@ export class GogoStreams {
     private readonly baseUrl = `https://gogoanime3.net`;
     private readonly ajaxUrl = `https://ajax.gogo-load.com/ajax`;
 
-    public searchForAnime = async (searchTerm: string): Promise<ISearchOutput[]> => {
+    public searchForAnime = async (
+        searchTerm: string,
+        onlySearch: boolean,
+    ): Promise<ISearchOutput[]> => {
         const searchUrl = `${this.baseUrl}/search.html?keyword=${encodeURIComponent(searchTerm)}`;
         const res = await axios.get(searchUrl);
         const $ = cheerio.load(res.data);
@@ -43,14 +46,22 @@ export class GogoStreams {
         const searchResults = [];
         for (const item of list) {
             try {
-                const extraa = await this.getAnimeEpisodeLink(links[list.indexOf(item)]);
-                searchResults.push({
-                    name: item,
-                    alias: links[list.indexOf(item)],
-                    imageUrl: images[list.indexOf(item)],
-                    episodes: extraa.episodes,
-                    episodeLink: `${this.baseUrl}${extraa.link.trim()}`,
-                });
+                if (onlySearch) {
+                    searchResults.push({
+                        name: item,
+                        alias: links[list.indexOf(item)],
+                        imageUrl: images[list.indexOf(item)],
+                    });
+                } else {
+                    const extraa = await this.getAnimeEpisodeLink(links[list.indexOf(item)]);
+                    searchResults.push({
+                        name: item,
+                        alias: links[list.indexOf(item)],
+                        imageUrl: images[list.indexOf(item)],
+                        episodes: extraa.episodes,
+                        episodeLink: `${this.baseUrl}${extraa.link.trim()}`,
+                    });
+                }
             } catch (err) {
                 console.log('err');
             }
@@ -139,7 +150,8 @@ export class GogoStreams {
     };
 
     private generateQualitiesFromBaseStreamLink = async (
-        streamLink: string, backup?: boolean
+        streamLink: string,
+        backup?: boolean,
     ): Promise<{ resolution: string; quality: string; link: string }[]> => {
         const qualityArray = [];
         const streamMetadata: string = await this.fetch(streamLink);
@@ -154,7 +166,7 @@ export class GogoStreams {
                 resolution: edit[0],
                 quality: edit[1].replace(/"/g, ''),
                 link: `${streamLink.split('/').slice(0, -1).join('/')}/${edit[2]}`,
-                server: backup ? "vidstreaming" : "vidstreaming backup"
+                server: backup ? 'vidstreaming' : 'vidstreaming backup',
             };
             qualityArray.push(obj);
         }
@@ -183,7 +195,7 @@ export class GogoStreams {
         if (!link) return undefined;
         return link;
     };
-    
+
     private decrypt = async (streamLink: URL) => {
         const res = await this.fetch(streamLink.href);
         const $ = cheerio.load(res);
@@ -196,7 +208,7 @@ export class GogoStreams {
         return decrypted;
     };
 
-    private getAnimeEpisodeLink = async (
+    public getAnimeEpisodeLink = async (
         aliasId: string,
     ): Promise<{ link: string; episodes: number }> => {
         const url = `${this.baseUrl}/category/${aliasId}`;

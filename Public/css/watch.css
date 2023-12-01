@@ -40,7 +40,7 @@ button:focus {
     align-items: center;
     justify-content: center;
     position: relative;
-    z-index:10;
+    z-index: 10;
 }
 
 .overlay.show {
@@ -112,7 +112,7 @@ button:focus {
 
 .servers div:hover {
     background-color: #caf979;
-    color: black
+    color: black;
 }
 
 .streamGroup {
@@ -148,30 +148,37 @@ button:focus {
 }
 
 .playerContainer2 {
-    max-height: 500px;
+    max-height: 483.75px;
     /* max-height: 892px; */
 }
 
 .player {
-    height: 500px;
+    height: 483.75px;
     max-width: 892px;
     position: relative;
 }
 
 .videoPlayer {
     border: 1px solid rgba(70, 70, 70, 0.568);
-    height: 100%;
+    height: 483.75px;
     width: 100%;
+    max-width: 860px;
     background-color: rgb(0, 0, 0);
     border-radius: 5px;
 }
 
 .controlContainer {
-    background-color: rgba(0, 0, 0, 0.616);
-    height: 80px;
+    background-image: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.7),
+        rgba(0, 0, 0, 0.35) 88%,
+        rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0)
+    );
+    height: 95px;
     display: flex;
     justify-content: center;
-    margin-top: -4.9rem;
+    margin-top: -5.75rem;
 }
 
 .controls {
@@ -181,8 +188,8 @@ button:focus {
     height: inherit;
     padding-left: 2.5%;
     padding-right: 2.5%;
-    max-width: 860px;
-    background-color: inherit;
+    max-width: 862px;
+    background-image: inherit;
     transition: opacity 0.3s ease-out;
 }
 
@@ -193,6 +200,7 @@ button:focus {
 .timeDiv {
     display: flex;
     margin-bottom: 8px;
+    margin-top: 12px;
 }
 
 #watch_progress {
@@ -207,6 +215,7 @@ button:focus {
     height: 100%;
     background-color: #caf979;
     border-radius: inherit;
+    transition: width 0.08s ease-in;
 }
 
 #point {
@@ -219,12 +228,13 @@ button:focus {
     background-color: rgb(0, 0, 0);
     border: 1px solid rgb(192, 192, 192);
     border-radius: 100%;
-    scale: 1.5;
-    transition: opacity 0.25s ease-out;
+    transform: scale(0);
+    transition: opacity 0.1s ease-out, transform 0.1s ease-in-out, margin-left 0.08s ease-in;
 }
 
 #watch_progress:hover #point {
     opacity: 1;
+    transform: scale(1.5);
 }
 
 .sourcesContainer {
@@ -303,7 +313,7 @@ button:focus {
 .sources button:active {
     background-color: black;
     border-color: #caf979;
-    color: white
+    color: white;
 }
 
 .sources button:active img {
@@ -362,4 +372,39 @@ button:focus {
     width: 50px;
     margin-top: -2%;
     /* margin-left: -10%; */
+}
+
+.playerTitle {
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+}
+
+.videoLoaderContainer {
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+.videoLoader {
+    color: #ffffff;
+    width: 4px;
+    height: 4px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    box-shadow: 19px 0 0 7px, 38px 0 0 3px, 57px 0 0 0;
+    transform: translateX(-38px);
+    animation: l21 0.5s infinite alternate linear;
+}
+
+@keyframes l21 {
+    50% {
+        box-shadow: 19px 0 0 3px, 38px 0 0 7px, 57px 0 0 3px;
+    }
+    100% {
+        box-shadow: 19px 0 0 0, 38px 0 0 3px, 57px 0 0 7px;
+    }
 }

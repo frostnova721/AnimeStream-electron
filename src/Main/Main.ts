@@ -3,7 +3,7 @@ import path from 'path';
 import { TGlobalVar } from '../Types';
 import { clearRuntimeCache } from '../Core';
 import * as fs from 'fs';
-import { setupTitlebar, attachTitlebarToWindow } from 'custom-electron-titlebar/main'
+import { setupTitlebar, attachTitlebarToWindow } from 'custom-electron-titlebar/main';
 
 if (!fs.existsSync('../../Cache')) {
     fs.mkdirSync('../../Cache');
@@ -29,7 +29,7 @@ const anilistData = {
     data: '' as any,
 };
 
-setupTitlebar()
+setupTitlebar();
 
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
@@ -45,13 +45,13 @@ const createWindow = () => {
         },
     });
 
-    attachTitlebarToWindow(mainWindow)
+    attachTitlebarToWindow(mainWindow);
 
     process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
     mainWindow.loadFile(path.join(__dirname, '../../Public/html/Home.html'));
 
-    if(!app.isPackaged) {
-    mainWindow.webContents.openDevTools();
+    if (!app.isPackaged) {
+        mainWindow.webContents.openDevTools();
     }
 
     Menu.setApplicationMenu(null);
@@ -96,7 +96,7 @@ const createWindow = () => {
                 },
             });
 
-            attachTitlebarToWindow(newWindow)
+            attachTitlebarToWindow(newWindow);
 
             newWindow.loadFile(path.join(__dirname, '../../Public/html/Settings.html'));
 
@@ -104,8 +104,7 @@ const createWindow = () => {
                 globalVars.subWindows--;
             });
 
-            if(!app.isPackaged)
-                newWindow.webContents.openDevTools();
+            if (!app.isPackaged) newWindow.webContents.openDevTools();
         }
     });
 
@@ -137,8 +136,8 @@ const createWindow = () => {
     });
 };
 
-const icoPath = path.join(__dirname, '../../assets/icons/ICO.ico')
-const appIcon = nativeImage.createFromPath(icoPath)
+const icoPath = path.join(__dirname, '../../assets/icons/ICO.ico');
+const appIcon = nativeImage.createFromPath(icoPath);
 
 app.on('ready', createWindow);
 

@@ -69,7 +69,7 @@ recentDiv.addEventListener('click', async (e) => {
     if (link) {
         await setClickableResult(link);
         const alLink = div?.getAttribute('al-link');
-        if(alLink) await setAnilistLink(alLink)
+        if (alLink) await setAnilistLink(alLink);
         window.location.href = './AnimeInfo.html?rel=recents';
     }
 });
