@@ -7,11 +7,13 @@ import {
     paheSearch,
     paheStreamDetails,
     stream,
+    getStoredTotalEpisodes
 } from '../Core';
 
 let playState = false;
 let videoLoaded = false;
 let localMemory;
+let overlayShown = false
 let autoLoadLink = '';
 let selectedProvider: 'animepahe' | 'gogoanime' = 'gogoanime';
 let playTime: number = 0;
@@ -74,8 +76,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     )
         throw new Error('err'); //typescript's OCD
 
+    const totalEps = await getStoredTotalEpisodes()
+
     //to go back
-    backBtn.onclick = () => (window.location.href = './AnimeInfo.html?rel=bwatch');
+    backBtn.onclick = () => {
+        if(overlayShown) {
+            overlay.classList.toggle('show');
+            container.classList.toggle('hidden');
+            overlayShown = false
+        } else {
+            (window.location.href = './AnimeInfo.html?rel=bwatch')
+        }
+    };
 
     //pause or play the video when play-pause icon is clicked
     playPause.onclick = () => {
@@ -90,11 +102,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     serversBtn.onclick = () => {
         overlay.classList.toggle('show');
         container.classList.toggle('hidden');
+        overlayShown = true
     };
 
     closeBtn.onclick = () => {
         overlay.classList.toggle('show');
         container.classList.toggle('hidden');
+        overlayShown = false
     };
 
     const queries = window.location.href.split('?')[1].split('&');
@@ -120,7 +134,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     nextBtn.onclick = () => {
-        window.location.href = `./Watch.html?watch=${anime ?? ''}&ep=${parseInt(ep) + 1 ?? ''}`;
+        if(parseInt(ep) !== parseInt(totalEps))
+            window.location.href = `./Watch.html?watch=${anime ?? ''}&ep=${parseInt(ep) + 1 ?? ''}`;
     };
 
     selectedProvider = await getDefaultStream();
@@ -196,6 +211,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             point.style.marginLeft = `${(video.currentTime / video.duration) * 100 - 0.5}%`;
         }
     });
+
+    video.onwaiting = () => {
+        videoLoaderContainer.style.display = 'flex'
+    }
+
+    video.onplaying = () => {
+        videoLoaderContainer.style.display = 'none'
+    }
 
     //to determine wether the left mouse is held
     // let draggable = false

@@ -23,6 +23,7 @@ const globalVars: TGlobalVar = {
     subWindows: 0,
     backTo: '',
     clickedAnilistLink: '',
+    totalEpisodes: ''
 };
 
 const anilistData = {
@@ -134,6 +135,15 @@ const createWindow = () => {
         globalVars.clickedAnilistLink = link;
         return null;
     });
+
+    ipcMain.handle('storeTotalEpisodes', (e, totalEps) => {
+        globalVars.totalEpisodes = totalEps
+        return null
+    })
+
+    ipcMain.handle('getStoredTotalEpisodes', (e) => {
+        return globalVars.totalEpisodes
+    })
 };
 
 const icoPath = path.join(__dirname, '../../assets/icons/ICO.ico');

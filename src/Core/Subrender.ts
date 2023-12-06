@@ -191,3 +191,12 @@ export async function setAnilistLink(link: string) {
 export async function getMalIdWithAlId(id: string) {
     return await anilist.getMalIdFromAlId(parseInt(id));
 }
+
+export async function storeTotalEpisodes(episodes: string) {
+    return void (await ipcRenderer.invoke('storeTotalEpisodes', episodes));
+}
+
+export async function getStoredTotalEpisodes() {
+    const res = ipcRenderer.invoke('getStoredTotalEpisodes')
+    return res
+}

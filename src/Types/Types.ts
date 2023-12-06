@@ -72,6 +72,7 @@ export type TGlobalVar = {
     subWindows: number;
     backTo: string;
     clickedAnilistLink: string;
+    totalEpisodes: string
 };
 
 export interface ILatestAnimes {

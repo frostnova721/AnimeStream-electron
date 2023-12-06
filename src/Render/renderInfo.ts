@@ -8,8 +8,13 @@ import {
     getAnilistLink,
     getMalIdWithAlId,
     setAnilistLink,
+    storeTotalEpisodes,
 } from '../Core';
 import { IAnimeDetails } from '../Types';
+
+let isScrolling = false;
+let accumulatedDelta = 0;
+
 
 document.addEventListener('DOMContentLoaded', async () => {
     // const settings = await readSettings()
@@ -164,14 +169,37 @@ async function renderResult(res: IAnimeDetails) {
         characterdiv.appendChild(charaName);
         characterdiv.appendChild(charaRole);
         characters.appendChild(characterdiv);
-
-        characters.addEventListener('wheel', (event) => {
-            if (event.deltaY !== 0) {
-                characters.scrollLeft += event.deltaY / 3.5;
-                event.preventDefault();
-            }
-        });
     }
+
+    characters.addEventListener('wheel', (event) => {
+        // if (event.deltaY !== 0) {
+        //     event.preventDefault();
+        //     if(timeOut) clearTimeout(timeOut)
+        //     timeOut = setTimeout(() => {
+        //         characters.scrollLeft += event.deltaY / 2.5;
+        //     }, 50)
+        // }
+        if (event.deltaY !== 0) {
+            event.preventDefault();
+            
+            accumulatedDelta += event.deltaY;
+
+            if (!isScrolling) {
+                isScrolling = true;
+
+                const updateScroll = () => {
+                    characters.scrollLeft += accumulatedDelta / 9;
+                    accumulatedDelta *= 0.85;
+                    if (Math.abs(accumulatedDelta) > 0.1) {
+                        requestAnimationFrame(updateScroll);
+                    } else {
+                        isScrolling = false;
+                    }
+                };
+                requestAnimationFrame(updateScroll);
+            }
+        }
+    });
 
     loader.style.display = 'none';
     main.style.display = 'flex';
@@ -196,6 +224,8 @@ async function appendEpisodes(term: string, term2?: string) {
     if (!epContent || !loaderContainer) return;
     loaderContainer.style.display = 'none';
     epContent.style.display = 'grid';
+
+    await storeTotalEpisodes(`${res.length}`)
 
     epContent.setAttribute('mal-title', term);
     for (let i = 1; i <= res.length; i++) {

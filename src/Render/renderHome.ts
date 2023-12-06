@@ -12,6 +12,9 @@ import {
 } from '../Core';
 import { ILatestAnimes, ISeasonResponse } from '../Types';
 
+let accumulatedDelta = 0;
+let isScrolling = false
+
 document.addEventListener('DOMContentLoaded', async () => {
     const connectedToAccount = false;
     const db = await getDataBase();
@@ -23,25 +26,57 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (!recentContainer || !latestContainer) throw new Error('No DIVVVVV');
 
-    latestContainer.style.opacity = '1';
-    recentContainer.style.opacity = '1';
-
     if (connectedToAccount) await loadRecentsFromAccount();
     else await loadRecentsFromCache();
 
     await loadLatestAnimes();
 
+    latestContainer.style.opacity = '1';
+    recentContainer.style.opacity = '1';
+
     recentContainer.addEventListener('wheel', (event) => {
         if (event.deltaY !== 0 && recentContainer.scrollWidth > recentContainer.clientWidth) {
-            recentContainer.scrollLeft += event.deltaY / 2;
             event.preventDefault();
+            
+            accumulatedDelta += event.deltaY;
+
+            if (!isScrolling) {
+                isScrolling = true;
+
+                const updateScroll = () => {
+                    recentContainer.scrollLeft += accumulatedDelta / 4.5; 
+                    accumulatedDelta *= 0.85;
+                    if (Math.abs(accumulatedDelta) > 0.1) {
+                        requestAnimationFrame(updateScroll);
+                    } else {
+                        isScrolling = false;
+                    }
+                };
+                requestAnimationFrame(updateScroll);
+            }
         }
     });
 
     latestContainer.addEventListener('wheel', (event) => {
         if (event.deltaY !== 0 && latestContainer.scrollWidth > latestContainer.clientWidth) {
-            latestContainer.scrollLeft += event.deltaY / 2;
             event.preventDefault();
+            
+            accumulatedDelta += event.deltaY;
+
+            if (!isScrolling) {
+                isScrolling = true;
+
+                const updateScroll = () => {
+                    latestContainer.scrollLeft += accumulatedDelta / 4.5;
+                    accumulatedDelta *= 0.85;
+                    if (Math.abs(accumulatedDelta) > 0.1) {
+                        requestAnimationFrame(updateScroll);
+                    } else {
+                        isScrolling = false;
+                    }
+                };
+                requestAnimationFrame(updateScroll);
+            }
         }
     });
 });
