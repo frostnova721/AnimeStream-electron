@@ -57,15 +57,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     let link: string = '';
 
     link = await readClickedResult();
+    let fromlatest = false
     // if(window.location.href.split('?')[1] !== 'rel=latest')
     if (
         db === 'anilist' &&
         window.location.href.split('?')[1] === 'rel=latest'
-        // window.location.href.split('?')[1] === 'rel=bwatch'
     ) {
         const data = await getMalIdWithAlId(link);
         await setAnilistLink(`https://anilist.co/anime/${link}`);
         link = data.malLink;
+        fromlatest = true
     }
     if (!link) throw new Error('Couldnt get the link');
     res = await getAnimeInfo(link);
@@ -84,7 +85,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             await storeAnimeWatchedCache(title, img, link, al);
             window.location.href = `./Watch.html?watch=${
                 epContent.getAttribute('mal-title') ?? ''
-            }&ep=${epBtn.getAttribute('episode')}`;
+            }&ep=${epBtn.getAttribute('episode')}&fromlatest=${fromlatest}`;
         }
     });
 });

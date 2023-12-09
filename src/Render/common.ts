@@ -3,6 +3,7 @@ import { Titlebar, TitlebarColor } from 'custom-electron-titlebar';
 document.addEventListener('DOMContentLoaded', () => {
     new Titlebar({
         backgroundColor: TitlebarColor.BLACK,
+        menuBarBackgroundColor: TitlebarColor.BLACK,
         minimizable: true,
         closeable: true,
         maximizable: true,

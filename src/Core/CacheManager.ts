@@ -2,7 +2,8 @@ import * as fs from 'fs';
 import path from 'path';
 import { Coder } from '../Coder/codeIt';
 import { ILatestAnimes, ISeasonResponse } from '../Types';
-const cachePath = '../../Cache';
+import { tmpdir } from 'os'
+const cachePath = `${tmpdir()}/animestream`;
 const code = new Coder();
 
 export async function storeAnimeWatchedCache(

@@ -1,20 +1,28 @@
-import { app, BrowserWindow, Menu, ipcMain, dialog, nativeImage } from 'electron';
+import { app, BrowserWindow, Menu, ipcMain, dialog, nativeImage, nativeTheme } from 'electron';
 import path from 'path';
 import { TGlobalVar } from '../Types';
 import { clearRuntimeCache } from '../Core';
 import * as fs from 'fs';
 import { setupTitlebar, attachTitlebarToWindow } from 'custom-electron-titlebar/main';
+import { tmpdir } from 'os'
 
-if (!fs.existsSync('../../Cache')) {
-    fs.mkdirSync('../../Cache');
+const cachePath = `${tmpdir()}/animestream`
+const settingPath = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share")
+
+if (!fs.existsSync(cachePath)) {
+    fs.mkdirSync(cachePath);
 }
 
-if (!fs.existsSync('../../settings')) {
-    fs.mkdirSync('../../settings');
+if (!fs.existsSync(`${settingPath}/animestream`)) {
+    fs.mkdirSync(`${settingPath}/animestream`);
 }
 
 if (require('electron-squirrel-startup')) {
     app.quit();
+}
+
+const essentials = {
+    settingPath: `${settingPath}/animestream`
 }
 
 const globalVars: TGlobalVar = {
@@ -38,13 +46,14 @@ const createWindow = () => {
         height: 980,
         titleBarStyle: 'hidden',
         icon: appIcon,
-        frame: false,
-        titleBarOverlay: true,
+        titleBarOverlay: false,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
         },
     });
+
+    nativeTheme.themeSource = 'system'
 
     attachTitlebarToWindow(mainWindow);
 
@@ -90,7 +99,7 @@ const createWindow = () => {
                 maxWidth: 800,
                 frame: false,
                 titleBarStyle: 'hidden',
-                titleBarOverlay: true,
+                titleBarOverlay: false,
                 webPreferences: {
                     nodeIntegration: true,
                     contextIsolation: false,
@@ -143,6 +152,10 @@ const createWindow = () => {
 
     ipcMain.handle('getStoredTotalEpisodes', (e) => {
         return globalVars.totalEpisodes
+    })
+
+    ipcMain.handle('getSettingPath', (e) => {
+        return essentials.settingPath
     })
 };
 

@@ -110,15 +110,19 @@ export async function createNewWindow() {
 }
 
 export async function readSettings() {
+    const settingPath = await ipcRenderer.invoke('getSettingPath')
+    if(!fs.existsSync(path.join(settingPath, './settings.json'))) {
+        fs.writeFileSync(path.join(settingPath, './settings.json'), '{ "database":"anilist", "defaultStream":"gogoanime"}')
+    }
     const settings = JSON.parse(
-        fs.readFileSync(path.join(__dirname, '../../settings/settings.json'), 'utf8'),
+        fs.readFileSync(`${settingPath}/settings.json`, 'utf8'),
     ) as Settings;
     return settings;
 }
 
 export async function writeSettings(setting: Settings) {
     const stringy = JSON.stringify(setting, null, 2);
-    fs.writeFileSync(path.join(__dirname, '../../settings/settings.json'), stringy);
+    fs.writeFileSync(`${await ipcRenderer.invoke('getSettingPath')}/settings.json`, stringy);
 }
 
 export async function setBackTo(to: string) {

@@ -12,6 +12,14 @@ module.exports = {
             },
         },
         {
+            name: '@electron-forge/maker-wix',
+            config: {
+                icon: 'Assets/Icons/ICO.ico',
+                name: 'AnimeStream',
+                description: 'AnimeStream - An app to download and stream anime for free',
+            }
+        },
+        {
             name: '@electron-forge/maker-zip',
             platforms: ['darwin'],
         },

@@ -12,6 +12,7 @@
         "prepack": "npm run build && node prepare.js",
         "package": "npm run prepack && electron-forge package",
         "make": "npm run prepack && electron-forge make",
+        "make-msi": "npm run make -- --targets=\"@electron-forge/maker-wix\"",
         "format": "prettier --write \"**/*.{ts,css,html}\""
     },
     "keywords": [
@@ -36,8 +37,8 @@
         "graphql": "^16.8.1",
         "graphql-request": "^6.1.0",
         "hls.js": "^1.4.12",
-        "typescript": "^5.3.2",
-        "rimraf": "^5.0.5"
+        "rimraf": "^5.0.5",
+        "typescript": "^5.3.2"
     },
     "devDependencies": {
         "@electron-forge/cli": "^6.4.2",

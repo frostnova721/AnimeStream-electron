@@ -36,9 +36,11 @@ Currently, you can enjoy anime content from the following sources:
 
 Ofcourse there are issues(a lot) some of the major stuffs are:
 
-- **Subsplease Server Error:** Subsplease server is currently giving a 403 error. I'm actively working on resolving this issue.
+- **Subsplease Server Error:** Sometimes, subplease server gives off a 403 error. I'm actively working on resolving this issue.
 
 - **Episode Selection Glitch:** Occasionally, the wrong anime gets selected when choosing an episode. This issue will be fixed soon!.
+
+- **Episodes Not Showing Up** Honestly, I dont know any other source to get released anime episode title/number. (trying to find a fix)
 
 *Pro Tip: Dont use MAL as database(It doesnt work well with my concept).*
 
@@ -55,7 +57,7 @@ To make the setup executable file, use the following command:
 ```
 npm run make
 ```
-The setup file will be situated in the out folder in the project root after using the make command.
+The setup file will be situated in the out folder in the project root after using the make command. (This command makes the installer for your current OS and architecture)
 
 ## License
 

@@ -17,6 +17,7 @@ let overlayShown = false
 let autoLoadLink = '';
 let selectedProvider: 'animepahe' | 'gogoanime' = 'gogoanime';
 let playTime: number = 0;
+let backLink = './AnimeInfo.html'
 
 document.addEventListener('DOMContentLoaded', async () => {
     const backBtn = document.getElementById('backBtn');
@@ -85,7 +86,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             container.classList.toggle('hidden');
             overlayShown = false
         } else {
-            (window.location.href = './AnimeInfo.html?rel=bwatch')
+            (window.location.href = backLink)
         }
     };
 
@@ -114,13 +115,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     const queries = window.location.href.split('?')[1].split('&');
 
     let anime: string = '',
-        ep: string = '';
+        ep: string = '',
+        fromlatest: 'true' | 'false' | undefined;
 
     for (const query of queries) {
         const key = query.split('=');
         if (key[0] === 'watch') anime = key[1];
         if (key[0] === 'ep') ep = key[1];
+        if(key[0] === 'fromlatest') fromlatest = key[1] as typeof fromlatest
     }
+
+    if(fromlatest === 'true') backLink = './AnimeInfo.html?rel=latest'
 
     if (!anime || !ep) throw new Error('no anime name found');
 
