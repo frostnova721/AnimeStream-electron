@@ -157,6 +157,14 @@ const createWindow = () => {
     ipcMain.handle('getSettingPath', (e) => {
         return essentials.settingPath
     })
+
+    ipcMain.handle('getAppDetails', (e) => {
+        return { version: app.getVersion(), name: app.getName() }
+    })
+
+    ipcMain.handle('reloadMain', (e) => {
+        return BrowserWindow.getAllWindows()[1].webContents.reload()
+    })
 };
 
 const icoPath = path.join(__dirname, '../../assets/icons/ICO.ico');

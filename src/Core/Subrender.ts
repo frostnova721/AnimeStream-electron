@@ -4,6 +4,7 @@ import { IMALSearch, ISearchOutput, IStreamOutput, Settings } from '../Types';
 import Hls from 'hls.js';
 import * as fs from 'fs';
 import path from 'path';
+import { clearRuntimeCache } from './CacheManager';
 
 const mal = new MAL();
 const pahe = new Animepahe();
@@ -164,6 +165,12 @@ export async function getDefaultStream() {
     return settings.defaultStream;
 }
 
+export async function changeDefaultStream(stream: 'animepahe' | 'gogoanime') {
+    const settings = await readSettings()
+    settings.defaultStream = stream
+    return await writeSettings(settings)
+}
+
 export async function getEpisodeLink(aliasId: string) {
     const gogo = new GogoStreams();
     const res = await gogo.getAnimeEpisodeLink(aliasId);
@@ -175,6 +182,8 @@ export async function changeDataBase(db: 'mal' | 'anilist') {
     settings.database = db;
     console.log(settings);
     await writeSettings(settings);
+    clearRuntimeCache()
+    await reload()
 }
 
 export async function getEpisodes(infoLink: string) {
@@ -203,4 +212,13 @@ export async function storeTotalEpisodes(episodes: string) {
 export async function getStoredTotalEpisodes() {
     const res = ipcRenderer.invoke('getStoredTotalEpisodes')
     return res
+}
+
+export async function getAppDetails(): Promise<{ version: string, name: string }> {
+    const res = await ipcRenderer.invoke('getAppDetails')
+    return res
+}
+
+export async function reload() {
+    await ipcRenderer.invoke('reloadMain')
 }

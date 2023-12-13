@@ -1,3 +1,4 @@
+import { ipcRenderer } from 'electron';
 import {
     createNewWindow,
     fetchRecentsFromCache,
