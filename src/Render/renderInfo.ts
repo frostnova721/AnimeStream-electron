@@ -75,7 +75,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!link) throw new Error('Couldnt get the link');
     res = await getAnimeInfo(link);
     const alLink = await getAnilistLink()
-    banner = (await getAnilistInfo(alLink.split('/').length > 1 ? alLink.split('/')[alLink.split('/').length-1] : alLink)).bannerImage
+    try {
+        banner = (await getAnilistInfo(alLink.split('/').length > 1 ? alLink.split('/')[alLink.split('/').length-1] : alLink)).bannerImage
+    } catch(err) {
+        console.log('couldnt get banner image')
+    }
     await renderResult(res);
 
     const epContent = document.getElementById('episodeContent');

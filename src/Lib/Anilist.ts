@@ -100,7 +100,6 @@ export class AniList {
             'https://graphql.anilist.co',
             query.replace('$Id', `${id}`),
         );
-        console.log(res.Page.media[0])
         return res.Page.media[0] as IAnilistInfo
     }
 }
