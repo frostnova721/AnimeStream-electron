@@ -222,7 +222,6 @@ export class GogoStreams {
         const movieId = $('#movie_id').attr('value');
 
         const ajaxurl = `${this.ajaxUrl}/load-list-episode?ep_start=${epStart}&ep_end=${epEnd}&id=${movieId}&default_ep=0&alias=${alias}`;
-
         const ajaxres = await this.fetch(ajaxurl);
         $ = cheerio.load(ajaxres);
         // const eps = $('.name').text().replace(/EP/g, '').split(' ')

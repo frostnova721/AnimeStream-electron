@@ -8,12 +8,15 @@ import {
     getAnilistLink,
     getMalIdWithAlId,
     setAnilistLink,
+    getAnilistInfo,
     storeTotalEpisodes,
+    getEpisodesFromSite,
 } from '../Core';
 import { IAnimeDetails } from '../Types';
 
 let isScrolling = false;
 let accumulatedDelta = 0;
+let banner: string = ''
 
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -56,6 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let res: any = '';
     let link: string = '';
 
+
     link = await readClickedResult();
     let fromlatest = false
     // if(window.location.href.split('?')[1] !== 'rel=latest')
@@ -70,6 +74,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     if (!link) throw new Error('Couldnt get the link');
     res = await getAnimeInfo(link);
+    const alLink = await getAnilistLink()
+    banner = (await getAnilistInfo(alLink.split('/').length > 1 ? alLink.split('/')[alLink.split('/').length-1] : alLink)).bannerImage
     await renderResult(res);
 
     const epContent = document.getElementById('episodeContent');
@@ -85,7 +91,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             await storeAnimeWatchedCache(title, img, link, al);
             window.location.href = `./Watch.html?watch=${
                 epContent.getAttribute('mal-title') ?? ''
-            }&ep=${epBtn.getAttribute('episode')}&fromlatest=${fromlatest}`;
+            }&ep=${epBtn.getAttribute('episode')}&fromlatest=${fromlatest}&link=${epBtn.getAttribute('link') ?? ''}`;
         }
     });
 });
@@ -207,18 +213,20 @@ async function renderResult(res: IAnimeDetails) {
 
     return void (await appendEpisodes(
         res.title.replace(/[,|\.]/g, ''),
-        res.names.english ?? res.names.japanese,
+        // res.names.english ?? res.names.japanese,
     ));
 }
 
-async function appendEpisodes(term: string, term2?: string) {
+async function appendEpisodes(term: string) {
     const db = await getDataBase();
     let l = await readClickedResult();
     if (db === 'anilist' && window.location.href.split('?')[1] !== 'rel=latest') {
         const link = await getAnilistLink();
         l = link.split('/')[link.split('/').length - 1];
     }
-    const res = await getEpisodes(l);
+    // const res = await getEpisodes(l); not reliable
+    const res = await getEpisodesFromSite(term)
+    
 
     const epContent = document.getElementById('episodeContent');
     const loaderContainer = document.getElementById('loaderContainer');
@@ -230,16 +238,16 @@ async function appendEpisodes(term: string, term2?: string) {
 
     epContent.setAttribute('mal-title', term);
     for (let i = 1; i <= res.length; i++) {
-        createEpisode(i, epContent, res[i - 1].episodeTitle, res[i - 1].imageUrl);
+        createEpisode(i, epContent, res[i-1].link);
     }
 }
 
 function createEpisode(
     number: number,
     div: HTMLElement,
-    epName: string,
-    img?: string,
-    episodeId?: string,
+    // epName?: string,
+    // img?: string,
+    episodeLink?: string,
 ) {
     const divElement = document.createElement('div');
     divElement.className = 'episode';
@@ -248,21 +256,22 @@ function createEpisode(
     episode.className = 'epBtn';
     episode.id = 'epBtn';
     episode.setAttribute('episode', `${number}`);
+    episode.setAttribute('link', episodeLink ?? '')
 
-    if (img) {
-        episode.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url(${img})`;
+    if (banner) {
+        episode.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url(${banner})`;
     }
 
     const numberDiv = document.createElement('div');
     numberDiv.className = 'epNumber';
     numberDiv.textContent = `Episode ${number}`;
 
-    const nameDiv = document.createElement('div');
-    nameDiv.className = 'epName';
-    nameDiv.textContent = epName;
+    // const nameDiv = document.createElement('div');
+    // nameDiv.className = 'epName';
+    // nameDiv.textContent = epName;
 
     episode.appendChild(numberDiv);
-    episode.appendChild(nameDiv);
+    // episode.appendChild(nameDiv);
     divElement.appendChild(episode);
     div.appendChild(divElement);
 }

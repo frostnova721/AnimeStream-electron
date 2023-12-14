@@ -139,3 +139,32 @@ export interface AnimepaheSearch {
     poster: string;
     session: string;
 }
+
+export interface IGogoEpisodes {
+    episodeNumber: number;
+    link: string
+}
+
+export interface IAnilistInfo {
+    title: {
+        romaji: string;
+        english: string;
+        native: string;
+        userPreferred: string;
+    };
+    startDate: {
+        year: number;
+        month: number;
+        day: number;
+    };
+    season: string;
+    seasonInt: number;
+    seasonYear: number;
+    genres: string[];
+    averageScore: number;
+    popularity: number;
+    isAdult: boolean;
+    status: string;
+    type: string;
+    bannerImage: string;
+}

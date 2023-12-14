@@ -1,19 +1,25 @@
 import cheerio from 'cheerio';
 import axios from 'axios';
-import { IAiredEpisodes } from '../Types';
+import { IGogoEpisodes, IAiredEpisodes } from '../Types';
 import request, { gql } from 'graphql-request';
+import { Animepahe, GogoStreams } from '.';
 
 export class Episodes {
     constructor() {}
 
     public getAiredEpisodes = async (
         infoLink: string,
-        db: 'anilist' | 'mal',
+        db: 'anilist' | 'mal'
     ): Promise<IAiredEpisodes[]> => {
         if (db === 'anilist') return await this.getAiredEpisodesFromAL(infoLink);
         if (db === 'mal') return await this.getAiredEpisodesFromMal(infoLink);
         throw new Error('No DB??');
     };
+
+    public getAiredEpisodesFromSite = async(animeName: string, site: 'gogoanime' | 'animepahe') => {
+        if(site === 'gogoanime') return await this.getAiredEpisodesFromGogo(animeName)
+        throw new Error('No site??')
+    }
 
     private getAiredEpisodesFromMal = async (malEpLink: string): Promise<IAiredEpisodes[]> => {
         const url = `${malEpLink}/episode`;
@@ -75,6 +81,17 @@ export class Episodes {
 
         return episodeArray;
     };
+
+    private getAiredEpisodesFromGogo = async(animeName: string): Promise<IGogoEpisodes[]> => {
+        const gogo = new GogoStreams()
+        const search = await gogo.searchForAnime(animeName, true)
+        const eps = await gogo.getAnimeEpisodeLink(search[0].alias)
+        const episodeArray: IGogoEpisodes[] = []
+        for(let i=0; i<eps.episodes; i++) {
+            episodeArray.push({ episodeNumber: i+1, link: `https://gogoanime3.net${eps.link.trim()}${i+1}`})
+        }
+        return episodeArray
+    }
 
     private fetch = async (url: string, options?: any): Promise<any> => {
         if (!options) options = '';

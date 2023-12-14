@@ -11,6 +11,7 @@ const pahe = new Animepahe();
 const anilist = new AniList();
 
 export async function getAnimeInfo(link: string) {
+    //add al info too
     const results = mal.getAnimeDetails(link);
     return results;
 }
@@ -192,9 +193,20 @@ export async function getEpisodes(infoLink: string) {
     return eps;
 }
 
+export async function getEpisodesFromSite(animeName: string) {
+    const ep = await new Episodes()
+    const eps = await ep.getAiredEpisodesFromSite(animeName, await getDefaultStream())
+    return eps
+}
+
 export async function getAnilistLink() {
     const res = await ipcRenderer.invoke('getStoredAnilistLink');
     return res;
+}
+
+export async function getAnilistInfo(anilistId: string) {
+    const data = await anilist.getALInfo(anilistId)
+    return data
 }
 
 export async function setAnilistLink(link: string) {

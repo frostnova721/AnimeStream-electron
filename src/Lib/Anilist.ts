@@ -1,5 +1,5 @@
 import { request, gql } from 'graphql-request';
-import { IAnimeSearchResult, ISeasonResponse } from '../Types';
+import { IAnilistInfo, IAnimeSearchResult, ISeasonResponse } from '../Types';
 import axios from 'axios';
 
 export class AniList {
@@ -65,4 +65,42 @@ export class AniList {
         };
         return updatedResponse;
     };
+
+    public getALInfo = async(id: string): Promise<IAnilistInfo> => {
+        const query = gql`
+        {
+            Page(perPage: 100) {
+              media (id: $Id) {
+                title {
+                  romaji
+                  english
+                  native
+                  userPreferred
+                },
+                startDate {
+                  year
+                  month
+                  day
+                },
+                season,
+                seasonInt,
+                seasonYear,
+                genres,
+                averageScore,
+                popularity,
+                isAdult,
+                status,
+                type,
+                bannerImage
+              }
+            }
+          }
+        `
+        const res: any = await request(
+            'https://graphql.anilist.co',
+            query.replace('$Id', `${id}`),
+        );
+        console.log(res.Page.media[0])
+        return res.Page.media[0] as IAnilistInfo
+    }
 }

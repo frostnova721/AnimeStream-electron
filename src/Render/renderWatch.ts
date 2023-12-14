@@ -116,13 +116,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let anime: string = '',
         ep: string = '',
-        fromlatest: 'true' | 'false' | undefined;
+        fromlatest: 'true' | 'false' | undefined,
+        link: string = ''
 
     for (const query of queries) {
         const key = query.split('=');
         if (key[0] === 'watch') anime = key[1];
         if (key[0] === 'ep') ep = key[1];
         if(key[0] === 'fromlatest') fromlatest = key[1] as typeof fromlatest
+        if(key[0] === 'link') link = key[1]
     }
 
     if(fromlatest === 'true') backLink = './AnimeInfo.html?rel=latest'
@@ -157,7 +159,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadCorrespondingStreams(anime ?? '', parseInt(ep));
     };
 
-    await loadCorrespondingStreams(anime ?? '', parseInt(ep));
+    await loadCorrespondingStreams(anime ?? '', parseInt(ep), link);
 
     const updateProgression = () => {
         progressed.style.width = `${(video.currentTime / video.duration) * 100}%`;
@@ -316,10 +318,10 @@ function secondsToTime(seconds: number) {
     return `${hours > 0 ? `${hoursStr}:` : ''}${minutesStr}:${secondsStr}`;
 }
 
-async function loadCorrespondingStreams(anime: string, ep: number) {
+async function loadCorrespondingStreams(anime: string, ep: number, link?: string) {
     switch (selectedProvider) {
         case 'gogoanime':
-            return await loadGogoStreams(anime, ep);
+            return await loadGogoStreams(anime, ep, link);
         case 'animepahe':
             return await loadPaheStreams(anime, ep);
         default:
@@ -327,13 +329,18 @@ async function loadCorrespondingStreams(anime: string, ep: number) {
     }
 }
 
-async function loadGogoStreams(anime: string, ep: number) {
+async function loadGogoStreams(anime: string, ep: number, link?: string) {
     try {
-        const search = await gogoSearch(decodeURIComponent(anime));
-        const link = await getEpisodeLink(search[0].alias);
-        const sources = await (
-            await getGogoStreams(`https://gogoanime3.net${link.link.trim()}` + ep)
-        ).sources;
+        let sources;
+        if(selectedProvider === await getDefaultStream()) {
+            sources = await ( await getGogoStreams(link?? '')).sources
+        } else {
+            const search = await gogoSearch(decodeURIComponent(anime));
+            const link = await getEpisodeLink(search[0].alias);
+            sources = await (
+                await getGogoStreams(`https://gogoanime3.net${link.link.trim()}` + ep)
+            ).sources;
+        }
 
         const arr: { child: HTMLElement; source: string }[] = [];
 
