@@ -61,7 +61,7 @@ The setup file will be situated in the out folder in the project root after usin
 
 ## License
 
-This project is licensed under the **GNU Affero Public License version 3.0**.
+This project is licensed under the **GNU Public License version 3.0**.
 
 ## Disclaimer
 - By using this app, you agree that the developer(s) of AnimeStream is not responsible for any content within the app and won't be legally responsible for any violations. 

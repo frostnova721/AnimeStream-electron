@@ -26,7 +26,7 @@
         "type": "git",
         "url": "https://github.com/frostnova721/AnimeStream"
     },
-    "license": "AGPL-3.0 license",
+    "license": "GPL-3.0",
     "dependencies": {
         "anilist-node": "^1.14.0",
         "axios": "^1.5.1",
