@@ -1,6 +1,6 @@
 import cheerio from 'cheerio';
 import axios from 'axios';
-import { IGogoEpisodes, IAiredEpisodes } from '../Types';
+import { IAiredSiteEpisodes, IAiredEpisodes } from '../Types';
 import request, { gql } from 'graphql-request';
 import { Animepahe, GogoStreams } from '.';
 
@@ -9,17 +9,21 @@ export class Episodes {
 
     public getAiredEpisodes = async (
         infoLink: string,
-        db: 'anilist' | 'mal'
+        db: 'anilist' | 'mal',
     ): Promise<IAiredEpisodes[]> => {
         if (db === 'anilist') return await this.getAiredEpisodesFromAL(infoLink);
         if (db === 'mal') return await this.getAiredEpisodesFromMal(infoLink);
         throw new Error('No DB??');
     };
 
-    public getAiredEpisodesFromSite = async(animeName: string, site: 'gogoanime' | 'animepahe') => {
-        if(site === 'gogoanime') return await this.getAiredEpisodesFromGogo(animeName)
-        throw new Error('No site??')
-    }
+    public getAiredEpisodesFromSite = async (
+        animeName: string,
+        site: 'gogoanime' | 'animepahe',
+    ) => {
+        if (site === 'gogoanime') return await this.getAiredEpisodesFromGogo(animeName);
+        if (site === 'animepahe') return await this.getAiredEpisodesFromAnimePahe(animeName);
+        throw new Error('No site??');
+    };
 
     private getAiredEpisodesFromMal = async (malEpLink: string): Promise<IAiredEpisodes[]> => {
         const url = `${malEpLink}/episode`;
@@ -82,16 +86,37 @@ export class Episodes {
         return episodeArray;
     };
 
-    private getAiredEpisodesFromGogo = async(animeName: string): Promise<IGogoEpisodes[]> => {
-        const gogo = new GogoStreams()
-        const search = await gogo.searchForAnime(animeName, true)
-        const eps = await gogo.getAnimeEpisodeLink(search[0].alias)
-        const episodeArray: IGogoEpisodes[] = []
-        for(let i=0; i<eps.episodes; i++) {
-            episodeArray.push({ episodeNumber: i+1, link: `https://gogoanime3.net${eps.link.trim()}${i+1}`})
+    private getAiredEpisodesFromGogo = async (animeName: string): Promise<IAiredSiteEpisodes[]> => {
+        const gogo = new GogoStreams();
+        const search = await gogo.searchForAnime(animeName, true);
+        const eps = await gogo.getAnimeEpisodeLink(search[0].alias);
+        const episodeArray: IAiredSiteEpisodes[] = [];
+        for (let i = 0; i < eps.episodes; i++) {
+            episodeArray.push({
+                episodeNumber: i + 1,
+                link: `https://gogoanime3.net${eps.link.trim()}${i + 1}`,
+            });
         }
-        return episodeArray
-    }
+        return episodeArray;
+    };
+
+    private getAiredEpisodesFromAnimePahe = async (
+        animeName: string,
+    ): Promise<IAiredSiteEpisodes[]> => {
+        const pahe = new Animepahe();
+        const search = await pahe.searchPahe(animeName);
+        const eps = await pahe.getEpisodeInfo(search[0].session);
+        const episodeArray: IAiredSiteEpisodes[] = [];
+        for (let i = 0; i < eps.length; i++) {
+            episodeArray.push({
+                episodeNumber: i + 1,
+                title: eps[i].title,
+                img: eps[i].snapshot,
+                link: `https://animepahe.ru/play/${search[0].session}/${eps[i].session}`,
+            });
+        }
+        return episodeArray;
+    };
 
     private fetch = async (url: string, options?: any): Promise<any> => {
         if (!options) options = '';

@@ -72,9 +72,13 @@ export async function paheSearch(term: string) {
 
 export async function paheStreamDetails(session: string, episode: number) {
     const res = await pahe.getEpisodeInfo(session);
-    const data = await pahe.getAnimepaheStreams(
+    return await getPaheStreamDetails(
         `https://animepahe.ru/play/${session}/${res[episode - 1].session}`,
     );
+}
+
+export async function getPaheStreamDetails(link: string) {
+    const data = await pahe.getAnimepaheStreams(link);
     return data;
 }
 
@@ -112,9 +116,12 @@ export async function createNewWindow() {
 }
 
 export async function readSettings() {
-    const settingPath = await ipcRenderer.invoke('getSettingPath')
-    if(!fs.existsSync(path.join(settingPath, './settings.json'))) {
-        fs.writeFileSync(path.join(settingPath, './settings.json'), '{ "database":"anilist", "defaultStream":"gogoanime"}')
+    const settingPath = await ipcRenderer.invoke('getSettingPath');
+    if (!fs.existsSync(path.join(settingPath, './settings.json'))) {
+        fs.writeFileSync(
+            path.join(settingPath, './settings.json'),
+            '{ "database":"anilist", "defaultStream":"gogoanime"}',
+        );
     }
     const settings = JSON.parse(
         fs.readFileSync(`${settingPath}/settings.json`, 'utf8'),
@@ -167,9 +174,9 @@ export async function getDefaultStream() {
 }
 
 export async function changeDefaultStream(stream: 'animepahe' | 'gogoanime') {
-    const settings = await readSettings()
-    settings.defaultStream = stream
-    return await writeSettings(settings)
+    const settings = await readSettings();
+    settings.defaultStream = stream;
+    return await writeSettings(settings);
 }
 
 export async function getEpisodeLink(aliasId: string) {
@@ -183,8 +190,8 @@ export async function changeDataBase(db: 'mal' | 'anilist') {
     settings.database = db;
     console.log(settings);
     await writeSettings(settings);
-    clearRuntimeCache()
-    await reload()
+    clearRuntimeCache();
+    await reload();
 }
 
 export async function getEpisodes(infoLink: string) {
@@ -194,9 +201,9 @@ export async function getEpisodes(infoLink: string) {
 }
 
 export async function getEpisodesFromSite(animeName: string) {
-    const ep = await new Episodes()
-    const eps = await ep.getAiredEpisodesFromSite(animeName, await getDefaultStream())
-    return eps
+    const ep = await new Episodes();
+    const eps = await ep.getAiredEpisodesFromSite(animeName, await getDefaultStream());
+    return eps;
 }
 
 export async function getAnilistLink() {
@@ -205,8 +212,8 @@ export async function getAnilistLink() {
 }
 
 export async function getAnilistInfo(anilistId: string) {
-    const data = await anilist.getALInfo(anilistId)
-    return data
+    const data = await anilist.getALInfo(anilistId);
+    return data;
 }
 
 export async function setAnilistLink(link: string) {
@@ -222,15 +229,15 @@ export async function storeTotalEpisodes(episodes: string) {
 }
 
 export async function getStoredTotalEpisodes() {
-    const res = ipcRenderer.invoke('getStoredTotalEpisodes')
-    return res
+    const res = ipcRenderer.invoke('getStoredTotalEpisodes');
+    return res;
 }
 
-export async function getAppDetails(): Promise<{ version: string, name: string }> {
-    const res = await ipcRenderer.invoke('getAppDetails')
-    return res
+export async function getAppDetails(): Promise<{ version: string; name: string }> {
+    const res = await ipcRenderer.invoke('getAppDetails');
+    return res;
 }
 
 export async function reload() {
-    await ipcRenderer.invoke('reloadMain')
+    await ipcRenderer.invoke('reloadMain');
 }

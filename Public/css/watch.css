@@ -57,7 +57,7 @@ button:focus {
 }
 
 .container {
-    margin-top: 20px;
+    margin-top: 25px;
     padding: 25px;
 }
 
@@ -149,12 +149,14 @@ button:focus {
 
 .playerContainer2 {
     max-height: 483.75px;
+    /* width: 90%; */
     /* max-height: 892px; */
 }
 
 .player {
     height: 483.75px;
     max-width: 892px;
+    /* max-width: 100%; */
     position: relative;
 }
 
@@ -352,12 +354,28 @@ button:focus {
     filter: invert();
 }
 
+.widescreen {
+    height: 30px;
+    width: 45px;
+    background-color: transparent;
+    border: none;
+    float: right;
+    margin-top: -4px;
+}
+
+.widescreen img {
+    filter: invert();
+    height: 35px;
+    width: 35px;
+}
+
 .fullScreen {
     height: 30px;
     width: 30px;
     background-color: transparent;
     border: 1px solid transparent;
     float: right;
+    margin-left: 15px;
 }
 
 .fullScreen img {

@@ -14,7 +14,7 @@ import {
 import { ILatestAnimes, ISeasonResponse } from '../Types';
 
 let accumulatedDelta = 0;
-let isScrolling = false
+let isScrolling = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
     const connectedToAccount = false;
@@ -38,14 +38,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     recentContainer.addEventListener('wheel', (event) => {
         if (event.deltaY !== 0 && recentContainer.scrollWidth > recentContainer.clientWidth) {
             event.preventDefault();
-            
+
             accumulatedDelta += event.deltaY;
 
             if (!isScrolling) {
                 isScrolling = true;
 
                 const updateScroll = () => {
-                    recentContainer.scrollLeft += accumulatedDelta / 4.5; 
+                    recentContainer.scrollLeft += accumulatedDelta / 4.5;
                     accumulatedDelta *= 0.85;
                     if (Math.abs(accumulatedDelta) > 0.1) {
                         requestAnimationFrame(updateScroll);
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     latestContainer.addEventListener('wheel', (event) => {
         if (event.deltaY !== 0 && latestContainer.scrollWidth > latestContainer.clientWidth) {
             event.preventDefault();
-            
+
             accumulatedDelta += event.deltaY;
 
             if (!isScrolling) {

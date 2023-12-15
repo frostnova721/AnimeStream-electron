@@ -4,10 +4,14 @@ import { TGlobalVar } from '../Types';
 import { clearRuntimeCache } from '../Core';
 import * as fs from 'fs';
 import { setupTitlebar, attachTitlebarToWindow } from 'custom-electron-titlebar/main';
-import { tmpdir } from 'os'
+import { tmpdir } from 'os';
 
-const cachePath = `${tmpdir()}/animestream`
-const settingPath = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share")
+const cachePath = `${tmpdir()}/animestream`;
+const settingPath =
+    process.env.APPDATA ||
+    (process.platform == 'darwin'
+        ? process.env.HOME + '/Library/Preferences'
+        : process.env.HOME + '/.local/share');
 
 if (!fs.existsSync(cachePath)) {
     fs.mkdirSync(cachePath);
@@ -22,8 +26,8 @@ if (require('electron-squirrel-startup')) {
 }
 
 const essentials = {
-    settingPath: `${settingPath}/animestream`
-}
+    settingPath: `${settingPath}/animestream`,
+};
 
 const globalVars: TGlobalVar = {
     clickedResult: '',
@@ -31,7 +35,7 @@ const globalVars: TGlobalVar = {
     subWindows: 0,
     backTo: '',
     clickedAnilistLink: '',
-    totalEpisodes: ''
+    totalEpisodes: '',
 };
 
 const anilistData = {
@@ -53,7 +57,7 @@ const createWindow = () => {
         },
     });
 
-    nativeTheme.themeSource = 'system'
+    nativeTheme.themeSource = 'system';
 
     attachTitlebarToWindow(mainWindow);
 
@@ -146,25 +150,25 @@ const createWindow = () => {
     });
 
     ipcMain.handle('storeTotalEpisodes', (e, totalEps) => {
-        globalVars.totalEpisodes = totalEps
-        return null
-    })
+        globalVars.totalEpisodes = totalEps;
+        return null;
+    });
 
     ipcMain.handle('getStoredTotalEpisodes', (e) => {
-        return globalVars.totalEpisodes
-    })
+        return globalVars.totalEpisodes;
+    });
 
     ipcMain.handle('getSettingPath', (e) => {
-        return essentials.settingPath
-    })
+        return essentials.settingPath;
+    });
 
     ipcMain.handle('getAppDetails', (e) => {
-        return { version: app.getVersion(), name: app.getName() }
-    })
+        return { version: app.getVersion(), name: app.getName() };
+    });
 
     ipcMain.handle('reloadMain', (e) => {
-        return BrowserWindow.getAllWindows()[1].webContents.reload()
-    })
+        return BrowserWindow.getAllWindows()[1].webContents.reload();
+    });
 };
 
 const icoPath = path.join(__dirname, '../../assets/icons/ICO.ico');

@@ -201,7 +201,7 @@ button.item {
     color: black;
 }
 
-.streamOpts:hover~ .dropdown {
+.streamOpts:hover ~ .dropdown {
     display: flex;
 }
 

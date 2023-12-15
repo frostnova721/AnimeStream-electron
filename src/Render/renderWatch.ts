@@ -7,17 +7,19 @@ import {
     paheSearch,
     paheStreamDetails,
     stream,
-    getStoredTotalEpisodes
+    getStoredTotalEpisodes,
+    getPaheStreamDetails,
 } from '../Core';
 
 let playState = false;
 let videoLoaded = false;
 let localMemory;
-let overlayShown = false
+let overlayShown = false;
 let autoLoadLink = '';
 let selectedProvider: 'animepahe' | 'gogoanime' = 'gogoanime';
 let playTime: number = 0;
-let backLink = './AnimeInfo.html'
+let backLink = './AnimeInfo.html';
+let widened = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
     const backBtn = document.getElementById('backBtn');
@@ -46,6 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const nextBtn = document.getElementById('nextEp');
     const playerTitle = document.getElementById('playerTitle');
     const videoLoaderContainer = document.getElementById('videoLoaderContainer');
+    const wideScreen = document.getElementById('widescreen');
 
     if (
         !video ||
@@ -73,20 +76,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         !previousBtn ||
         !nextBtn ||
         !playerTitle ||
-        !videoLoaderContainer
+        !videoLoaderContainer ||
+        !wideScreen
     )
         throw new Error('err'); //typescript's OCD
 
-    const totalEps = await getStoredTotalEpisodes()
+    const totalEps = await getStoredTotalEpisodes();
 
     //to go back
     backBtn.onclick = () => {
-        if(overlayShown) {
+        if (overlayShown) {
             overlay.classList.toggle('show');
             container.classList.toggle('hidden');
-            overlayShown = false
+            overlayShown = false;
         } else {
-            (window.location.href = backLink)
+            window.location.href = backLink;
         }
     };
 
@@ -103,13 +107,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     serversBtn.onclick = () => {
         overlay.classList.toggle('show');
         container.classList.toggle('hidden');
-        overlayShown = true
+        overlayShown = true;
     };
 
     closeBtn.onclick = () => {
         overlay.classList.toggle('show');
         container.classList.toggle('hidden');
-        overlayShown = false
+        overlayShown = false;
+    };
+
+    wideScreen.onclick = () => {
+        widenVideo();
     };
 
     const queries = window.location.href.split('?')[1].split('&');
@@ -117,17 +125,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     let anime: string = '',
         ep: string = '',
         fromlatest: 'true' | 'false' | undefined,
-        link: string = ''
+        link: string = '';
 
     for (const query of queries) {
         const key = query.split('=');
         if (key[0] === 'watch') anime = key[1];
         if (key[0] === 'ep') ep = key[1];
-        if(key[0] === 'fromlatest') fromlatest = key[1] as typeof fromlatest
-        if(key[0] === 'link') link = key[1]
+        if (key[0] === 'fromlatest') fromlatest = key[1] as typeof fromlatest;
+        if (key[0] === 'link') link = key[1];
     }
 
-    if(fromlatest === 'true') backLink = './AnimeInfo.html?rel=latest'
+    if (fromlatest === 'true') backLink = './AnimeInfo.html?rel=latest';
 
     if (!anime || !ep) throw new Error('no anime name found');
 
@@ -141,7 +149,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     nextBtn.onclick = () => {
-        if(parseInt(ep) !== parseInt(totalEps))
+        if (parseInt(ep) !== parseInt(totalEps))
             window.location.href = `./Watch.html?watch=${anime ?? ''}&ep=${parseInt(ep) + 1 ?? ''}`;
     };
 
@@ -220,12 +228,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     video.onwaiting = () => {
-        videoLoaderContainer.style.display = 'flex'
-    }
+        videoLoaderContainer.style.display = 'flex';
+    };
 
     video.onplaying = () => {
-        videoLoaderContainer.style.display = 'none'
-    }
+        videoLoaderContainer.style.display = 'none';
+    };
 
     //to determine wether the left mouse is held
     // let draggable = false
@@ -323,17 +331,17 @@ async function loadCorrespondingStreams(anime: string, ep: number, link?: string
         case 'gogoanime':
             return await loadGogoStreams(anime, ep, link);
         case 'animepahe':
-            return await loadPaheStreams(anime, ep);
+            return await loadPaheStreams(anime, ep, link);
         default:
-            return await loadGogoStreams(anime, ep);
+            return await loadGogoStreams(anime, ep, link);
     }
 }
 
 async function loadGogoStreams(anime: string, ep: number, link?: string) {
     try {
         let sources;
-        if(selectedProvider === await getDefaultStream()) {
-            sources = await ( await getGogoStreams(link?? '')).sources
+        if (selectedProvider === (await getDefaultStream())) {
+            sources = await (await getGogoStreams(link ?? '')).sources;
         } else {
             const search = await gogoSearch(decodeURIComponent(anime));
             const link = await getEpisodeLink(search[0].alias);
@@ -372,12 +380,17 @@ async function loadGogoStreams(anime: string, ep: number, link?: string) {
     }
 }
 
-async function loadPaheStreams(anime: string, ep: number) {
+async function loadPaheStreams(anime: string, ep: number, link?: string) {
     try {
-        const search = await paheSearch(anime);
-        const streamDetails = await paheStreamDetails(search[0].session, ep);
+        let sources;
+        if (selectedProvider === (await getDefaultStream())) {
+            sources = await getPaheStreamDetails(link ?? '');
+        } else {
+            const search = await paheSearch(anime);
+            sources = await paheStreamDetails(search[0].session, ep);
+        }
         const arr: { child: HTMLElement; source: string }[] = [];
-        for (const source of streamDetails) {
+        for (const source of sources) {
             const child = document.createElement('button');
             child.className = 'source';
             child.id = 'source';
@@ -389,7 +402,7 @@ async function loadPaheStreams(anime: string, ep: number) {
 
         const srcs = Array.from(new Set(arr.map((obj) => obj.source)));
         if (autoLoadLink.length < 1) {
-            const src = streamDetails.find((item) => item.quality === '720p');
+            const src = sources.find((item) => item.quality === '720p');
             autoLoadLink = src?.link ?? '';
         }
         const subStream = document.getElementById('subStream');
@@ -442,4 +455,22 @@ function createStreamGroup(streamName: string, children: { child: HTMLElement; s
     subStream.appendChild(mainDiv);
 
     return streams;
+}
+
+function widenVideo() {
+    const player = document.getElementsByClassName('player')[0] as HTMLElement;
+    const video = document.getElementById('videoPlayer');
+    const controls = document.getElementById('controls');
+    const playerContainer2 = document.getElementsByClassName('playerContainer2')[0] as HTMLElement;
+    const playerContainer = document.getElementsByClassName('playerContainer')[0] as HTMLElement;
+    if (!player || !video || !controls || !playerContainer2 || !playerContainer) return;
+    player.style.maxWidth = widened ? '892px' : '100%';
+    video.style.maxWidth = widened ? '892px' : '100%';
+    controls.style.maxWidth = widened ? '892px' : '100%';
+    playerContainer2.style.width = widened ? 'auto' : '90%';
+    // playerContainer
+    playerContainer2.style.maxHeight = widened ? '483.75px' : '685px';
+    player.style.height = widened ? '483.75px' : '685px';
+    video.style.height = widened ? '483.75px' : '685px';
+    widened = !widened;
 }

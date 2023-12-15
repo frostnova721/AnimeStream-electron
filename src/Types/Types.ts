@@ -72,7 +72,7 @@ export type TGlobalVar = {
     subWindows: number;
     backTo: string;
     clickedAnilistLink: string;
-    totalEpisodes: string
+    totalEpisodes: string;
 };
 
 export interface ILatestAnimes {
@@ -140,9 +140,11 @@ export interface AnimepaheSearch {
     session: string;
 }
 
-export interface IGogoEpisodes {
+export interface IAiredSiteEpisodes {
     episodeNumber: number;
-    link: string
+    link: string;
+    img?: string;
+    title?: string;
 }
 
 export interface IAnilistInfo {
