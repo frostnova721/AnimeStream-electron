@@ -9,7 +9,7 @@
         "build": "rimraf dist/ && tsc",
         "start": "electron .",
         "dev": "nodemon",
-        "prepack": "npm run build && node prepare.js",
+        "prepack": "npm run build",
         "package": "npm run prepack && electron-forge package",
         "make": "npm run prepack && electron-forge make",
         "make-msi": "npm run make -- --targets=\"@electron-forge/maker-wix\"",

@@ -24,7 +24,6 @@ let widened = false;
 document.addEventListener('DOMContentLoaded', async () => {
     const backBtn = document.getElementById('backBtn');
     const video = <HTMLVideoElement>document.getElementById('videoPlayer');
-    // const sourcesDiv = document.getElementById('sources');
     const playPause = document.getElementById('playPause');
     const progressBar = document.getElementById('watch_progress');
     const progressed = document.getElementById('progressed');
@@ -35,12 +34,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const fullScreenBtn = document.getElementById('fullScreen');
     const playPauseImg = <HTMLImageElement>document.getElementById('playPauseImg');
     const fsImg = <HTMLImageElement>document.getElementById('fsImg');
-    const srcLoader = document.getElementById('srcLoader');
     const serversBtn = document.getElementById('serversBtn');
     const closeBtn = document.getElementById('close');
     const overlay = document.getElementById('overlay');
     const container = document.getElementById('container');
-    // const streamDiv = document.getElementById('streams')
     const subStream = document.getElementById('subStream');
     const paheButton = document.getElementById('pahe');
     const gogoButton = document.getElementById('gogo');
@@ -52,7 +49,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (
         !video ||
-        // !sourcesDiv ||
         !backBtn ||
         !playPause ||
         !progressBar ||
@@ -64,7 +60,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         !point ||
         !playPauseImg ||
         !fsImg ||
-        // !srcLoader ||
         !serversBtn ||
         !closeBtn ||
         !overlay ||
@@ -462,13 +457,11 @@ function widenVideo() {
     const video = document.getElementById('videoPlayer');
     const controls = document.getElementById('controls');
     const playerContainer2 = document.getElementsByClassName('playerContainer2')[0] as HTMLElement;
-    const playerContainer = document.getElementsByClassName('playerContainer')[0] as HTMLElement;
-    if (!player || !video || !controls || !playerContainer2 || !playerContainer) return;
+    if (!player || !video || !controls || !playerContainer2) return;
     player.style.maxWidth = widened ? '892px' : '100%';
     video.style.maxWidth = widened ? '892px' : '100%';
     controls.style.maxWidth = widened ? '892px' : '100%';
     playerContainer2.style.width = widened ? 'auto' : '90%';
-    // playerContainer
     playerContainer2.style.maxHeight = widened ? '483.75px' : '685px';
     player.style.height = widened ? '483.75px' : '685px';
     video.style.height = widened ? '483.75px' : '685px';

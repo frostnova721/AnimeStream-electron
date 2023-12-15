@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { MAL, GogoStreams, AniList, Episodes, Animepahe } from '../Lib';
-import { IMALSearch, ISearchOutput, IStreamOutput, Settings } from '../Types';
+import { ISearchOutput, IStreamOutput, Settings } from '../Types';
 import Hls from 'hls.js';
 import * as fs from 'fs';
 import path from 'path';
