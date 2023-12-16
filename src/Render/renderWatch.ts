@@ -9,6 +9,7 @@ import {
     stream,
     getStoredTotalEpisodes,
     getPaheStreamDetails,
+    readSettings,
 } from '../Core';
 
 let playState = false;
@@ -265,12 +266,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     //     }
     // });
 
-    //pause or play when space key is pressed
+    //pause or play or skip when space key is pressed
+    let skipDuration = await (await readSettings()).skipDuration || 5
     document.addEventListener('keydown', (event) => {
         if (event.key === ' ' || event.keyCode === 32 || event.which === 32) {
             event.preventDefault();
             if (videoLoaded) {
                 playState = updatePlayButton(playState, video, playPauseImg);
+            }
+        }
+        if(event.key === 'ArrowRight') {
+            event.preventDefault()
+            if(videoLoaded) {
+                video.currentTime = video.currentTime + skipDuration
+                updateProgression()
+            }
+        }
+        if(event.key === 'ArrowLeft') {
+            event.preventDefault()
+            if(videoLoaded) {
+                video.currentTime = video.currentTime - skipDuration
+                updateProgression()
             }
         }
     });
@@ -335,8 +351,8 @@ async function loadCorrespondingStreams(anime: string, ep: number, link?: string
 async function loadGogoStreams(anime: string, ep: number, link?: string) {
     try {
         let sources;
-        if (selectedProvider === (await getDefaultStream())) {
-            sources = await (await getGogoStreams(link ?? '')).sources;
+        if (selectedProvider === (await getDefaultStream()) && link) {
+            sources = await (await getGogoStreams(link)).sources;
         } else {
             const search = await gogoSearch(decodeURIComponent(anime));
             const link = await getEpisodeLink(search[0].alias);
@@ -378,8 +394,8 @@ async function loadGogoStreams(anime: string, ep: number, link?: string) {
 async function loadPaheStreams(anime: string, ep: number, link?: string) {
     try {
         let sources;
-        if (selectedProvider === (await getDefaultStream())) {
-            sources = await getPaheStreamDetails(link ?? '');
+        if (selectedProvider === (await getDefaultStream()) && link) {
+            sources = await getPaheStreamDetails(link);
         } else {
             const search = await paheSearch(anime);
             sources = await paheStreamDetails(search[0].session, ep);

@@ -171,8 +171,8 @@ const createWindow = () => {
     });
 };
 
-const icoPath = path.join(__dirname, '../../assets/icons/ICO.ico');
-const appIcon = nativeImage.createFromPath(icoPath);
+const icoPath = path.join(__dirname, '../../Assets/Icons/logo_new.png');
+const appIcon = nativeImage.createFromPath(icoPath)
 
 app.on('ready', createWindow);
 

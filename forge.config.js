@@ -1,6 +1,6 @@
 module.exports = {
     packagerConfig: {
-        icon: 'Assets/Icons/ICO',
+        icon: 'Assets/Icons/logo_new.ico',
         asar: true,
     },
     rebuildConfig: {},
@@ -8,13 +8,18 @@ module.exports = {
         {
             name: '@electron-forge/maker-squirrel',
             config: {
-                setupIcon: 'Assets/Icons/ICO.ico'
+                setupIcon: 'Assets/Icons/logo_new.ico',
+                description: 'AnimeStream - An app to download and stream anime for free',
+                exe: 'AnimeStream.exe',
+                loadingGif: 'Assets/Icons/installer.gif',
+                name: 'AnimeStream',
+                authors: 'FrostNova'
             },
         },
         {
             name: '@electron-forge/maker-wix',
             config: {
-                icon: 'Assets/Icons/ICO.ico',
+                icon: 'Assets/Icons/logo_new.ico',
                 name: 'AnimeStream',
                 description: 'AnimeStream - An app to download and stream anime for free',
             }
