@@ -120,7 +120,7 @@ export async function readSettings() {
     if (!fs.existsSync(path.join(settingPath, './settings.json'))) {
         fs.writeFileSync(
             path.join(settingPath, './settings.json'),
-            '{ "database":"anilist", "defaultStream":"gogoanime", skipDuration: 5 }',
+            '{ "database":"anilist", "defaultStream":"gogoanime", "skipDuration": 5 }',
         );
     }
     const settings = JSON.parse(
