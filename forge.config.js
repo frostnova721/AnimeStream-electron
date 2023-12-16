@@ -30,7 +30,12 @@ module.exports = {
         },
         {
             name: '@electron-forge/maker-deb',
-            config: {},
+            config: {
+                name: 'AnimeStream',
+                productName: 'AnimeStream',
+                icon: 'Assets/Icons/logo_new.ico',
+                description: 'AnimeStream - An app to download and stream anime for free',
+            },
         },
         {
             name: '@electron-forge/maker-rpm',
