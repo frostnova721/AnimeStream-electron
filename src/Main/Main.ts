@@ -50,6 +50,7 @@ const createWindow = () => {
         height: 980,
         titleBarStyle: 'hidden',
         icon: appIcon,
+        frame: false,
         titleBarOverlay: false,
         webPreferences: {
             nodeIntegration: true,

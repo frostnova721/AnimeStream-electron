@@ -37,10 +37,6 @@ module.exports = {
                 description: 'AnimeStream - An app to download and stream anime for free',
             },
         },
-        {
-            name: '@electron-forge/maker-rpm',
-            config: {},
-        },
     ],
     plugins: [
         {
