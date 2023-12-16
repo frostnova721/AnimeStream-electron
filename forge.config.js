@@ -34,7 +34,7 @@ module.exports = {
                 name: 'AnimeStream',
                 productName: 'AnimeStream',
                 icon: 'Assets/Icons/logo_new.ico',
-                description: 'AnimeStream - An app to download and stream anime for free',
+                "description": 'AnimeStream - An app to download and stream anime for free',
             },
         },
     ],
