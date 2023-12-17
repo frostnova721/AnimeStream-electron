@@ -2,7 +2,7 @@
 
 Welcome to the Anime Stream project—a simple project designed for streaming and downloading your favorite anime!
 
-<img src="Assets/Icons/logo_new.png" width="256px" height="256px" alt="Project Logo">
+![Project Logo](Assets/Icons/logo_new.ico)
 
 *(Note: any similarities are coincidental)*
 
