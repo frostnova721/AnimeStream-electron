@@ -40,8 +40,6 @@ Ofcourse there are issues(a lot) some of the major stuffs are:
 
 - **Episode Selection Glitch:** Occasionally, the wrong anime gets selected when choosing an episode. This issue will be fixed soon!.
 
-- **Episodes Not Showing Up:** Honestly, I dont know any other source to get released anime episode title/number. (trying to find a fix)
-
 *Pro Tip: Dont use MAL as database(It doesnt work well with my concept).*
 
 ## Commands
