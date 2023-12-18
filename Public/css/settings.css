@@ -209,6 +209,32 @@ button.item {
     display: flex;
 }
 
+.skipDurationDiv {
+    display: flex;
+    font-size: 1.2rem;
+}
+
+.skipInput {
+    margin-left: 20px;
+    border: none;
+    border-bottom: 2px solid grey;
+    background-color: transparent;
+    color: white;
+    font-family: Poppins-Bold;
+    font-size: 1.2rem;
+    width: 40px;
+}
+
+.skipInput:focus {
+    outline: none;
+    border-bottom: 2px solid #caf979;
+}
+
+.skipInput:hover {
+    border-bottom: 2px solid #caf979;
+}
+
+
 /* .dropdown.drop {
     opacity: 1; 
     display: flex;

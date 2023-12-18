@@ -7,7 +7,17 @@ import {
     getDataBase,
     getDefaultStream,
     readSettings,
+    setDefaultSkipTime,
 } from '../Core';
+import { Settings } from '../Types';
+
+const defaultSettings: Settings = {
+    database: 'anilist',
+    defaultStream: 'gogoanime',
+    skipDuration: 5
+}
+
+//just tried making the html in js(bad idea)
 
 const options = document.getElementById('left');
 
@@ -30,11 +40,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 await appendGeneral();
             } else if (selectedElement.getAttribute('data-value') === 'info') {
                 await appendInfo();
+            } else if (selectedElement.getAttribute('data-value') === 'player') {
+                await appendPlayer()
             }
         }
     });
 });
 
+//CACHE
 function appendCache() {
     clearPage();
     const right = document.getElementById('insidediv');
@@ -61,6 +74,7 @@ function appendCache() {
     right.appendChild(element);
 }
 
+//GENERAL
 async function appendGeneral() {
     clearPage();
     const insidediv = document.getElementById('insidediv');
@@ -82,6 +96,7 @@ function clearPage() {
     inside.innerHTML = '';
 }
 
+//streams
 async function loadStreamOptions() {
     const imgPath = '../../Public/Assets/Icons/down-arrow.png';
 
@@ -128,6 +143,7 @@ async function loadStreamOptions() {
     return element;
 }
 
+//dbs
 async function loadDbOptions() {
     const element = document.createElement('div');
     element.className = 'db'; //unused
@@ -174,6 +190,7 @@ async function loadDbOptions() {
     return element;
 }
 
+//INFO
 async function appendInfo() {
     clearPage();
     const html = `<h2>INFO</h2>
@@ -199,4 +216,32 @@ async function appendInfo() {
         e.preventDefault();
         shell.openExternal((e.target as HTMLAnchorElement).href);
     };
+}
+
+//PLAYER
+async function appendPlayer() {
+    clearPage()
+
+    const insidediv = document.getElementById('insidediv');
+    if(!insidediv) return
+
+    const settings = await readSettings()
+
+    const html = `<div class="skipDurationDiv">
+    <div class="skipTitle">skip duration</div>
+    <input type="number" max="60" min="0" class="skipInput" id="skipInput" value="${settings.skipDuration}">s
+    </div>`
+
+    insidediv.innerHTML = html
+
+    const skipInput = document.getElementById('skipInput') as HTMLInputElement
+    skipInput?.addEventListener('input', async() => {
+        const enteredVal = parseInt(skipInput.value, 10);
+        console.log('inp')
+        if(enteredVal > 60) {
+            skipInput.value = '60'
+        }
+        await setDefaultSkipTime(enteredVal)
+    })
+
 }

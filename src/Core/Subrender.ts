@@ -241,3 +241,9 @@ export async function getAppDetails(): Promise<{ version: string; name: string }
 export async function reload() {
     await ipcRenderer.invoke('reloadMain');
 }
+
+export async function setDefaultSkipTime(duration: number) {
+    const settings = await readSettings()
+    settings.skipDuration = duration < 60 ? duration : 60
+    await writeSettings(settings)
+}
