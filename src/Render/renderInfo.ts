@@ -33,7 +33,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!backBtn || !watchBtn || !epCounter || !main || !closeBtn || !characterContainer) return; //typescript's OCD
 
     //to go back
-    backBtn.onclick = async () => (window.location.href = await getBackTo());
+    backBtn.onclick = async () => {
+        const backTo = await getBackTo()
+        if(backTo.split('/').includes('search.html')) {
+            window.location.href = './search.html?rel=info'
+        } else {
+            window.location.href = backTo
+        }
+    }
 
     //toggle the view of episode menu
     watchBtn.onclick = () => {

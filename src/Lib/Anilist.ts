@@ -36,8 +36,30 @@ export class AniList {
     };
 
     public getThisSeason = async (): Promise<ISeasonResponse[]> => {
-        const res = await axios.get('https://anime-stream-api-psi.vercel.app/alseason');
-        return res.data;
+        const query = `{
+            Page(perPage: 100) {
+              media(sort: [START_DATE_DESC], type: ANIME, format: TV, status: RELEASING) {
+                id
+                title {
+                  romaji
+                  english
+                }
+                startDate {
+                  year
+                  month
+                  day
+                }
+                episodes
+                coverImage {
+                  large
+                  medium
+                  color
+                }
+              }
+            }
+          }`
+          const response: any = await request('https://graphql.anilist.co', query);
+        return response.Page.media as ISeasonResponse[];
     };
 
     public getMalIdFromAlId = async (

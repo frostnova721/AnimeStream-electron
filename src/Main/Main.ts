@@ -38,6 +38,10 @@ const globalVars: TGlobalVar = {
     totalEpisodes: '',
 };
 
+let memory: { searchMemory: any } = {
+    searchMemory: undefined
+}
+
 const anilistData = {
     data: '' as any,
 };
@@ -170,6 +174,15 @@ const createWindow = () => {
     ipcMain.handle('reloadMain', (e) => {
         return BrowserWindow.getAllWindows()[1].webContents.reload();
     });
+
+    ipcMain.handle('storeSearchMemory', (e, div) => {
+        memory.searchMemory = div
+        return null;
+    })
+
+    ipcMain.handle('getSearchMemory', (e) => {
+        return memory.searchMemory
+    })
 };
 
 const icoPath = path.join(__dirname, '../../Assets/Icons/logo_new.png');

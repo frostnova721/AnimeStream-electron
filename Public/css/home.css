@@ -110,11 +110,11 @@ button:focus {
     transition: opacity 0.4s ease-in-out;
 }
 
-.recents div {
+/* .recents div {
     height: 100%;
     width: 200px;
     margin-right: 20px;
-}
+} */
 
 .recents:first-child {
     margin-right: 0px;

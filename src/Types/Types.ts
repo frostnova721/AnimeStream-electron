@@ -105,10 +105,22 @@ export interface IAiredEpisodes {
 }
 
 export interface ISeasonResponse {
-    img: string;
-    url: string;
     id: number;
-    title: string;
+    title: {
+        romaji: string;
+        english: string;
+    };
+    startDate: {
+        year: number;
+        month: number;
+        day: number;
+    };
+    episodes: number;
+    coverImage: {
+        large: string;
+        medium: string;
+        color: string;
+    };
 }
 
 export interface AnimeEpisode {

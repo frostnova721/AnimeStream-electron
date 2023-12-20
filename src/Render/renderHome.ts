@@ -16,6 +16,7 @@ import { ILatestAnimes, ISeasonResponse } from '../Types';
 let accumulatedDelta = 0;
 let isScrolling = false;
 
+
 document.addEventListener('DOMContentLoaded', async () => {
     const connectedToAccount = false;
     const db = await getDataBase();
@@ -211,18 +212,19 @@ async function loadLatestAnimes() {
         }
         if (!latestAnimes) return;
         for (const latestAnime of latestAnimes) {
+            const animeTitle = latestAnime.title.english ?? latestAnime.title.romaji
             let name = '';
-            if (latestAnime.title.length >= 30) {
-                name = latestAnime.title.slice(0, 30) + '...';
+            if (animeTitle.length >= 30) {
+                name = animeTitle.slice(0, 30) + '...';
             } else {
-                name = latestAnime.title;
+                name = animeTitle;
             }
             const latestDiv = document.createElement('div');
             const image = document.createElement('img');
             const title = document.createElement('p');
             latestDiv.className = 'latest_div';
             latestDiv.setAttribute('data-value', `${latestAnime.id}`);
-            image.src = latestAnime.img;
+            image.src = latestAnime.coverImage.large;
             image.draggable = false;
             image.className = 'recent_img';
             title.textContent = name;

@@ -247,3 +247,13 @@ export async function setDefaultSkipTime(duration: number) {
     settings.skipDuration = duration < 60 ? duration : 60
     await writeSettings(settings)
 }
+
+export async function getSearchMemory() {
+    const res = await ipcRenderer.invoke('getSearchMemory')
+    if(!res) throw new Error('Recieved search memory as undefined')
+    return res
+}
+
+export async function storeSearchMemory(divHTML: string) {
+    return await ipcRenderer.invoke('storeSearchMemory', divHTML)
+}
