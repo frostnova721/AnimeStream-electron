@@ -16,8 +16,18 @@ import { ILatestAnimes, ISeasonResponse } from '../Types';
 let accumulatedDelta = 0;
 let isScrolling = false;
 
+if(!navigator.onLine) {
+    const offlineContainer = document.getElementById('offline')
+    const contents = document.getElementById('contents')
+    if(!offlineContainer || !contents) throw new Error('no containers!');
+    offlineContainer.style.display = 'flex'
+    contents.style.display = 'none'
+    throw new Error('CRASH IT! (no network)')
+}
+
 
 document.addEventListener('DOMContentLoaded', async () => {
+
     const connectedToAccount = false;
     const db = await getDataBase();
 

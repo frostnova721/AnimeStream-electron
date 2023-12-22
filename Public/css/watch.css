@@ -8,6 +8,11 @@
     src: url('../Assets/Fonts/Poppins-Bold.ttf');
 }
 
+@font-face {
+    font-family: NunitoSans-Bold;
+    src: url('../Assets/Fonts/NunitoSans_10pt-Medium.ttf');
+}
+
 body {
     background-color: black;
     padding: 0;
@@ -416,6 +421,16 @@ button:focus {
     box-shadow: 19px 0 0 7px, 38px 0 0 3px, 57px 0 0 0;
     transform: translateX(-38px);
     animation: l21 0.5s infinite alternate linear;
+}
+
+.errorScreen {
+    font-family: NunitoSans-Bold;
+    font-size: 2rem;
+    display: none;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    font-weight: 600;
 }
 
 @keyframes l21 {

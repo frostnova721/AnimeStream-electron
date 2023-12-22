@@ -8,6 +8,11 @@
     src: url('../Assets/Fonts/Poppins-Bold.ttf');
 }
 
+@font-face {
+    font-family: NunitoSans-Bold;
+    src: url('../Assets/Fonts/NunitoSans_10pt-Medium.ttf');
+}
+
 body {
     background-color: black;
     padding: 0;
@@ -259,4 +264,21 @@ button:focus {
 
 .searchButton:active img {
     filter: invert();
+}
+
+.offline {
+    margin-top: 5rem;
+    width: 100%;
+    height: 100%;
+    font-size: 2.5rem;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-family: NunitoSans-Bold;
+    font-weight: 600;
+    flex-direction: column;
+}
+
+.offline a {
+    color: #caf979;
 }

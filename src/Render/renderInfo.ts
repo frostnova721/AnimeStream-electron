@@ -4,7 +4,6 @@ import {
     storeAnimeWatchedCache,
     getBackTo,
     getDataBase,
-    getEpisodes,
     getAnilistLink,
     getMalIdWithAlId,
     setAnilistLink,
@@ -17,6 +16,7 @@ import { IAiredSiteEpisodes, IAnimeDetails } from '../Types';
 let isScrolling = false;
 let accumulatedDelta = 0;
 let banner: string = '';
+let error = false
 
 document.addEventListener('DOMContentLoaded', async () => {
     // const settings = await readSettings()
@@ -26,11 +26,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const backBtn = document.getElementById('backBtn');
     const watchBtn = document.getElementById('watchBtn');
     const epCounter = document.getElementById('episodeCounter');
-    const main = document.getElementById('container');
+    const container = document.getElementById('container');
     const closeBtn = document.getElementById('close');
     const characterContainer = document.getElementById('characters');
 
-    if (!backBtn || !watchBtn || !epCounter || !main || !closeBtn || !characterContainer) return; //typescript's OCD
+    if (!backBtn || !watchBtn || !epCounter || !container || !closeBtn || !characterContainer) return; //typescript's OCD
 
     //to go back
     backBtn.onclick = async () => {
@@ -45,11 +45,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     //toggle the view of episode menu
     watchBtn.onclick = () => {
         if (!toggled) {
-            main.style.display = 'none';
+            container.style.display = 'none';
             epCounter.style.display = 'block';
             toggled = true;
         } else {
-            main.style.display = 'block';
+            container.style.display = error ? 'none' : 'block';
             epCounter.style.display = 'none';
             toggled = false;
         }
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     //close the menu
     closeBtn.onclick = () => {
-        main.style.display = 'block';
+        container.style.display = error ? 'none' : 'block';
         epCounter.style.display = 'none';
         toggled = false;
     };
@@ -75,7 +75,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         fromlatest = true;
     }
     if (!link) throw new Error('Couldnt get the link');
-    res = await getAnimeInfo(link);
+
+    try {
+        res = await getAnimeInfo(link);
+    } catch(err) {
+        error = true
+        const errorScreen = document.getElementById('errorScreen')
+        const loader = document.getElementById('loader');
+        const main = document.getElementById('main');
+        if(!errorScreen || !loader || !main) return;
+        loader.style.display = 'none'
+        errorScreen.style.display = 'flex'
+        main.style.display = 'flex'
+        container.style.display = 'none'
+        console.log(err)
+        return;
+
+    }
+
     const alLink = await getAnilistLink();
     try {
         banner = (

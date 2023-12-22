@@ -21,6 +21,7 @@ let selectedProvider: 'animepahe' | 'gogoanime' = 'gogoanime';
 let playTime: number = 0;
 let backLink = './AnimeInfo.html';
 let widened = false;
+let error = false
 
 document.addEventListener('DOMContentLoaded', async () => {
     const backBtn = document.getElementById('backBtn');
@@ -351,6 +352,9 @@ async function loadCorrespondingStreams(anime: string, ep: number, link?: string
 async function loadGogoStreams(anime: string, ep: number, link?: string) {
     try {
         let sources;
+        if(error) {
+            manageErrorScreen()
+        }
         if (selectedProvider === (await getDefaultStream()) && link) {
             sources = await (await getGogoStreams(link)).sources;
         } else {
@@ -361,71 +365,81 @@ async function loadGogoStreams(anime: string, ep: number, link?: string) {
             ).sources;
         }
 
-        const arr: { child: HTMLElement; source: string }[] = [];
+        if(selectedProvider === 'gogoanime') { // to manage its loading incase the user change the stream in between
+            const arr: { child: HTMLElement; source: string }[] = [];
 
-        if (autoLoadLink.length < 1) {
-            const src = sources.find((item) => item.quality === '720p');
-            autoLoadLink = src?.link ?? '';
+            if (autoLoadLink.length < 1) {
+                const src = sources.find((item) => item.quality === '720p');
+                autoLoadLink = src?.link ?? '';
+            }
+
+            for (const source of sources) {
+                const child = document.createElement('button');
+                child.className = 'source';
+                child.id = 'source';
+                child.setAttribute('data-value', source.link);
+                child.textContent = source.quality ?? '';
+                arr.push({ child: child, source: source.server });
+            }
+
+            //group the children- we can hardcode it since there are only 2 streams
+            const vidstream = arr.filter((obj) => obj.source === 'vidstreaming');
+            const backup = arr.filter((obj) => obj.source === 'vidstreaming backup');
+            const subStream = document.getElementById('subStream');
+            if (subStream) subStream.innerHTML = '';
+            createStreamGroup(vidstream[0].source, vidstream);
+            createStreamGroup(backup[0].source, backup);
+            streamsLoading('disable');
         }
-
-        for (const source of sources) {
-            const child = document.createElement('button');
-            child.className = 'source';
-            child.id = 'source';
-            child.setAttribute('data-value', source.link);
-            child.textContent = source.quality ?? '';
-            arr.push({ child: child, source: source.server });
-        }
-
-        //group the children- we can hardcode it since there are only 2 streams
-        const vidstream = arr.filter((obj) => obj.source === 'vidstreaming');
-        const backup = arr.filter((obj) => obj.source === 'vidstreaming backup');
-        const subStream = document.getElementById('subStream');
-        if (subStream) subStream.innerHTML = '';
-        createStreamGroup(vidstream[0].source, vidstream);
-        createStreamGroup(backup[0].source, backup);
-        streamsLoading('disable');
     } catch (err) {
         //todo: implement error screen
         console.log(err);
+        manageErrorScreen()
     }
 }
 
 async function loadPaheStreams(anime: string, ep: number, link?: string) {
     try {
         let sources;
+        if(error) {
+            manageErrorScreen()
+        }
         if (selectedProvider === (await getDefaultStream()) && link) {
             sources = await getPaheStreamDetails(link);
         } else {
             const search = await paheSearch(anime);
             sources = await paheStreamDetails(search[0].session, ep);
         }
-        const arr: { child: HTMLElement; source: string }[] = [];
-        for (const source of sources) {
-            const child = document.createElement('button');
-            child.className = 'source';
-            child.id = 'source';
-            const data = await getPaheStreams(source.link);
-            child.setAttribute('data-value', data.url);
-            child.textContent = source.quality ?? '';
-            arr.push({ child: child, source: source.server });
-        }
 
-        const srcs = Array.from(new Set(arr.map((obj) => obj.source)));
-        if (autoLoadLink.length < 1) {
-            const src = sources.find((item) => item.quality === '720p');
-            autoLoadLink = src?.link ?? '';
+        if(selectedProvider === 'animepahe') {
+            const arr: { child: HTMLElement; source: string }[] = [];
+            for (const source of sources) {
+                const child = document.createElement('button');
+                child.className = 'source';
+                child.id = 'source';
+                const data = await getPaheStreams(source.link);
+                child.setAttribute('data-value', data.url);
+                child.textContent = source.quality ?? '';
+                arr.push({ child: child, source: source.server });
+            }
+
+            const srcs = Array.from(new Set(arr.map((obj) => obj.source)));
+            if (autoLoadLink.length < 1) {
+                const src = sources.find((item) => item.quality === '720p');
+                autoLoadLink = src?.link ?? '';
+            }
+            const subStream = document.getElementById('subStream');
+            if (subStream) subStream.innerHTML = '';
+            for (const source of srcs) {
+                const filteredArray = arr.filter((obj) => obj.source === source);
+                createStreamGroup(source, filteredArray);
+            }
+            streamsLoading('disable');
         }
-        const subStream = document.getElementById('subStream');
-        if (subStream) subStream.innerHTML = '';
-        for (const source of srcs) {
-            const filteredArray = arr.filter((obj) => obj.source === source);
-            createStreamGroup(source, filteredArray);
-        }
-        streamsLoading('disable');
     } catch (err) {
         //todo: implement error screen
         console.log(err);
+        manageErrorScreen()
     }
 }
 
@@ -482,4 +496,14 @@ function widenVideo() {
     player.style.height = widened ? '483.75px' : '685px';
     video.style.height = widened ? '483.75px' : '685px';
     widened = !widened;
+}
+
+function manageErrorScreen() {
+    error = !error
+    const errorScreen = document.getElementById('errorScreen')
+    const stream = document.getElementById('stream')
+    const streamLoader = document.getElementById('streamLoader');
+    if(!stream || !errorScreen || !streamLoader) return;
+    errorScreen.style.display = error ? 'flex' : 'none'
+    streamLoader.style.display = error ? 'none' : 'block'
 }
