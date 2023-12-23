@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const playerTitle = document.getElementById('playerTitle');
     const videoLoaderContainer = document.getElementById('videoLoaderContainer');
     const wideScreen = document.getElementById('widescreen');
+    const playerContainer2 = <HTMLDivElement>document.getElementsByClassName('playerContainer2')[0]
 
     if (
         !video ||
@@ -199,17 +200,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (target.id === 'source') {
             const src = target.getAttribute('data-value') ?? '';
             await streamEpisode(src);
-            // try {
-            //     await stream(video, src);
-            //     videoLoaded = true;
-            //     video.addEventListener('loadedmetadata', () => {
-            //         updateDuration(video, totalTime);
-            //         if (playTime !== 0) video.currentTime = playTime;
-            //         updateProgression();
-            //     });
-            // } catch (err) {
-            //     console.log(err);
-            // }
         }
     });
 
@@ -232,18 +222,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         videoLoaderContainer.style.display = 'none';
     };
 
-    //to determine wether the left mouse is held
-    // let draggable = false
-    // progressBar.addEventListener('mousedown', (e) => {
-    //     draggable = true
-    // })
-    // progressBar.addEventListener('mouseup', (e) => {
-    //     draggable = false
-    // })
-
-    // progressBar.addEventListener('mouseout', (e) => {
-    //     draggable = false
-    // })
+    let timeOut: NodeJS.Timeout;
+    playerContainer2.addEventListener('mousemove', () => {
+        if(timeOut) clearTimeout(timeOut)
+        showControlsWithState(controls, true)
+        timeOut = setTimeout(() => {
+            showControlsWithState(controls, false)
+        }, 2500)
+    })
 
     //update the video progress on click
     progressBar.addEventListener('click', (e) => {
@@ -255,17 +241,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }%`;
         video.currentTime = video.duration * clickPercent;
     });
-
-    //update the progressbar on cursor move
-    // progressBar.addEventListener('mousemove', (e) => {
-    //     if(draggable) {
-    //         const currentTarget = e.currentTarget as HTMLElement;
-    //         const clickPercent = e.offsetX / currentTarget.offsetWidth;
-    //         progressed.style.width = `${(video.duration * clickPercent / video.duration) * 100}%`;
-    //         point.style.marginLeft = `${(video.duration * clickPercent / video.duration) * 100 - 0.5}%`;
-    //         video.currentTime = video.duration * clickPercent;
-    //     }
-    // });
 
     //pause or play or skip when space key is pressed
     let skipDuration = await (await readSettings()).skipDuration || 5
@@ -392,7 +367,6 @@ async function loadGogoStreams(anime: string, ep: number, link?: string) {
             streamsLoading('disable');
         }
     } catch (err) {
-        //todo: implement error screen
         console.log(err);
         manageErrorScreen()
     }
@@ -437,7 +411,6 @@ async function loadPaheStreams(anime: string, ep: number, link?: string) {
             streamsLoading('disable');
         }
     } catch (err) {
-        //todo: implement error screen
         console.log(err);
         manageErrorScreen()
     }
