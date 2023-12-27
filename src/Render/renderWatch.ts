@@ -331,13 +331,11 @@ async function loadGogoStreams(anime: string, ep: number, link?: string) {
             manageErrorScreen()
         }
         if (selectedProvider === (await getDefaultStream()) && link) {
-            sources = await (await getGogoStreams(link)).sources;
+            sources = (await getGogoStreams(link));
         } else {
             const search = await gogoSearch(decodeURIComponent(anime));
             const link = await getEpisodeLink(search[0].alias);
-            sources = await (
-                await getGogoStreams(`https://gogoanime3.net${link.link.trim()}` + ep)
-            ).sources;
+            sources = await getGogoStreams(`https://gogoanime3.net${link.link.trim()}` + ep)
         }
 
         if(selectedProvider === 'gogoanime') { // to manage its loading incase the user change the stream in between
@@ -358,12 +356,16 @@ async function loadGogoStreams(anime: string, ep: number, link?: string) {
             }
 
             //group the children- we can hardcode it since there are only 2 streams
-            const vidstream = arr.filter((obj) => obj.source === 'vidstreaming');
-            const backup = arr.filter((obj) => obj.source === 'vidstreaming backup');
+            const srcs = Array.from(new Set(arr.map((obj) => obj.source)));
             const subStream = document.getElementById('subStream');
             if (subStream) subStream.innerHTML = '';
-            createStreamGroup(vidstream[0].source, vidstream);
-            createStreamGroup(backup[0].source, backup);
+            for(const src of srcs) {
+                const filteredArray = arr.filter((obj) => obj.source === src);
+                createStreamGroup(src, filteredArray);
+            }
+            // const vidstream = arr.filter((obj) => obj.source === 'vidstreaming');
+            // const backup = arr.filter((obj) => obj.source === 'vidstreaming backup');
+            
             streamsLoading('disable');
         }
     } catch (err) {

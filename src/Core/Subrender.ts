@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { MAL, GogoStreams, AniList, Episodes, Animepahe } from '../Lib';
-import { ISearchOutput, IStreamOutput, Settings } from '../Types';
+import { ISearchOutput, IStreamOutput, IStreams, Settings } from '../Types';
 import Hls from 'hls.js';
 import * as fs from 'fs';
 import path from 'path';
@@ -53,7 +53,7 @@ export async function gogoSearch(term: string): Promise<ISearchOutput[]> {
 export async function getGogoStreams(
     episodeId: string,
     quality?: '360' | '480' | '720' | '1080',
-): Promise<IStreamOutput> {
+): Promise<IStreams[]> {
     const gogo = new GogoStreams();
     try {
         const results = await gogo.getStreams(episodeId, quality);

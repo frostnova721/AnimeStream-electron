@@ -1,5 +1,5 @@
 import { request, gql } from 'graphql-request';
-import { IAnilistInfo, IAnimeSearchResult, ISeasonResponse } from '../Types';
+import { IAnilistInfo, IAnimeSearchResult, ISeasonResponse } from '../../Types';
 import axios from 'axios';
 
 export class AniList {

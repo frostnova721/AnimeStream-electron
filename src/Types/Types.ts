@@ -182,3 +182,9 @@ export interface IAnilistInfo {
     type: string;
     bannerImage: string;
 }
+
+export interface IStreams {
+    link: string,
+    server: string,
+    quality: string
+}

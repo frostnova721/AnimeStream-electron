@@ -1,8 +1,8 @@
 import cheerio from 'cheerio';
 import axios from 'axios';
-import { IAiredSiteEpisodes, IAiredEpisodes } from '../Types';
+import { IAiredSiteEpisodes, IAiredEpisodes } from '../../Types';
 import request, { gql } from 'graphql-request';
-import { Animepahe, GogoStreams } from '.';
+import { Animepahe, GogoStreams } from '..';
 
 export class Episodes {
     constructor() {}

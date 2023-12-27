@@ -1,6 +1,6 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
-import { IAnimeDetails, IAnimeSearchResult, ILatestAnimes, IMALSearch, TChara } from '../Types';
+import { IAnimeDetails, IAnimeSearchResult, ILatestAnimes, IMALSearch, TChara } from '../../Types';
 
 export class MAL {
     constructor() {}
