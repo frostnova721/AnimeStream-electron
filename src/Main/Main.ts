@@ -39,8 +39,8 @@ const globalVars: TGlobalVar = {
 };
 
 let memory: { searchMemory: any } = {
-    searchMemory: undefined
-}
+    searchMemory: undefined,
+};
 
 const anilistData = {
     data: '' as any,
@@ -176,17 +176,17 @@ const createWindow = () => {
     });
 
     ipcMain.handle('storeSearchMemory', (e, div) => {
-        memory.searchMemory = div
+        memory.searchMemory = div;
         return null;
-    })
+    });
 
     ipcMain.handle('getSearchMemory', (e) => {
-        return memory.searchMemory
-    })
+        return memory.searchMemory;
+    });
 };
 
 const icoPath = path.join(__dirname, '../../Assets/Icons/logo_new.png');
-const appIcon = nativeImage.createFromPath(icoPath)
+const appIcon = nativeImage.createFromPath(icoPath);
 
 app.on('ready', createWindow);
 

@@ -1,7 +1,7 @@
-import axios from 'axios'
+import axios from 'axios';
 import { IStreamOutput } from '../../Types';
 const CryptoJS = require('crypto-js');
-import { load } from 'cheerio'
+import { load } from 'cheerio';
 
 export class Gogo {
     constructor() {}
@@ -34,14 +34,16 @@ export class Gogo {
 
         const params = `id=${encryptedKey}&alias=${id}&${decrypted}`;
 
-        const encryptedData = (await axios.get(
-            `${episodeLink.protocol}//${episodeLink.hostname}/encrypt-ajax.php?${params}`,
-            {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
+        const encryptedData = (
+            await axios.get(
+                `${episodeLink.protocol}//${episodeLink.hostname}/encrypt-ajax.php?${params}`,
+                {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
                 },
-            },
-        )).data;
+            )
+        ).data;
 
         const decryptedData = CryptoJS.enc.Utf8.stringify(
             CryptoJS.AES.decrypt(encryptedData.data, this.keys.secondKey, {
@@ -131,7 +133,7 @@ export class Gogo {
 
         return decrypted;
     };
-    
+
     private getIframeLink = async (epurl: string): Promise<string | undefined> => {
         const res = (await axios.get(epurl)).data;
         const $ = load(res);

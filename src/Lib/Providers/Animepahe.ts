@@ -7,9 +7,9 @@ export class Animepahe {
     constructor() {}
 
     public extractKwik = async (videoUrl: string): Promise<{ url: string; isM3U8: boolean }> => {
-        const kwik = new Kwik()
-        const stream = await kwik.extractKwik(videoUrl)
-        return stream
+        const kwik = new Kwik();
+        const stream = await kwik.extractKwik(videoUrl);
+        return stream;
     };
 
     public getAnimepaheStreams = async (

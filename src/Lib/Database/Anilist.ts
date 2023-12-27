@@ -57,8 +57,8 @@ export class AniList {
                 }
               }
             }
-          }`
-          const response: any = await request('https://graphql.anilist.co', query);
+          }`;
+        const response: any = await request('https://graphql.anilist.co', query);
         return response.Page.media as ISeasonResponse[];
     };
 

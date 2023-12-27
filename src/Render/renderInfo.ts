@@ -16,7 +16,7 @@ import { IAiredSiteEpisodes, IAnimeDetails } from '../Types';
 let isScrolling = false;
 let accumulatedDelta = 0;
 let banner: string = '';
-let error = false
+let error = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
     // const settings = await readSettings()
@@ -30,17 +30,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const closeBtn = document.getElementById('close');
     const characterContainer = document.getElementById('characters');
 
-    if (!backBtn || !watchBtn || !epCounter || !container || !closeBtn || !characterContainer) return; //typescript's OCD
+    if (!backBtn || !watchBtn || !epCounter || !container || !closeBtn || !characterContainer)
+        return; //typescript's OCD
 
     //to go back
     backBtn.onclick = async () => {
-        const backTo = await getBackTo()
-        if(backTo.split('/').includes('search.html')) {
-            window.location.href = './search.html?rel=info'
+        const backTo = await getBackTo();
+        if (backTo.split('/').includes('search.html')) {
+            window.location.href = './search.html?rel=info';
         } else {
-            window.location.href = backTo
+            window.location.href = backTo;
         }
-    }
+    };
 
     //toggle the view of episode menu
     watchBtn.onclick = () => {
@@ -78,19 +79,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         res = await getAnimeInfo(link);
-    } catch(err) {
-        error = true
-        const errorScreen = document.getElementById('errorScreen')
+    } catch (err) {
+        error = true;
+        const errorScreen = document.getElementById('errorScreen');
         const loader = document.getElementById('loader');
         const main = document.getElementById('main');
-        if(!errorScreen || !loader || !main) return;
-        loader.style.display = 'none'
-        errorScreen.style.display = 'flex'
-        main.style.display = 'flex'
-        container.style.display = 'none'
-        console.log(err)
+        if (!errorScreen || !loader || !main) return;
+        loader.style.display = 'none';
+        errorScreen.style.display = 'flex';
+        main.style.display = 'flex';
+        container.style.display = 'none';
+        console.log(err);
         return;
-
     }
 
     const alLink = await getAnilistLink();

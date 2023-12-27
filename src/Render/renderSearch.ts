@@ -1,4 +1,11 @@
-import { getSearchMemory, searchResults, setAnilistLink, setBackTo, setClickableResult, storeSearchMemory } from '../Core';
+import {
+    getSearchMemory,
+    searchResults,
+    setAnilistLink,
+    setBackTo,
+    setClickableResult,
+    storeSearchMemory,
+} from '../Core';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const btn = document.getElementById('searchBtn');
@@ -20,11 +27,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const resDiv = document.getElementById('results');
     if (!resDiv) throw new Error('haaa'); //error wont happen
 
-    const currentUrl = window.location.href
-    if(currentUrl.split('?')[1] === 'rel=info') {
-        console.log('from info')
-        const resultFromMemory: string = await getSearchMemory()
-        if(resultFromMemory) resDiv.innerHTML = resultFromMemory
+    const currentUrl = window.location.href;
+    if (currentUrl.split('?')[1] === 'rel=info') {
+        console.log('from info');
+        const resultFromMemory: string = await getSearchMemory();
+        if (resultFromMemory) resDiv.innerHTML = resultFromMemory;
     }
 
     resDiv.addEventListener('click', async (e) => {
@@ -91,7 +98,7 @@ async function appendSearchResults(searchValue: string) {
         newDiv.appendChild(textElement);
     }
 
-    await storeSearchMemory(resultDiv.innerHTML)
+    await storeSearchMemory(resultDiv.innerHTML);
     loader.style.display = 'none';
     main.style.display = 'flex';
 }

@@ -1,2 +1,2 @@
-export * from './Animepahe'
-export * from './GogoStream'
+export * from './Animepahe';
+export * from './GogoStream';

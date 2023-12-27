@@ -184,7 +184,7 @@ export interface IAnilistInfo {
 }
 
 export interface IStreams {
-    link: string,
-    server: string,
-    quality: string
+    link: string;
+    server: string;
+    quality: string;
 }

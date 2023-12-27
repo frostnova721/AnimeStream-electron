@@ -21,7 +21,7 @@ let selectedProvider: 'animepahe' | 'gogoanime' = 'gogoanime';
 let playTime: number = 0;
 let backLink = './AnimeInfo.html';
 let widened = false;
-let error = false
+let error = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
     const backBtn = document.getElementById('backBtn');
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const playerTitle = document.getElementById('playerTitle');
     const videoLoaderContainer = document.getElementById('videoLoaderContainer');
     const wideScreen = document.getElementById('widescreen');
-    const playerContainer2 = <HTMLDivElement>document.getElementsByClassName('playerContainer2')[0]
+    const playerContainer2 = <HTMLDivElement>document.getElementsByClassName('playerContainer2')[0];
 
     if (
         !video ||
@@ -224,12 +224,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let timeOut: NodeJS.Timeout;
     playerContainer2.addEventListener('mousemove', () => {
-        if(timeOut) clearTimeout(timeOut)
-        showControlsWithState(controls, true)
+        if (timeOut) clearTimeout(timeOut);
+        showControlsWithState(controls, true);
         timeOut = setTimeout(() => {
-            showControlsWithState(controls, false)
-        }, 2500)
-    })
+            showControlsWithState(controls, false);
+        }, 2500);
+    });
 
     //update the video progress on click
     progressBar.addEventListener('click', (e) => {
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     //pause or play or skip when space key is pressed
-    let skipDuration = await (await readSettings()).skipDuration || 5
+    let skipDuration = (await (await readSettings()).skipDuration) || 5;
     document.addEventListener('keydown', (event) => {
         if (event.key === ' ' || event.keyCode === 32 || event.which === 32) {
             event.preventDefault();
@@ -251,18 +251,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                 playState = updatePlayButton(playState, video, playPauseImg);
             }
         }
-        if(event.key === 'ArrowRight') {
-            event.preventDefault()
-            if(videoLoaded) {
-                video.currentTime = video.currentTime + skipDuration
-                updateProgression()
+        if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            if (videoLoaded) {
+                video.currentTime = video.currentTime + skipDuration;
+                updateProgression();
             }
         }
-        if(event.key === 'ArrowLeft') {
-            event.preventDefault()
-            if(videoLoaded) {
-                video.currentTime = video.currentTime - skipDuration
-                updateProgression()
+        if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            if (videoLoaded) {
+                video.currentTime = video.currentTime - skipDuration;
+                updateProgression();
             }
         }
     });
@@ -327,18 +327,19 @@ async function loadCorrespondingStreams(anime: string, ep: number, link?: string
 async function loadGogoStreams(anime: string, ep: number, link?: string) {
     try {
         let sources;
-        if(error) {
-            manageErrorScreen()
+        if (error) {
+            manageErrorScreen();
         }
         if (selectedProvider === (await getDefaultStream()) && link) {
-            sources = (await getGogoStreams(link));
+            sources = await getGogoStreams(link);
         } else {
             const search = await gogoSearch(decodeURIComponent(anime));
             const link = await getEpisodeLink(search[0].alias);
-            sources = await getGogoStreams(`https://gogoanime3.net${link.link.trim()}` + ep)
+            sources = await getGogoStreams(`https://gogoanime3.net${link.link.trim()}` + ep);
         }
 
-        if(selectedProvider === 'gogoanime') { // to manage its loading incase the user change the stream in between
+        if (selectedProvider === 'gogoanime') {
+            // to manage its loading incase the user change the stream in between
             const arr: { child: HTMLElement; source: string }[] = [];
 
             if (autoLoadLink.length < 1) {
@@ -359,26 +360,26 @@ async function loadGogoStreams(anime: string, ep: number, link?: string) {
             const srcs = Array.from(new Set(arr.map((obj) => obj.source)));
             const subStream = document.getElementById('subStream');
             if (subStream) subStream.innerHTML = '';
-            for(const src of srcs) {
+            for (const src of srcs) {
                 const filteredArray = arr.filter((obj) => obj.source === src);
                 createStreamGroup(src, filteredArray);
             }
             // const vidstream = arr.filter((obj) => obj.source === 'vidstreaming');
             // const backup = arr.filter((obj) => obj.source === 'vidstreaming backup');
-            
+
             streamsLoading('disable');
         }
     } catch (err) {
         console.log(err);
-        manageErrorScreen()
+        manageErrorScreen();
     }
 }
 
 async function loadPaheStreams(anime: string, ep: number, link?: string) {
     try {
         let sources;
-        if(error) {
-            manageErrorScreen()
+        if (error) {
+            manageErrorScreen();
         }
         if (selectedProvider === (await getDefaultStream()) && link) {
             sources = await getPaheStreamDetails(link);
@@ -387,7 +388,7 @@ async function loadPaheStreams(anime: string, ep: number, link?: string) {
             sources = await paheStreamDetails(search[0].session, ep);
         }
 
-        if(selectedProvider === 'animepahe') {
+        if (selectedProvider === 'animepahe') {
             const arr: { child: HTMLElement; source: string }[] = [];
             for (const source of sources) {
                 const child = document.createElement('button');
@@ -414,7 +415,7 @@ async function loadPaheStreams(anime: string, ep: number, link?: string) {
         }
     } catch (err) {
         console.log(err);
-        manageErrorScreen()
+        manageErrorScreen();
     }
 }
 
@@ -474,11 +475,11 @@ function widenVideo() {
 }
 
 function manageErrorScreen() {
-    error = !error
-    const errorScreen = document.getElementById('errorScreen')
-    const stream = document.getElementById('stream')
+    error = !error;
+    const errorScreen = document.getElementById('errorScreen');
+    const stream = document.getElementById('stream');
     const streamLoader = document.getElementById('streamLoader');
-    if(!stream || !errorScreen || !streamLoader) return;
-    errorScreen.style.display = error ? 'flex' : 'none'
-    streamLoader.style.display = error ? 'none' : 'block'
+    if (!stream || !errorScreen || !streamLoader) return;
+    errorScreen.style.display = error ? 'flex' : 'none';
+    streamLoader.style.display = error ? 'none' : 'block';
 }

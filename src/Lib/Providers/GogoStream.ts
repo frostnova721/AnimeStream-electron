@@ -74,32 +74,38 @@ export class GogoStreams {
         episodeId: string,
         quality?: '360' | '480' | '720' | '1080',
     ): Promise<IStreams[]> => {
-        const gogo = new Gogo()
-        const streamWish = new StreamWish()
-        const servers = await this.getAllServerLinks(episodeId)
-        let streamwish: IStreams[] = [], filelions: IStreams[] = [], vidStreaming: IStreams[] = []
+        const gogo = new Gogo();
+        const streamWish = new StreamWish();
+        const servers = await this.getAllServerLinks(episodeId);
+        let streamwish: IStreams[] = [],
+            filelions: IStreams[] = [],
+            vidStreaming: IStreams[] = [];
 
         try {
-            streamwish = await streamWish.extractStreamWish(servers.find(item => item.src.includes('awish.pro'))?.src ?? '')
-        } catch(err) {
+            streamwish = await streamWish.extractStreamWish(
+                servers.find((item) => item.src.includes('awish.pro'))?.src ?? '',
+            );
+        } catch (err) {
             //ignore
-            console.log(err)
+            console.log(err);
         }
         try {
-            filelions = await streamWish.extractStreamWish(servers.find(item => item.src.includes('alions.pro'))?.src ?? '')
-        } catch(err) {
+            filelions = await streamWish.extractStreamWish(
+                servers.find((item) => item.src.includes('alions.pro'))?.src ?? '',
+            );
+        } catch (err) {
             //ignore
-            console.log(err)
+            console.log(err);
         }
         try {
             // vidStreaming = (await gogo.extractGogo(episodeId, quality)).sources
-        } catch(err) {
+        } catch (err) {
             //ignore
         }
-        
-        const resultArray = [...streamwish, ...filelions, ...vidStreaming]
 
-        if(resultArray.length < 1) throw new Error('No_Streams_Found_(sus)')
+        const resultArray = [...streamwish, ...filelions, ...vidStreaming];
+
+        if (resultArray.length < 1) throw new Error('No_Streams_Found_(sus)');
 
         return resultArray;
     };
@@ -108,7 +114,7 @@ export class GogoStreams {
         if (!options) options = '';
         const res = await axios.get(url, options);
         return res.data;
-    };    
+    };
 
     public getAnimeEpisodeLink = async (
         aliasId: string,
@@ -134,18 +140,18 @@ export class GogoStreams {
         return { link: `${split.slice(0, -1).join('-')}-`, episodes: parseInt(epEnd) };
     };
 
-    public getAllServerLinks = async(epUrl: string) => {
-        const res = await this.fetch(epUrl)
-        const $ = cheerio.load(res)
-        const serverArray: { server: string, src: string }[] = []
-        $('div.anime_muti_link > ul > li').each((i,e) => {
-            const serverName = $(e).attr('class') ?? ''
-            const src = $(e).children('a').attr('data-video') ?? ''
+    public getAllServerLinks = async (epUrl: string) => {
+        const res = await this.fetch(epUrl);
+        const $ = cheerio.load(res);
+        const serverArray: { server: string; src: string }[] = [];
+        $('div.anime_muti_link > ul > li').each((i, e) => {
+            const serverName = $(e).attr('class') ?? '';
+            const src = $(e).children('a').attr('data-video') ?? '';
             serverArray.push({
                 server: serverName === 'anime' ? 'vidstreaming' : serverName,
-                src: src
-            })
-        })
-        return serverArray
-    }
+                src: src,
+            });
+        });
+        return serverArray;
+    };
 }

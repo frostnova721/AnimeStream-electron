@@ -14,8 +14,8 @@ import { Settings } from '../Types';
 const defaultSettings: Settings = {
     database: 'anilist',
     defaultStream: 'gogoanime',
-    skipDuration: 5
-}
+    skipDuration: 5,
+};
 
 //just tried making the html in js(bad idea)
 
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else if (selectedElement.getAttribute('data-value') === 'info') {
                 await appendInfo();
             } else if (selectedElement.getAttribute('data-value') === 'player') {
-                await appendPlayer()
+                await appendPlayer();
             }
         }
     });
@@ -220,28 +220,27 @@ async function appendInfo() {
 
 //PLAYER
 async function appendPlayer() {
-    clearPage()
+    clearPage();
 
     const insidediv = document.getElementById('insidediv');
-    if(!insidediv) return
+    if (!insidediv) return;
 
-    const settings = await readSettings()
+    const settings = await readSettings();
 
     const html = `<div class="skipDurationDiv">
     <div class="skipTitle">skip duration</div>
     <input type="number" max="60" min="0" class="skipInput" id="skipInput" value="${settings.skipDuration}">s
-    </div>`
+    </div>`;
 
-    insidediv.innerHTML = html
+    insidediv.innerHTML = html;
 
-    const skipInput = document.getElementById('skipInput') as HTMLInputElement
-    skipInput?.addEventListener('input', async() => {
+    const skipInput = document.getElementById('skipInput') as HTMLInputElement;
+    skipInput?.addEventListener('input', async () => {
         const enteredVal = parseInt(skipInput.value, 10);
-        console.log('inp')
-        if(enteredVal > 60) {
-            skipInput.value = '60'
+        console.log('inp');
+        if (enteredVal > 60) {
+            skipInput.value = '60';
         }
-        await setDefaultSkipTime(enteredVal)
-    })
-
+        await setDefaultSkipTime(enteredVal);
+    });
 }
