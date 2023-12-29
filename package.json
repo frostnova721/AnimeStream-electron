@@ -11,6 +11,7 @@
         "dev": "nodemon",
         "prepack": "npm run build",
         "package": "npm run prepack && electron-forge package",
+        "compile": "innosetup-compiler setup.iss",
         "make": "npm run prepack && electron-forge make",
         "make-msi": "npm run make -- --targets=\"@electron-forge/maker-wix\"",
         "format": "prettier --write \"**/*.{ts,css,html}\""
@@ -48,6 +49,7 @@
         "@electron-forge/maker-wix": "^6.4.2",
         "@electron-forge/maker-zip": "^6.4.2",
         "@electron-forge/plugin-auto-unpack-natives": "^6.4.2",
-        "electron": "^27.0.2"
+        "electron": "^27.0.2",
+        "innosetup": "^6.0.5"
     }
 }

@@ -1678,6 +1678,11 @@ ini@^1.3.4:
   resolved "https://registry.npmjs.org/ini/-/ini-1.3.8.tgz"
   integrity sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
 
+innosetup@^6.0.5:
+  version "6.0.5"
+  resolved "https://registry.npmjs.org/innosetup/-/innosetup-6.0.5.tgz"
+  integrity sha512-XRvidEN0dcxe7NrGXBjl/clfNRfmyakSDtgKaJgvZ3ciKE5ArQOVGqUJcLyPhllqHhMzYGpbUF3ZTZvtKVDP2g==
+
 interpret@^3.1.1:
   version "3.1.1"
   resolved "https://registry.npmjs.org/interpret/-/interpret-3.1.1.tgz"

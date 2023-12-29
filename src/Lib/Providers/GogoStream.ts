@@ -87,7 +87,6 @@ export class GogoStreams {
             );
         } catch (err) {
             //ignore
-            console.log(err);
         }
         try {
             filelions = await streamWish.extractStreamWish(
@@ -95,9 +94,9 @@ export class GogoStreams {
             );
         } catch (err) {
             //ignore
-            console.log(err);
         }
         try {
+            //current src link (embtaku.pro) works when using vpn. otherwise its giving conn timed out 
             // vidStreaming = (await gogo.extractGogo(episodeId, quality)).sources
         } catch (err) {
             //ignore
@@ -140,7 +139,7 @@ export class GogoStreams {
         return { link: `${split.slice(0, -1).join('-')}-`, episodes: parseInt(epEnd) };
     };
 
-    public getAllServerLinks = async (epUrl: string) => {
+    private getAllServerLinks = async (epUrl: string) => {
         const res = await this.fetch(epUrl);
         const $ = cheerio.load(res);
         const serverArray: { server: string; src: string }[] = [];

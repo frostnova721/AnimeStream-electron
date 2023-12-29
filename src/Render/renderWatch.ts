@@ -356,7 +356,7 @@ async function loadGogoStreams(anime: string, ep: number, link?: string) {
                 arr.push({ child: child, source: source.server });
             }
 
-            //group the children- we can hardcode it since there are only 2 streams
+            //group the children based on the server
             const srcs = Array.from(new Set(arr.map((obj) => obj.source)));
             const subStream = document.getElementById('subStream');
             if (subStream) subStream.innerHTML = '';
