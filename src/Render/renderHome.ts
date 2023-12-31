@@ -1,4 +1,3 @@
-import { ipcRenderer } from 'electron';
 import {
     createNewWindow,
     fetchRecentsFromCache,
@@ -26,6 +25,7 @@ if (!navigator.onLine) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+
     const connectedToAccount = false;
     const db = await getDataBase();
 
@@ -150,8 +150,8 @@ async function loadRecentsFromCache() {
         if (loaded.includes(data.name)) continue; //prevent multiple entries!
         loaded.push(data.name);
         let name = '';
-        if (data.name?.length >= 30) {
-            name = data.name.slice(0, 30) + '...';
+        if (data.name.length > 25) {
+            name = data.name.slice(0, 25).trim() + '...';
         } else {
             name = data.name;
         }
@@ -188,8 +188,8 @@ async function loadLatestAnimes() {
         if (!latestAnimes) return;
         for (const latestAnime of latestAnimes) {
             let name = '';
-            if (latestAnime.title.length >= 30) {
-                name = latestAnime.title.slice(0, 30) + '...';
+            if (latestAnime.title.length > 25) {
+                name = latestAnime.title.slice(0, 25).trim() + '...';
             } else {
                 name = latestAnime.title;
             }
@@ -222,8 +222,8 @@ async function loadLatestAnimes() {
         for (const latestAnime of latestAnimes) {
             const animeTitle = latestAnime.title.english ?? latestAnime.title.romaji;
             let name = '';
-            if (animeTitle.length >= 30) {
-                name = animeTitle.slice(0, 30) + '...';
+            if (animeTitle.length > 25) {
+                name = animeTitle.slice(0, 25).trim() + '...';
             } else {
                 name = animeTitle;
             }

@@ -1,6 +1,7 @@
 import { ipcRenderer, shell } from 'electron';
 import {
     changeDataBase,
+    changeDefaultQuality,
     changeDefaultStream,
     clearCache,
     getAppDetails,
@@ -15,6 +16,7 @@ const defaultSettings: Settings = {
     database: 'anilist',
     defaultStream: 'gogoanime',
     skipDuration: 5,
+    defaultQuality: '720p'
 };
 
 //just tried making the html in js(bad idea)
@@ -230,6 +232,7 @@ async function appendPlayer() {
     const html = `<div class="skipDurationDiv">
     <div class="skipTitle">skip duration</div>
     <input type="number" max="60" min="0" class="skipInput" id="skipInput" value="${settings.skipDuration}">s
+    </div>
     </div>`;
 
     insidediv.innerHTML = html;
@@ -243,4 +246,49 @@ async function appendPlayer() {
         }
         await setDefaultSkipTime(enteredVal);
     });
+
+    const imgPath = '../../Public/Assets/Icons/down-arrow.png';
+
+    const element = document.createElement('div');
+    element.className = 'defquality'; //unused
+    element.classList.add('grp');
+    const desc = document.createElement('div');
+    desc.className = 'desc';
+    desc.style.fontSize = '1.2rem'
+    desc.innerText = 'Default stream quality';
+    // const optsContainer = document.createElement('div')
+    // optsContainer.className = 'optsContainer'
+    const opts = document.createElement('div');
+    const img = document.createElement('img');
+    img.src = imgPath;
+    opts.id = 'streamOpts';
+    opts.className = 'streamOpts';
+    opts.innerText = settings.defaultQuality;
+    const dropdown = document.createElement('div');
+
+    dropdown.id = 'dropdown';
+    dropdown.className = 'dropdown';
+    // const select = document.createElement('select')
+
+    const streamQualities = ['360p', '480p', '720p', '1080p'];
+    for (const streamQuality of streamQualities) {
+        const option = document.createElement('div');
+        option.setAttribute('data-value', streamQuality);
+        // option.className = 'streamName'
+        option.onclick = async () => {
+            const currentStream = settings.defaultQuality;
+            const selectedQuality = option.getAttribute('data-value') as '360p' | '480p' | '720p' | '1080p';
+            if (currentStream === selectedQuality) return;
+            await changeDefaultQuality(selectedQuality);
+            opts.innerText = selectedQuality;
+        };
+        option.innerText = streamQuality;
+        dropdown.appendChild(option);
+    }
+
+    opts.appendChild(img);
+    element.appendChild(desc);
+    element.appendChild(opts);
+    element.appendChild(dropdown);
+    insidediv.appendChild(element)
 }

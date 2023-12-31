@@ -10,6 +10,13 @@ const mal = new MAL();
 const pahe = new Animepahe();
 const anilist = new AniList();
 
+const defaultSettings: Settings = {
+    database: 'anilist',
+    defaultStream: 'gogoanime',
+    skipDuration: 5,
+    defaultQuality: '720p'
+};
+
 export async function getAnimeInfo(link: string) {
     //add al info too
     const results = mal.getAnimeDetails(link);
@@ -87,7 +94,6 @@ export async function getPaheStreams(streamLink: string) {
     return streams;
 }
 
-//having issues with subplease server for animepahe
 export async function stream(videoElement: HTMLVideoElement, src: string) {
     if (!videoElement) throw new Error('ERRRRRRR');
     try {
@@ -120,7 +126,7 @@ export async function readSettings() {
     if (!fs.existsSync(path.join(settingPath, './settings.json'))) {
         fs.writeFileSync(
             path.join(settingPath, './settings.json'),
-            '{ "database":"anilist", "defaultStream":"gogoanime", "skipDuration": 5 }',
+            JSON.stringify(defaultSettings, null, 2),
         );
     }
     const settings = JSON.parse(
@@ -176,6 +182,12 @@ export async function getDefaultStream() {
 export async function changeDefaultStream(stream: 'animepahe' | 'gogoanime') {
     const settings = await readSettings();
     settings.defaultStream = stream;
+    return await writeSettings(settings);
+}
+
+export async function changeDefaultQuality(quality: '360p' | '480p' | '720p' | '1080p') {
+    const settings = await readSettings();
+    settings.defaultQuality = quality;
     return await writeSettings(settings);
 }
 

@@ -212,6 +212,7 @@ button.item {
 .skipDurationDiv {
     display: flex;
     font-size: 1.2rem;
+    margin-bottom: 30px;
 }
 
 .skipInput {

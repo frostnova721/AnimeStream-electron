@@ -22,6 +22,7 @@ let playTime: number = 0;
 let backLink = './AnimeInfo.html';
 let widened = false;
 let error = false;
+let defaultQuality: '360p' | '480p' | '720p' | '1080p' = '720p'
 
 document.addEventListener('DOMContentLoaded', async () => {
     const backBtn = document.getElementById('backBtn');
@@ -343,8 +344,9 @@ async function loadGogoStreams(anime: string, ep: number, link?: string) {
             const arr: { child: HTMLElement; source: string }[] = [];
 
             if (autoLoadLink.length < 1) {
-                const src = sources.find((item) => item.quality === '720p');
+                const src = sources.find((item) => item.quality === defaultQuality);
                 autoLoadLink = src?.link ?? '';
+                console.log(`selected source: ${src?.server} ${src?.quality}`)
             }
 
             for (const source of sources) {
@@ -402,7 +404,7 @@ async function loadPaheStreams(anime: string, ep: number, link?: string) {
 
             const srcs = Array.from(new Set(arr.map((obj) => obj.source)));
             if (autoLoadLink.length < 1) {
-                const src = sources.find((item) => item.quality === '720p');
+                const src = sources.find((item) => item.quality === defaultQuality);
                 autoLoadLink = src?.link ?? '';
             }
             const subStream = document.getElementById('subStream');

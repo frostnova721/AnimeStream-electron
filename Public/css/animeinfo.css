@@ -340,3 +340,13 @@ body {
     font-family: NotoSans-Bold;
     font-weight: 600;
 }
+
+.epError {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.9rem;
+    font-family: NunitoSans-Bold;
+    font-weight: 600;
+}

@@ -4,14 +4,14 @@ body {
 
 ::-webkit-scrollbar {
     background-color: black;
-    height: 10px;
-    max-width: 0.5rem;
+    height: 8px;
+    width: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
     background-color: #caf979;
-    max-width: 1.5rem;
-    height: 4px;
+    width: 8px;
+    height: 8px;
     border-radius: 25px;
 }
 

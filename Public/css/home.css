@@ -141,7 +141,7 @@ button:focus {
 
 .recent_div:hover img {
     transform: scale(1.01);
-    margin-bottom: 5px;
+    /* margin-bottom: 5px; this mf caused the text moving up on hover*/
     border-radius: 0px;
 }
 
@@ -184,15 +184,15 @@ button:focus {
 
 .latest_div:hover img {
     transform: scale(1.01);
-    margin-bottom: 5px;
+    /* margin-bottom: 5px; */
     border-radius: 0px;
 }
 
 .anime_title {
     text-align: center;
     transition: color 0.1s ease-in-out;
-    max-width: 220px;
-    max-height: 80px;
+    width: 180px;
+    height: 54px;
     margin-top: -2px;
     font-size: 1.2rem;
 }

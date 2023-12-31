@@ -248,27 +248,38 @@ async function renderResult(res: IAnimeDetails) {
     ));
 }
 
-async function appendEpisodes(term: string) {
-    const db = await getDataBase();
-    let l = await readClickedResult();
-    if (db === 'anilist' && window.location.href.split('?')[1] !== 'rel=latest') {
-        const link = await getAnilistLink();
-        l = link.split('/')[link.split('/').length - 1];
-    }
-    // const res = await getEpisodes(l); not reliable
-    const res = await getEpisodesFromSite(term);
-
+async function appendEpisodes(term: string) { 
     const epContent = document.getElementById('episodeContent');
     const loaderContainer = document.getElementById('loaderContainer');
-    if (!epContent || !loaderContainer) return;
-    loaderContainer.style.display = 'none';
-    epContent.style.display = 'grid';
+    if (!epContent || !loaderContainer ) return;
+    try {
+        const db = await getDataBase();
+        let l = await readClickedResult();
+        if (db === 'anilist' && window.location.href.split('?')[1] !== 'rel=latest') {
+            const link = await getAnilistLink();
+            l = link.split('/')[link.split('/').length - 1];
+        }
+        // const res = await getEpisodes(l); not reliable
+        const res = await getEpisodesFromSite(term);
 
-    await storeTotalEpisodes(`${res.length}`);
+        loaderContainer.style.display = 'none';
+        epContent.style.display = 'grid';
 
-    epContent.setAttribute('mal-title', term);
-    for (let i = 1; i <= res.length; i++) {
-        createEpisode(i, epContent, res);
+        await storeTotalEpisodes(`${res.length}`);
+
+        epContent.setAttribute('mal-title', term);
+        for (let i = 1; i <= res.length; i++) {
+            createEpisode(i, epContent, res);
+        }
+    } catch(err) {
+        loaderContainer.style.display = 'none';
+        epContent.innerHTML = `<div class="epError" id="epError">
+        <div>💔</div>
+        <div>Had some issues getting the episodes</div>
+        </div>`
+        epContent.style.display = 'flex'
+        epContent.style.justifyContent = 'center'
+        epContent.style.alignItems = 'center'
     }
 }
 
