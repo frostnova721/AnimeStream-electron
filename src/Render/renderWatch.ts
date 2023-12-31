@@ -22,7 +22,7 @@ let playTime: number = 0;
 let backLink = './AnimeInfo.html';
 let widened = false;
 let error = false;
-let defaultQuality: '360p' | '480p' | '720p' | '1080p' = '720p'
+let defaultQuality: '360p' | '480p' | '720p' | '1080p';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const backBtn = document.getElementById('backBtn');
@@ -81,6 +81,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         throw new Error('err'); //typescript's OCD
 
     const totalEps = await getStoredTotalEpisodes();
+
+        defaultQuality = (await readSettings()).defaultQuality
 
     //to go back
     backBtn.onclick = () => {
