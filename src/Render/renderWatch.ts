@@ -12,7 +12,6 @@ import {
     readSettings,
 } from '../Core';
 
-let playState = false;
 let videoLoaded = false;
 let localMemory;
 let overlayShown = false;
@@ -98,7 +97,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     //pause or play the video when play-pause icon is clicked
     playPause.onclick = () => {
         if (videoLoaded) {
-            playState = updatePlayButton(playState, video, playPauseImg);
+            alterPlayState(video);
         }
     };
 
@@ -206,6 +205,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    video.addEventListener('pause', () => {
+        updatePlayPauseIcon(video.paused, playPauseImg)
+    })
+
+    video.addEventListener('play', () => {
+        updatePlayPauseIcon(video.paused, playPauseImg)
+    })
+
     //update the timer
     video.addEventListener('timeupdate', () => {
         if (!isNaN(video.duration) && isFinite(video.duration)) {
@@ -251,7 +258,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (event.key === ' ' || event.keyCode === 32 || event.which === 32) {
             event.preventDefault();
             if (videoLoaded) {
-                playState = updatePlayButton(playState, video, playPauseImg);
+                alterPlayState(video);
             }
         }
         if (event.key === 'ArrowRight') {
@@ -272,8 +279,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     //pause or play when clicked on the video element
     video.addEventListener('click', () => {
+        console.log('click')
         if (videoLoaded) {
-            playState = updatePlayButton(playState, video, playPauseImg);
+            alterPlayState(video);
         }
     });
 });
@@ -284,18 +292,19 @@ function updateDuration(videoElement: HTMLVideoElement, totalTime: HTMLElement) 
     totalTime.textContent = `${secondsToTime(Math.floor(videoElement.duration))}`;
 }
 
-function updatePlayButton(playState: boolean, video: HTMLVideoElement, img: HTMLImageElement) {
-    if (!playState) {
+function alterPlayState(video: HTMLVideoElement) {
+    if(document.fullscreen) return
+    let playing = !video.paused
+    if (!playing) {
         video.play();
-        img.src = '../Assets/Icons/pause-button.png';
-        playState = true;
-        return playState;
     } else {
         video.pause();
-        img.src = '../Assets/Icons/play.png';
-        playState = false;
-        return playState;
     }
+}
+
+function updatePlayPauseIcon(playState: boolean, playPause: HTMLImageElement) {
+    if(!playState) playPause.src = '../Assets/Icons/pause-button.png';
+    else playPause.src = '../Assets/Icons/play.png';
 }
 
 //hide the controls when mouse isnt moved while inside the video element (couldnt figure out the logic :( )
@@ -346,7 +355,7 @@ async function loadGogoStreams(anime: string, ep: number, link?: string) {
             const arr: { child: HTMLElement; source: string }[] = [];
 
             if (autoLoadLink.length < 1) {
-                const src = sources.find((item) => item.quality === defaultQuality);
+                const src = sources.find((item) => item.quality === defaultQuality ?? '720p');
                 autoLoadLink = src?.link ?? '';
                 console.log(`selected source: ${src?.server} ${src?.quality}`)
             }
@@ -406,7 +415,7 @@ async function loadPaheStreams(anime: string, ep: number, link?: string) {
 
             const srcs = Array.from(new Set(arr.map((obj) => obj.source)));
             if (autoLoadLink.length < 1) {
-                const src = sources.find((item) => item.quality === defaultQuality);
+                const src = sources.find((item) => item.quality === defaultQuality ?? '720p');
                 autoLoadLink = src?.link ?? '';
             }
             const subStream = document.getElementById('subStream');

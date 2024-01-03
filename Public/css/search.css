@@ -115,4 +115,6 @@ body {
 .div_anime_cover p {
     text-align: center;
     text-wrap: wrap;
+    height: 45px;
+    width: 260px;
 }
