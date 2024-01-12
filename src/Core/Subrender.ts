@@ -17,9 +17,17 @@ const defaultSettings: Settings = {
     defaultQuality: '720p'
 };
 
-export async function getAnimeInfo(link: string) {
+export async function getAnimeInfo(linkOrId: string) {
     //add al info too
-    const results = mal.getAnimeDetails(link);
+    const db = await getDataBase()
+    let results
+    switch(db) {
+        case 'anilist' :
+            results = await anilist.getAnimeInfo(linkOrId)
+            break;
+        case 'mal':
+            results = mal.convertDataType(await mal.getAnimeInfo(linkOrId))  // need to format the output for mal
+    }
     return results;
 }
 

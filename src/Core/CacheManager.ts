@@ -19,12 +19,14 @@ export async function storeAnimeWatchedCache(
         const data = fs.readFileSync(recPath, 'utf8');
         if (data.length === 0) fs.writeFileSync(recPath, await code.encode('{ "recents": [] }'));
         const currentData = JSON.parse(await code.decode(fs.readFileSync(recPath, 'utf8')));
-        currentData.recents.push({
+        const newAnime = {
             name: animeName,
             img: imageLink,
             infoLink: infoLink,
             anilistLink: anilistLink,
-        });
+        };
+        currentData.recents = currentData.recents.filter((item: {name: string, img: string, infoLink: string, anilistLink: string }) => item.name !== newAnime.name)
+        currentData.recents.push(newAnime)
         fs.writeFileSync(recPath, await code.encode(JSON.stringify(currentData, null, 2)));
         return true;
     } catch (err) {

@@ -11,9 +11,9 @@ import {
     getPaheStreamDetails,
     readSettings,
 } from '../Core';
+import { IStreams } from '../Types';
 
 let videoLoaded = false;
-let localMemory;
 let overlayShown = false;
 let autoLoadLink = '';
 let selectedProvider: 'animepahe' | 'gogoanime' = 'gogoanime';
@@ -70,7 +70,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         !gogoButton ||
         !paheButton ||
         !subStream ||
-        // !streamDiv
         !previousBtn ||
         !nextBtn ||
         !playerTitle ||
@@ -286,7 +285,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
-//functions  (Their name does the explanation)
+//functions  (Their name does the explanation(almost))
 
 function updateDuration(videoElement: HTMLVideoElement, totalTime: HTMLElement) {
     totalTime.textContent = `${secondsToTime(Math.floor(videoElement.duration))}`;
@@ -355,7 +354,9 @@ async function loadGogoStreams(anime: string, ep: number, link?: string) {
             const arr: { child: HTMLElement; source: string }[] = [];
 
             if (autoLoadLink.length < 1) {
-                const src = sources.find((item) => item.quality === defaultQuality ?? '720p');
+                let src: IStreams | undefined
+                src = sources.find((item) => item.quality === defaultQuality ?? '720p');
+                if(!src) src = sources[0]
                 autoLoadLink = src?.link ?? '';
                 console.log(`selected source: ${src?.server} ${src?.quality}`)
             }
@@ -415,8 +416,11 @@ async function loadPaheStreams(anime: string, ep: number, link?: string) {
 
             const srcs = Array.from(new Set(arr.map((obj) => obj.source)));
             if (autoLoadLink.length < 1) {
-                const src = sources.find((item) => item.quality === defaultQuality ?? '720p');
+                let src: IStreams | undefined
+                src = sources.find((item) => item.quality === defaultQuality ?? '720p');
+                if(!src) src = sources[0]
                 autoLoadLink = src?.link ?? '';
+                console.log(`selected source: ${src?.server} ${src?.quality}`)
             }
             const subStream = document.getElementById('subStream');
             if (subStream) subStream.innerHTML = '';

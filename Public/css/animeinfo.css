@@ -318,14 +318,14 @@ body {
     background-color: black;
     border: 1px solid white;
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: 110%;
     transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out,
         background-color 0.2s ease-in-out, background-size 0.5s ease-in-out;
 }
 
 .epBtn:hover {
     background-color: black;
-    background-size: 110%;
+    background-size: 120%;
     color: #caf979;
     border-color: #caf979;
 }

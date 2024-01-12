@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (alLink) {
             await setAnilistLink(alLink);
         }
-        window.location.href = './AnimeInfo.html';
+        window.location.href = './AnimeInfo.html?rel=search';
     });
 
     const searchBar = <HTMLInputElement>document.getElementById('searchBar');

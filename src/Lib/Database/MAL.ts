@@ -1,6 +1,6 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
-import { IAnimeDetails, IAnimeSearchResult, ILatestAnimes, IMALSearch, TChara } from '../../Types';
+import { IAnimeDetails, IAnimeSearchResult, ILatestAnimes, IMALInfoResult, IMALSearch, TChara } from '../../Types';
 
 export class MAL {
     constructor() {}
@@ -12,7 +12,7 @@ export class MAL {
      * @param url MAL url of anime to fetch details
      * @returns details of the anime
      */
-    public getAnimeDetails = async (url: string): Promise<IAnimeDetails> => {
+    public getAnimeInfo = async (url: string): Promise<IMALInfoResult> => {
         if (!url) throw new Error('No url');
         const res = await this.fetch(url);
         let $ = cheerio.load(res);
@@ -343,4 +343,31 @@ export class MAL {
         const res = await axios.get(url, options);
         return res.data;
     };
+
+    public convertDataType = (data: IMALInfoResult) => {
+            const convertedData: IAnimeDetails = {
+                aired: {
+                    start: data.aired.split('to')[0],
+                    end: data.aired.split('to')[0]
+                },
+                characters: data.characters,
+                cover: data.cover,
+                duration: data.duration,
+                episodes: data.episodes,
+                genres: [...data.genres, ...data.themes],
+                rating: data.score ?? null,
+                status: data.status,
+                studios: [data.studios],
+                synonyms: [data.synonyms],
+                synopsis: data.synopsis,
+                title: {
+                    english: data.names.english,
+                    native: data.names.japanese,
+                    romaji: data.title
+                },
+                type: data.type
+            }
+
+            return convertedData
+        }
 }

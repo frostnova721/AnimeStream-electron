@@ -50,8 +50,8 @@ setupTitlebar();
 
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
-        width: 1440,
-        height: 980,
+        width: 1550,
+        height: 985,
         titleBarStyle: 'hidden',
         icon: appIcon,
         frame: false,

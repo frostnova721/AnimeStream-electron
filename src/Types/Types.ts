@@ -35,7 +35,7 @@ export type TChara = {
     };
 };
 
-export interface IAnimeDetails {
+export interface IMALInfoResult {
     title: string;
     synonyms: string;
     names: {
@@ -187,4 +187,103 @@ export interface IStreams {
     link: string;
     server: string;
     quality: string;
+}
+
+export interface IAnilistInfoResult {
+    title: {
+      romaji: string;
+      english: string;
+      native: string;
+      userPreferred: string;
+    };
+    synonyms: string[];
+    coverImage: {
+      large: string;
+      medium: string;
+    };
+    genres: string[];
+    description: string;
+    source: string;
+    type: string;
+    episodes: number;
+    status: string;
+    nextAiringEpisode?: {
+      episode: number;
+      airingAt: number;
+      timeUntilAiring: number;
+    };
+    tags: {
+      name: string;
+      category: string
+      }[]
+    startDate: {
+        year: number;
+        month: number;
+        day: number;
+      };
+    endDate: {
+        year: number;
+        month: number;
+        day: number;
+    };
+    meanScore: number;
+    studios: {
+      edges: {
+        node: {
+          isAnimationStudio: boolean;
+          name: string;
+          id: string;
+        };
+      }[];
+    };
+    duration: number;
+    popularity: number;
+    characters: {
+      edges: {
+        node: {
+          name: {
+            full: string;
+            native: string;
+          };
+          image: {
+            large: string;
+            medium: string
+          }
+        };
+        role: string;
+      }[];
+    };
+}
+
+export interface IAnimeDetails {
+    title: {
+        english: string;
+        romaji: string;
+        native: string;
+    };
+    synonyms: string[];
+    aired: {
+        start: string;
+        end: string;
+    };
+    studios: string[];
+    characters: {
+        name: string;
+        role: string;
+        image: string;
+    }[];
+    nextAiringEpisode?: {
+        episode: string | number;
+        airingAt: string | number;
+        timeLeft: string | number;
+    };
+    duration: string;
+    cover: string;
+    genres: string[];
+    rating: number;
+    status: string;
+    type: string;
+    synopsis: string;
+    episodes: string | number;
+    tags?: string[]
 }

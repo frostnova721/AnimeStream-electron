@@ -65,15 +65,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let res: any = '';
     let link: string = '';
+    let malLink: string;
 
     link = await readClickedResult();
+    malLink = link
     let fromlatest = false;
     // if(window.location.href.split('?')[1] !== 'rel=latest')
-    if (db === 'anilist' && window.location.href.split('?')[1] === 'rel=latest') {
-        const data = await getMalIdWithAlId(link);
-        await setAnilistLink(`https://anilist.co/anime/${link}`);
-        link = data.malLink;
-        fromlatest = true;
+    if (db === 'anilist') {
+        if(window.location.href.split('?')[1] === 'rel=latest') {
+            const data = await getMalIdWithAlId(link);
+            malLink = data.malLink
+            await setAnilistLink(`https://anilist.co/anime/${link}`);
+            fromlatest = true;
+        }
+        if(window.location.href.split('?')[1] === 'rel=recents' || window.location.href.split('?')[1] === 'rel=search') {
+            const anilistLink: string = await getAnilistLink()
+            link = anilistLink.split('/')[anilistLink.split('/').length - 1]
+        }
     }
     if (!link) throw new Error('Couldnt get the link');
 
@@ -115,9 +123,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const epBtn = target.closest('#epBtn');
         if (epBtn) {
             const img = res.cover;
-            const title = res.names.english.length > 1 ? res.names.english : res.title;
+            const title = res.title.english.length > 1 ? res.title.english : res.title.romaji;
             const al = await getAnilistLink();
-            await storeAnimeWatchedCache(title, img, link, al);
+            await storeAnimeWatchedCache(title, img, malLink, al);
             window.location.href = `./Watch.html?watch=${
                 epContent.getAttribute('mal-title') ?? ''
             }&ep=${epBtn.getAttribute('episode')}&fromlatest=${fromlatest}&link=${
@@ -145,16 +153,12 @@ async function renderResult(res: IAnimeDetails) {
     const titleDiv = document.getElementById('animeName');
     if (!titleDiv) return;
     const title = document.createElement('p');
-    title.innerText =
-        res.names.english.length > 1
-            ? res.names.english.length > 45
-                ? res.names.english.slice(0, 45) + '...'
-                : res.names.english
-            : res.title.length > 1
-            ? res.title.length > 45
-                ? res.title.slice(0, 45) + '...'
-                : res.title
-            : '';
+    const englishTitle = res.title.english
+    title.innerText = englishTitle.length > 1
+    ? (englishTitle.length > 45
+        ? englishTitle.slice(0, 45) + '...'
+        : englishTitle)
+    : '';
     titleDiv.appendChild(title);
 
     const basicInfo = document.getElementById('basicInfo');
@@ -169,12 +173,12 @@ async function renderResult(res: IAnimeDetails) {
     if (!advancedInfo || !miscInfo || !characters) return;
     const info = document.createElement('p');
     info.innerHTML = [
-        `Title: ${res.names.english.length > 1 ? res.names.english : res.title}`,
-        `Japanese: ${res.names.japanese}`,
+        // `Title: ${res.title.english.length > 1 ? res.title.english : res.title.romaji}`,
+        // `Japanese: ${res.title.native}`,
         `Episodes: ${res.episodes}`,
         `Type: ${res.type}`,
-        `Genres: ${res.genres.join(', ')}, ${res.themes.join(', ')}`,
-        `MAL score: ${res.score}`,
+        `Genres: ${res.genres.join(', ')}`,
+        `Rating: ${res.rating}/10`,
         `Status: ${res.status}`,
         `Duration: ${res.duration}`,
     ].join('<br>');
@@ -183,11 +187,11 @@ async function renderResult(res: IAnimeDetails) {
 
     const misc = document.createElement('p');
     misc.innerHTML = [
-        `Aired: ${res.aired}`,
+        `Aired: ${res.aired.start ?? '??'} to ${res.aired.end ?? '??'}`,
         `Studios: ${res.studios}`,
-        `Premiered: ${res.premiered}`,
-        `Producers: ${res.producers.join(', ')}`,
-        `Broadcast: ${res.broadcast}`,
+        // `Premiered: ${res.premiered}`,
+        // `Producers: ${res.producers.join(', ')}`,
+        // `Broadcast: ${res.broadcast}`,
     ].join('<br>');
 
     miscInfo.appendChild(misc);
@@ -241,9 +245,9 @@ async function renderResult(res: IAnimeDetails) {
 
     loader.style.display = 'none';
     main.style.display = 'flex';
-
+    const titleForEp = res.title.english ? res.title.english : res.title.romaji
     return void (await appendEpisodes(
-        res.title.replace(/[,|\.]/g, ''),
+        titleForEp.replace(/[,|\.]/g, ''),
         // res.names.english ?? res.names.japanese,
     ));
 }
