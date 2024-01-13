@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const totalEps = await getStoredTotalEpisodes();
 
-        defaultQuality = (await readSettings()).defaultQuality
+    defaultQuality = (await readSettings()).defaultQuality;
 
     //to go back
     backBtn.onclick = () => {
@@ -205,12 +205,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     video.addEventListener('pause', () => {
-        updatePlayPauseIcon(video.paused, playPauseImg)
-    })
+        updatePlayPauseIcon(video.paused, playPauseImg);
+    });
 
     video.addEventListener('play', () => {
-        updatePlayPauseIcon(video.paused, playPauseImg)
-    })
+        updatePlayPauseIcon(video.paused, playPauseImg);
+    });
 
     //update the timer
     video.addEventListener('timeupdate', () => {
@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     //pause or play when clicked on the video element
     video.addEventListener('click', () => {
-        console.log('click')
+        console.log('click');
         if (videoLoaded) {
             alterPlayState(video);
         }
@@ -292,8 +292,8 @@ function updateDuration(videoElement: HTMLVideoElement, totalTime: HTMLElement) 
 }
 
 function alterPlayState(video: HTMLVideoElement) {
-    if(document.fullscreen) return
-    let playing = !video.paused
+    if (document.fullscreen) return;
+    let playing = !video.paused;
     if (!playing) {
         video.play();
     } else {
@@ -302,7 +302,7 @@ function alterPlayState(video: HTMLVideoElement) {
 }
 
 function updatePlayPauseIcon(playState: boolean, playPause: HTMLImageElement) {
-    if(!playState) playPause.src = '../Assets/Icons/pause-button.png';
+    if (!playState) playPause.src = '../Assets/Icons/pause-button.png';
     else playPause.src = '../Assets/Icons/play.png';
 }
 
@@ -354,11 +354,11 @@ async function loadGogoStreams(anime: string, ep: number, link?: string) {
             const arr: { child: HTMLElement; source: string }[] = [];
 
             if (autoLoadLink.length < 1) {
-                let src: IStreams | undefined
+                let src: IStreams | undefined;
                 src = sources.find((item) => item.quality === defaultQuality ?? '720p');
-                if(!src) src = sources[0]
+                if (!src) src = sources[0];
                 autoLoadLink = src?.link ?? '';
-                console.log(`selected source: ${src?.server} ${src?.quality}`)
+                console.log(`selected source: ${src?.server} ${src?.quality}`);
             }
 
             for (const source of sources) {
@@ -416,11 +416,11 @@ async function loadPaheStreams(anime: string, ep: number, link?: string) {
 
             const srcs = Array.from(new Set(arr.map((obj) => obj.source)));
             if (autoLoadLink.length < 1) {
-                let src: IStreams | undefined
+                let src: IStreams | undefined;
                 src = sources.find((item) => item.quality === defaultQuality ?? '720p');
-                if(!src) src = sources[0]
+                if (!src) src = sources[0];
                 autoLoadLink = src?.link ?? '';
-                console.log(`selected source: ${src?.server} ${src?.quality}`)
+                console.log(`selected source: ${src?.server} ${src?.quality}`);
             }
             const subStream = document.getElementById('subStream');
             if (subStream) subStream.innerHTML = '';

@@ -25,7 +25,6 @@ if (!navigator.onLine) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-
     const connectedToAccount = false;
     const db = await getDataBase();
 

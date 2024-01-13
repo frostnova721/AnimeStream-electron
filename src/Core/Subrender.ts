@@ -14,19 +14,19 @@ const defaultSettings: Settings = {
     database: 'anilist',
     defaultStream: 'gogoanime',
     skipDuration: 5,
-    defaultQuality: '720p'
+    defaultQuality: '720p',
 };
 
 export async function getAnimeInfo(linkOrId: string) {
     //add al info too
-    const db = await getDataBase()
-    let results
-    switch(db) {
-        case 'anilist' :
-            results = await anilist.getAnimeInfo(linkOrId)
+    const db = await getDataBase();
+    let results;
+    switch (db) {
+        case 'anilist':
+            results = await anilist.getAnimeInfo(linkOrId);
             break;
         case 'mal':
-            results = mal.convertDataType(await mal.getAnimeInfo(linkOrId))  // need to format the output for mal
+            results = mal.convertDataType(await mal.getAnimeInfo(linkOrId)); // need to format the output for mal
     }
     return results;
 }

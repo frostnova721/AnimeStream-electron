@@ -25,8 +25,11 @@ export async function storeAnimeWatchedCache(
             infoLink: infoLink,
             anilistLink: anilistLink,
         };
-        currentData.recents = currentData.recents.filter((item: {name: string, img: string, infoLink: string, anilistLink: string }) => item.name !== newAnime.name)
-        currentData.recents.push(newAnime)
+        currentData.recents = currentData.recents.filter(
+            (item: { name: string; img: string; infoLink: string; anilistLink: string }) =>
+                item.name !== newAnime.name,
+        );
+        currentData.recents.push(newAnime);
         fs.writeFileSync(recPath, await code.encode(JSON.stringify(currentData, null, 2)));
         return true;
     } catch (err) {

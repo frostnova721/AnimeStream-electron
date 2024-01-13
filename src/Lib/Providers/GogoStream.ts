@@ -96,7 +96,7 @@ export class GogoStreams {
             //ignore
         }
         try {
-            //current src link (embtaku.pro) works when using vpn. otherwise its giving conn timed out 
+            //current src link (embtaku.pro) works when using vpn. otherwise its giving conn timed out
             // vidStreaming = (await gogo.extractGogo(episodeId, quality)).sources
         } catch (err) {
             //ignore

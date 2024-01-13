@@ -16,7 +16,7 @@ const defaultSettings: Settings = {
     database: 'anilist',
     defaultStream: 'gogoanime',
     skipDuration: 5,
-    defaultQuality: '720p'
+    defaultQuality: '720p',
 };
 
 //just tried making the html in js(bad idea)
@@ -254,7 +254,7 @@ async function appendPlayer() {
     element.classList.add('grp');
     const desc = document.createElement('div');
     desc.className = 'desc';
-    desc.style.fontSize = '1.2rem'
+    desc.style.fontSize = '1.2rem';
     desc.innerText = 'Default stream quality';
     // const optsContainer = document.createElement('div')
     // optsContainer.className = 'optsContainer'
@@ -277,7 +277,11 @@ async function appendPlayer() {
         // option.className = 'streamName'
         option.onclick = async () => {
             const currentStream = settings.defaultQuality;
-            const selectedQuality = option.getAttribute('data-value') as '360p' | '480p' | '720p' | '1080p';
+            const selectedQuality = option.getAttribute('data-value') as
+                | '360p'
+                | '480p'
+                | '720p'
+                | '1080p';
             if (currentStream === selectedQuality) return;
             await changeDefaultQuality(selectedQuality);
             opts.innerText = selectedQuality;
@@ -290,5 +294,5 @@ async function appendPlayer() {
     element.appendChild(desc);
     element.appendChild(opts);
     element.appendChild(dropdown);
-    insidediv.appendChild(element)
+    insidediv.appendChild(element);
 }

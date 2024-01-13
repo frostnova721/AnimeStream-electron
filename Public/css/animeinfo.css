@@ -35,7 +35,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* color: rgb(238, 235, 58); */
 }
 
 .container {
@@ -127,9 +126,10 @@ body {
 
 .charactersDiv {
     margin-top: 5rem;
+    margin-top: 5rem;
     display: flex;
     justify-content: center;
-    height: 350px;
+    height: 375px;
 }
 
 .characters {
@@ -140,7 +140,7 @@ body {
     max-width: 1181.72px;
     display: flex;
     flex-direction: row;
-    height: inherit;
+    height: 350px;
     border-radius: 12px;
     overflow-x: auto;
     overflow-y: hidden;
@@ -349,4 +349,28 @@ body {
     font-size: 1.9rem;
     font-family: NunitoSans-Bold;
     font-weight: 600;
+}
+
+.titlesContainer {
+    display: none;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.titles {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    max-width: 1000.72px;
+}
+
+.titles div {
+    font-family: NunitoSans-Bold;
+    margin-left: 5%;
+    margin-top: 0.5rem;
+}
+
+.title {
+    margin-bottom: 1.5rem;
 }

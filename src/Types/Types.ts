@@ -191,15 +191,15 @@ export interface IStreams {
 
 export interface IAnilistInfoResult {
     title: {
-      romaji: string;
-      english: string;
-      native: string;
-      userPreferred: string;
+        romaji: string;
+        english: string;
+        native: string;
+        userPreferred: string;
     };
     synonyms: string[];
     coverImage: {
-      large: string;
-      medium: string;
+        large: string;
+        medium: string;
     };
     genres: string[];
     description: string;
@@ -208,19 +208,19 @@ export interface IAnilistInfoResult {
     episodes: number;
     status: string;
     nextAiringEpisode?: {
-      episode: number;
-      airingAt: number;
-      timeUntilAiring: number;
+        episode: number;
+        airingAt: number;
+        timeUntilAiring: number;
     };
     tags: {
-      name: string;
-      category: string
-      }[]
+        name: string;
+        category: string;
+    }[];
     startDate: {
         year: number;
         month: number;
         day: number;
-      };
+    };
     endDate: {
         year: number;
         month: number;
@@ -228,30 +228,30 @@ export interface IAnilistInfoResult {
     };
     meanScore: number;
     studios: {
-      edges: {
-        node: {
-          isAnimationStudio: boolean;
-          name: string;
-          id: string;
-        };
-      }[];
+        edges: {
+            node: {
+                isAnimationStudio: boolean;
+                name: string;
+                id: string;
+            };
+        }[];
     };
     duration: number;
     popularity: number;
     characters: {
-      edges: {
-        node: {
-          name: {
-            full: string;
-            native: string;
-          };
-          image: {
-            large: string;
-            medium: string
-          }
-        };
-        role: string;
-      }[];
+        edges: {
+            node: {
+                name: {
+                    full: string;
+                    native: string;
+                };
+                image: {
+                    large: string;
+                    medium: string;
+                };
+            };
+            role: string;
+        }[];
     };
 }
 
@@ -285,5 +285,5 @@ export interface IAnimeDetails {
     type: string;
     synopsis: string;
     episodes: string | number;
-    tags?: string[]
+    tags?: string[];
 }

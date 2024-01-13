@@ -7,7 +7,6 @@ import {
     storeSearchMemory,
 } from '../Core';
 
-
 document.addEventListener('DOMContentLoaded', async () => {
     const btn = document.getElementById('searchBtn');
     if (!btn) throw new Error('No btn');
@@ -88,8 +87,8 @@ async function appendSearchResults(searchValue: string) {
         img.draggable = false;
 
         const textElement = document.createElement('p');
-        const name = result.title.english ?? result.title.romaji
-        textElement.innerText = name.length > 40 ? name.slice(0,40).trim()+ '...' : name;
+        const name = result.title.english ?? result.title.romaji;
+        textElement.innerText = name.length > 40 ? name.slice(0, 40).trim() + '...' : name;
 
         if (result.infoAl) {
             newDiv.setAttribute('al-link', result.infoAl);

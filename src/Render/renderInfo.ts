@@ -68,19 +68,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     let malLink: string;
 
     link = await readClickedResult();
-    malLink = link
+    malLink = link;
     let fromlatest = false;
     // if(window.location.href.split('?')[1] !== 'rel=latest')
     if (db === 'anilist') {
-        if(window.location.href.split('?')[1] === 'rel=latest') {
+        if (window.location.href.split('?')[1] === 'rel=latest') {
             const data = await getMalIdWithAlId(link);
-            malLink = data.malLink
+            malLink = data.malLink;
             await setAnilistLink(`https://anilist.co/anime/${link}`);
             fromlatest = true;
         }
-        if(window.location.href.split('?')[1] === 'rel=recents' || window.location.href.split('?')[1] === 'rel=search') {
-            const anilistLink: string = await getAnilistLink()
-            link = anilistLink.split('/')[anilistLink.split('/').length - 1]
+        if (
+            window.location.href.split('?')[1] === 'rel=recents' ||
+            window.location.href.split('?')[1] === 'rel=search'
+        ) {
+            const anilistLink: string = await getAnilistLink();
+            link = anilistLink.split('/')[anilistLink.split('/').length - 1];
         }
     }
     if (!link) throw new Error('Couldnt get the link');
@@ -140,9 +143,31 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function renderResult(res: IAnimeDetails) {
     const loader = document.getElementById('loader');
     const main = document.getElementById('main');
-    if (!loader || !main) return;
+    const titleDiv = document.getElementById('animeName');
     const imgDiv = document.getElementById('coverImage');
-    if (!imgDiv) return;
+    const basicInfo = document.getElementById('basicInfo');
+    const advancedInfo = document.getElementById('advancedInfo');
+    const miscInfo = document.getElementById('miscInfo');
+    const characters = document.getElementById('characters');
+    const titlesContainer = document.getElementById('titlesContainer');
+    const titleInfoDiv = document.getElementById('title');
+    const nativeTitleInfoDiv = document.getElementById('nativeTitle');
+
+    if (
+        !loader ||
+        !main ||
+        !imgDiv ||
+        !titleDiv ||
+        !basicInfo ||
+        !advancedInfo ||
+        !miscInfo ||
+        !characters ||
+        !titleInfoDiv ||
+        !nativeTitleInfoDiv ||
+        !titlesContainer
+    )
+        return;
+
     const img = document.createElement('img');
     img.src = res.cover;
     img.className = 'coverPic';
@@ -150,31 +175,28 @@ async function renderResult(res: IAnimeDetails) {
     img.draggable = false;
     imgDiv.appendChild(img);
 
-    const titleDiv = document.getElementById('animeName');
-    if (!titleDiv) return;
     const title = document.createElement('p');
-    const englishTitle = res.title.english
-    title.innerText = englishTitle.length > 1
-    ? (englishTitle.length > 45
-        ? englishTitle.slice(0, 45) + '...'
-        : englishTitle)
-    : '';
+    const englishTitle = res.title.english;
+    title.innerText =
+        englishTitle.length > 1
+            ? englishTitle.length > 45
+                ? englishTitle.slice(0, 45) + '...'
+                : englishTitle
+            : '';
     titleDiv.appendChild(title);
 
-    const basicInfo = document.getElementById('basicInfo');
-    if (!basicInfo) return;
     const synopsis = document.createElement('p');
     synopsis.innerHTML = `<strong>Synopsis:</strong> <br>${res.synopsis}`;
     basicInfo.appendChild(synopsis);
 
-    const advancedInfo = document.getElementById('advancedInfo');
-    const miscInfo = document.getElementById('miscInfo');
-    const characters = document.getElementById('characters');
-    if (!advancedInfo || !miscInfo || !characters) return;
+    titlesContainer.style.display = 'flex';
+
+    titleInfoDiv.innerText = res.title.english ?? res.title.romaji;
+    if (res.title.native.length > 1) nativeTitleInfoDiv.innerText = res.title.native;
+    else nativeTitleInfoDiv.style.display = 'none';
+
     const info = document.createElement('p');
     info.innerHTML = [
-        // `Title: ${res.title.english.length > 1 ? res.title.english : res.title.romaji}`,
-        // `Japanese: ${res.title.native}`,
         `Episodes: ${res.episodes}`,
         `Type: ${res.type}`,
         `Genres: ${res.genres.join(', ')}`,
@@ -189,9 +211,6 @@ async function renderResult(res: IAnimeDetails) {
     misc.innerHTML = [
         `Aired: ${res.aired.start ?? '??'} to ${res.aired.end ?? '??'}`,
         `Studios: ${res.studios}`,
-        // `Premiered: ${res.premiered}`,
-        // `Producers: ${res.producers.join(', ')}`,
-        // `Broadcast: ${res.broadcast}`,
     ].join('<br>');
 
     miscInfo.appendChild(misc);
@@ -200,6 +219,7 @@ async function renderResult(res: IAnimeDetails) {
         const characterdiv = document.createElement('div');
         characterdiv.className = 'character';
         const charaImg = document.createElement('img');
+        charaImg.draggable = false;
         charaImg.src = chara.image;
         const charaName = document.createElement('p');
         charaName.textContent = chara.name;
@@ -245,17 +265,17 @@ async function renderResult(res: IAnimeDetails) {
 
     loader.style.display = 'none';
     main.style.display = 'flex';
-    const titleForEp = res.title.english ? res.title.english : res.title.romaji
+    const titleForEp = res.title.english ? res.title.english : res.title.romaji;
     return void (await appendEpisodes(
         titleForEp.replace(/[,|\.]/g, ''),
         // res.names.english ?? res.names.japanese,
     ));
 }
 
-async function appendEpisodes(term: string) { 
+async function appendEpisodes(term: string) {
     const epContent = document.getElementById('episodeContent');
     const loaderContainer = document.getElementById('loaderContainer');
-    if (!epContent || !loaderContainer ) return;
+    if (!epContent || !loaderContainer) return;
     try {
         const db = await getDataBase();
         let l = await readClickedResult();
@@ -275,15 +295,15 @@ async function appendEpisodes(term: string) {
         for (let i = 1; i <= res.length; i++) {
             createEpisode(i, epContent, res);
         }
-    } catch(err) {
+    } catch (err) {
         loaderContainer.style.display = 'none';
         epContent.innerHTML = `<div class="epError" id="epError">
         <div>💔</div>
         <div>Had some issues getting the episodes</div>
-        </div>`
-        epContent.style.display = 'flex'
-        epContent.style.justifyContent = 'center'
-        epContent.style.alignItems = 'center'
+        </div>`;
+        epContent.style.display = 'flex';
+        epContent.style.justifyContent = 'center';
+        epContent.style.alignItems = 'center';
     }
 }
 
