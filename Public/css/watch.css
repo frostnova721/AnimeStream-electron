@@ -437,6 +437,49 @@ button:focus {
     font-weight: 600;
 }
 
+.download {
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    right: 0;
+    margin-right: 10px;
+    margin-top: 15px
+}
+
+.downloadBtn {
+    height: inherit;
+    width: inherit;
+    align-content: center;
+    background-color: black;
+    border: none;
+    border-radius: 6px;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.downloadBtn img {
+    height: 30px;
+    width: 30px;
+    filter: invert();
+    transition: filter 0.15s ease-in-out;
+}
+
+.downloadBtn:hover {
+    background-color: #caf979;
+}
+
+.downloadBtn:hover img {
+    filter: none;
+}
+
+.downloadBtn:active img {
+    filter: invert();
+}
+
+.downloadBtn:active {
+    background-color: black;
+    border: 1px solid #929292
+}
+
 @keyframes l21 {
     50% {
         box-shadow: 19px 0 0 3px, 38px 0 0 7px, 57px 0 0 3px;

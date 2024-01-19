@@ -3,4 +3,5 @@ export interface Settings {
     defaultStream: 'gogoanime' | 'animepahe';
     skipDuration: number;
     defaultQuality: '360p' | '480p' | '720p' | '1080p';
+    downloadPath: string;
 }

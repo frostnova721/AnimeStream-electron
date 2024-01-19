@@ -17,6 +17,7 @@ const defaultSettings: Settings = {
     defaultStream: 'gogoanime',
     skipDuration: 5,
     defaultQuality: '720p',
+    downloadPath: (process.env.USERPROFILE || process.env.HOME) + './Downloads/',
 };
 
 //just tried making the html in js(bad idea)

@@ -94,8 +94,9 @@ const searchBtn = document.getElementById('navigate_search');
 const settingsBtn = document.getElementById('settingsBtn');
 const recentDiv = document.getElementById('recents');
 const latestDiv = document.getElementById('latest');
+// const downloadsButton = document.getElementById('downloads')
 
-if (!searchBtn || !settingsBtn || !recentDiv || !latestDiv) throw new Error('No btn');
+if (!searchBtn || !settingsBtn || !recentDiv || !latestDiv ) throw new Error('No btn');
 
 searchBtn.onclick = async () => {
     window.location.href = './search.html';
@@ -104,6 +105,10 @@ searchBtn.onclick = async () => {
 settingsBtn.onclick = async () => {
     await createNewWindow();
 };
+
+// downloadsButton.onclick = async() => {
+//     await createNewWindow(true)
+// }
 
 recentDiv.addEventListener('click', async (e) => {
     const target = e.target as HTMLElement;

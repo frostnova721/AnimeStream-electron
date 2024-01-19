@@ -1,0 +1,80 @@
+@font-face {
+    font-family: NunitoSans-Bold;
+    src: url(../Assets/Fonts/NunitoSans_10pt-Medium.ttf);
+}
+
+@font-face {
+    font-family: Poppins-Bold;
+    src: url(../Assets/Fonts/Poppins-Bold.ttf);
+}
+
+@font-face {
+    font-family: NotoSans-Bold;
+    src: url(../Assets/Fonts/NotoSans-Bold.ttf);
+}
+
+body { 
+    background-color: black;
+    color: white;
+}
+
+.containerTitle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Poppins-Bold;
+    font-size: 1.6rem;
+    height: 50px;
+    margin-bottom: 20px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.downloadItem {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 120px;
+    width: 90%;
+}
+
+.img {
+   height: 100%;
+   width: 20%;
+   max-width: 125px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.img img {
+    height: 50%;
+    width: 50%;
+    filter: invert()
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 30px;
+    width: 100%;
+    font-family: NotoSans-Bold;
+    font-size: 1.3rem;
+}
+
+.title {
+    font-family: Poppins-Bold;
+}
+
+.location {
+    color: #9e9e9e;
+}
+
+.location:hover {
+    color: #caf979;
+}

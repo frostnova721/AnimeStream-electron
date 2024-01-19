@@ -97,7 +97,7 @@ const createWindow = () => {
         return globalVars.episodeId;
     });
 
-    ipcMain.handle('createNewWindow', (e) => {
+    ipcMain.handle('createNewWindow', (e, download?: boolean) => {
         if (globalVars.subWindows === 0) {
             globalVars.subWindows++;
 
@@ -117,7 +117,8 @@ const createWindow = () => {
 
             attachTitlebarToWindow(newWindow);
 
-            newWindow.loadFile(path.join(__dirname, '../../Public/html/Settings.html'));
+            //make it accept path and load from that!
+            newWindow.loadFile(download ? path.join(__dirname, '../../Public/html/Download.html') : path.join(__dirname, '../../Public/html/Settings.html'));
 
             newWindow.on('close', () => {
                 globalVars.subWindows--;

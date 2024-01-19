@@ -1,10 +1,11 @@
 import { ipcRenderer } from 'electron';
 import { MAL, GogoStreams, AniList, Episodes, Animepahe } from '../Lib';
-import { ISearchOutput, IStreamOutput, IStreams, Settings } from '../Types';
+import { IDownloads, ISearchOutput, IStreamOutput, IStreams, Settings } from '../Types';
 import Hls from 'hls.js';
 import * as fs from 'fs';
 import path from 'path';
 import { clearRuntimeCache } from './CacheManager';
+import { Downloader } from './Download';
 
 const mal = new MAL();
 const pahe = new Animepahe();
@@ -15,6 +16,7 @@ const defaultSettings: Settings = {
     defaultStream: 'gogoanime',
     skipDuration: 5,
     defaultQuality: '720p',
+    downloadPath: (process.env.USERPROFILE || process.env.HOME) + '\\Downloads\\'
 };
 
 export async function getAnimeInfo(linkOrId: string) {
@@ -125,8 +127,8 @@ export async function getStoredEpisodeId(): Promise<string> {
     return id;
 }
 
-export async function createNewWindow() {
-    await ipcRenderer.invoke('createNewWindow');
+export async function createNewWindow(downloads?: boolean) {
+    await ipcRenderer.invoke('createNewWindow', downloads);
 }
 
 export async function readSettings() {
@@ -143,9 +145,53 @@ export async function readSettings() {
     return settings;
 }
 
+async function fixSettingsError() {
+    const setting = await readSettings()
+    const replica = setting as any
+    const currentKeys = Object.keys(setting) as (keyof Settings)[]
+    const defaultKeys = Object.keys(defaultSettings) as (keyof Settings)[]
+    if(currentKeys.length !== defaultKeys.length) {
+        defaultKeys.forEach((key) => {
+            if (!setting[key]) {
+              replica[key] = defaultSettings[key];
+            }
+          });
+    }
+    await writeSettings(replica as Settings)
+}
+
 export async function writeSettings(setting: Settings) {
-    const stringy = JSON.stringify(setting, null, 2);
-    fs.writeFileSync(`${await ipcRenderer.invoke('getSettingPath')}/settings.json`, stringy);
+    try {
+        const stringy = JSON.stringify(setting, null, 2);
+        fs.writeFileSync(`${await ipcRenderer.invoke('getSettingPath')}/settings.json`, stringy);
+    } catch(err) {
+        console.log(err)
+        await fixSettingsError()
+    }
+}
+
+export async function readDownload() {
+    const settingPath = await ipcRenderer.invoke('getSettingPath');
+    if (!fs.existsSync(path.join(settingPath, './downloads.json'))) {
+        fs.writeFileSync(
+            path.join(settingPath, './downloads.json'),
+            JSON.stringify('[]', null, 2),
+        );
+    }
+    const downloads = JSON.parse(
+        fs.readFileSync(`${settingPath}/downloads.json`, 'utf8'),
+    ) as IDownloads[];
+    return downloads;
+}
+
+export async function writeDownloads(downloads: IDownloads) {
+    try {
+        const stringy = JSON.stringify(downloads, null, 2);
+        fs.writeFileSync(`${await ipcRenderer.invoke('getSettingPath')}/downloads.json`, stringy);
+    } catch(err) {
+        console.log(err)
+        await fixSettingsError()
+    }
 }
 
 export async function setBackTo(to: string) {
@@ -208,10 +254,16 @@ export async function getEpisodeLink(aliasId: string) {
 export async function changeDataBase(db: 'mal' | 'anilist') {
     const settings = await readSettings();
     settings.database = db;
-    console.log(settings);
     await writeSettings(settings);
     clearRuntimeCache();
     await reload();
+}
+
+export async function changeDownloadPath(path: string) {
+    if(!fs.existsSync(path)) throw new Error('Path specified doesnt exist')
+    const settings = await readSettings();
+    settings.downloadPath = path;
+    await writeSettings(settings)
 }
 
 export async function getEpisodes(infoLink: string) {
@@ -276,4 +328,14 @@ export async function getSearchMemory() {
 
 export async function storeSearchMemory(divHTML: string) {
     return await ipcRenderer.invoke('storeSearchMemory', divHTML);
+}
+
+export async function downloader(m3u8Link: string, title: string) {
+    let downloadPath = (await readSettings()).downloadPath
+    if(!downloadPath) {
+        await fixSettingsError()
+        downloadPath = (await readSettings()).downloadPath
+    }
+    const downloader = new Downloader(m3u8Link, `${downloadPath}${title}.mp4`)
+    return downloader
 }
