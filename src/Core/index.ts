@@ -1,3 +1,3 @@
 export * from './Subrender';
 export * from './CacheManager';
-export * from './Download'
+export * from './Download';

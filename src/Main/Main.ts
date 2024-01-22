@@ -118,7 +118,11 @@ const createWindow = () => {
             attachTitlebarToWindow(newWindow);
 
             //make it accept path and load from that!
-            newWindow.loadFile(download ? path.join(__dirname, '../../Public/html/Download.html') : path.join(__dirname, '../../Public/html/Settings.html'));
+            newWindow.loadFile(
+                download
+                    ? path.join(__dirname, '../../Public/html/Download.html')
+                    : path.join(__dirname, '../../Public/html/Settings.html'),
+            );
 
             newWindow.on('close', () => {
                 globalVars.subWindows--;

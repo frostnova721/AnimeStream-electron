@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         if (
             window.location.href.split('?')[1] === 'rel=recents' ||
-            window.location.href.split('?')[1] === 'rel=search'  ||
+            window.location.href.split('?')[1] === 'rel=search' ||
             window.location.href.split('?')[1] === 'rel=watch'
         ) {
             const anilistLink: string = await getAnilistLink();

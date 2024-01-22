@@ -10,18 +10,17 @@ import {
     getStoredTotalEpisodes,
     getPaheStreamDetails,
     readSettings,
-    downloader,
 } from '../Core';
 import { IStreams } from '../Types';
 
 let localMemory: {
-    server: string,
-    result: string
-}[] = []
+    server: string;
+    result: string;
+}[] = [];
 let videoLoaded = false;
 let overlayShown = false;
 let autoLoadLink = '';
-let loadedStreamsLink = ''
+let loadedStreamsLink = '';
 let selectedProvider: 'animepahe' | 'gogoanime' = 'gogoanime';
 let playTime: number = 0;
 let backLink = './AnimeInfo.html?rel=watch';
@@ -55,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const videoLoaderContainer = document.getElementById('videoLoaderContainer');
     const wideScreen = document.getElementById('widescreen');
     const playerContainer2 = <HTMLDivElement>document.getElementsByClassName('playerContainer2')[0];
-    const downloadButton = document.getElementById('downloadBtn')
+    const downloadButton = document.getElementById('downloadBtn');
 
     if (
         !video ||
@@ -102,10 +101,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     downloadButton.onclick = () => {
-        // if() {
-            
-        // }
-    }
+        if (videoLoaded) {
+        }
+    };
 
     //pause or play the video when play-pause icon is clicked
     playPause.onclick = () => {
@@ -340,13 +338,13 @@ function secondsToTime(seconds: number) {
 }
 
 async function loadCorrespondingStreams(anime: string, ep: number, link?: string) {
-    if(localMemory.length !== 0) {
-        const arrayWithStreams = localMemory.filter(item => item.server == selectedProvider)
-        if(arrayWithStreams.length !== 0) {
-            const subStream = document.getElementById('subStream')
-            if(!subStream) return;
-            subStream.innerHTML = arrayWithStreams[0].result
-            manageErrorScreen()
+    if (localMemory.length !== 0) {
+        const arrayWithStreams = localMemory.filter((item) => item.server == selectedProvider);
+        if (arrayWithStreams.length !== 0) {
+            const subStream = document.getElementById('subStream');
+            if (!subStream) return;
+            subStream.innerHTML = arrayWithStreams[0].result;
+            manageErrorScreen();
             streamsLoading('disable');
             return;
         }
@@ -407,8 +405,8 @@ async function loadGogoStreams(anime: string, ep: number, link?: string) {
             streamsLoading('disable');
             localMemory.push({
                 server: 'gogoanime',
-                result: subStream?.innerHTML ?? ''
-            })
+                result: subStream?.innerHTML ?? '',
+            });
         }
     } catch (err) {
         console.log(err);
@@ -458,8 +456,8 @@ async function loadPaheStreams(anime: string, ep: number, link?: string) {
             streamsLoading('disable');
             localMemory.push({
                 server: 'animepahe',
-                result: subStream?.innerHTML ?? ''
-            })
+                result: subStream?.innerHTML ?? '',
+            });
         }
     } catch (err) {
         console.log(err);
@@ -530,15 +528,4 @@ function manageErrorScreen() {
     if (!stream || !errorScreen || !streamLoader) return;
     errorScreen.style.display = error ? 'flex' : 'none';
     streamLoader.style.display = error ? 'none' : 'block';
-}
-
-async function downloadEpisode(streamLink: string, title: string) {
-    const _downloader = await downloader(streamLink, title)
-    _downloader.downloadStream()
-    _downloader.on('progress', (progress) => updateDownloadProgress(progress.percent))
-    _downloader.on('end', () => console.log('ended'))
-}
-
-function updateDownloadProgress(percent: string | number) {
-
 }

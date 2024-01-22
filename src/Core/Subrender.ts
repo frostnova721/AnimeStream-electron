@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { MAL, GogoStreams, AniList, Episodes, Animepahe } from '../Lib';
-import { IDownloads, ISearchOutput, IStreamOutput, IStreams, Settings } from '../Types';
+import { IDownloads, ISearchOutput, IStreams, Settings } from '../Types';
 import Hls from 'hls.js';
 import * as fs from 'fs';
 import path from 'path';
@@ -16,7 +16,7 @@ const defaultSettings: Settings = {
     defaultStream: 'gogoanime',
     skipDuration: 5,
     defaultQuality: '720p',
-    downloadPath: (process.env.USERPROFILE || process.env.HOME) + '\\Downloads\\'
+    downloadPath: (process.env.USERPROFILE || process.env.HOME) + '\\Downloads\\',
 };
 
 export async function getAnimeInfo(linkOrId: string) {
@@ -146,37 +146,34 @@ export async function readSettings() {
 }
 
 async function fixSettingsError() {
-    const setting = await readSettings()
-    const replica = setting as any
-    const currentKeys = Object.keys(setting) as (keyof Settings)[]
-    const defaultKeys = Object.keys(defaultSettings) as (keyof Settings)[]
-    if(currentKeys.length !== defaultKeys.length) {
+    const setting = await readSettings();
+    const replica = setting as any;
+    const currentKeys = Object.keys(setting) as (keyof Settings)[];
+    const defaultKeys = Object.keys(defaultSettings) as (keyof Settings)[];
+    if (currentKeys.length !== defaultKeys.length) {
         defaultKeys.forEach((key) => {
             if (!setting[key]) {
-              replica[key] = defaultSettings[key];
+                replica[key] = defaultSettings[key];
             }
-          });
+        });
     }
-    await writeSettings(replica as Settings)
+    await writeSettings(replica as Settings);
 }
 
 export async function writeSettings(setting: Settings) {
     try {
         const stringy = JSON.stringify(setting, null, 2);
         fs.writeFileSync(`${await ipcRenderer.invoke('getSettingPath')}/settings.json`, stringy);
-    } catch(err) {
-        console.log(err)
-        await fixSettingsError()
+    } catch (err) {
+        console.log(err);
+        await fixSettingsError();
     }
 }
 
 export async function readDownload() {
     const settingPath = await ipcRenderer.invoke('getSettingPath');
     if (!fs.existsSync(path.join(settingPath, './downloads.json'))) {
-        fs.writeFileSync(
-            path.join(settingPath, './downloads.json'),
-            JSON.stringify('[]', null, 2),
-        );
+        fs.writeFileSync(path.join(settingPath, './downloads.json'), JSON.stringify('[]', null, 2));
     }
     const downloads = JSON.parse(
         fs.readFileSync(`${settingPath}/downloads.json`, 'utf8'),
@@ -188,9 +185,9 @@ export async function writeDownloads(downloads: IDownloads) {
     try {
         const stringy = JSON.stringify(downloads, null, 2);
         fs.writeFileSync(`${await ipcRenderer.invoke('getSettingPath')}/downloads.json`, stringy);
-    } catch(err) {
-        console.log(err)
-        await fixSettingsError()
+    } catch (err) {
+        console.log(err);
+        await fixSettingsError();
     }
 }
 
@@ -260,10 +257,10 @@ export async function changeDataBase(db: 'mal' | 'anilist') {
 }
 
 export async function changeDownloadPath(path: string) {
-    if(!fs.existsSync(path)) throw new Error('Path specified doesnt exist')
+    if (!fs.existsSync(path)) throw new Error('Path specified doesnt exist');
     const settings = await readSettings();
     settings.downloadPath = path;
-    await writeSettings(settings)
+    await writeSettings(settings);
 }
 
 export async function getEpisodes(infoLink: string) {
@@ -331,11 +328,11 @@ export async function storeSearchMemory(divHTML: string) {
 }
 
 export async function downloader(m3u8Link: string, title: string) {
-    let downloadPath = (await readSettings()).downloadPath
-    if(!downloadPath) {
-        await fixSettingsError()
-        downloadPath = (await readSettings()).downloadPath
+    let downloadPath = (await readSettings()).downloadPath;
+    if (!downloadPath) {
+        await fixSettingsError();
+        downloadPath = (await readSettings()).downloadPath;
     }
-    const downloader = new Downloader(m3u8Link, `${downloadPath}${title}.mp4`)
-    return downloader
+    const downloader = new Downloader(m3u8Link, `${downloadPath}${title}.mp4`);
+    return downloader;
 }

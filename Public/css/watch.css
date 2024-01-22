@@ -443,7 +443,7 @@ button:focus {
     position: absolute;
     right: 0;
     margin-right: 10px;
-    margin-top: 15px
+    margin-top: 15px;
 }
 
 .downloadBtn {
@@ -477,7 +477,7 @@ button:focus {
 
 .downloadBtn:active {
     background-color: black;
-    border: 1px solid #929292
+    border: 1px solid #929292;
 }
 
 @keyframes l21 {

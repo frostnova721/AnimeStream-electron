@@ -96,7 +96,7 @@ const recentDiv = document.getElementById('recents');
 const latestDiv = document.getElementById('latest');
 // const downloadsButton = document.getElementById('downloads')
 
-if (!searchBtn || !settingsBtn || !recentDiv || !latestDiv ) throw new Error('No btn');
+if (!searchBtn || !settingsBtn || !recentDiv || !latestDiv) throw new Error('No btn');
 
 searchBtn.onclick = async () => {
     window.location.href = './search.html';
