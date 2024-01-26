@@ -30,7 +30,7 @@ This project is made to just test my skills (im still kind of new). While this i
 Currently, you can enjoy anime content from the following sources:
 
 - **Gogo**
-- **Animepahe**
+- ~~Animepahe~~ (will be removed on next release)
 
 ## Known Issues
 
