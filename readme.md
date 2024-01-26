@@ -36,7 +36,7 @@ Currently, you can enjoy anime content from the following sources:
 
 Ofcourse there are issues(a lot) some of the major stuffs are:
 
-- **Subsplease Server Error:** Sometimes, subplease server gives off a 403 error. I'm actively working on resolving this issue.
+- **Animepahe server unavailable:** The api of Animepahe has been modified and now is inaccessible. This source will be removed on next release.
 
 - **Episode Selection Glitch:** Occasionally, the wrong anime gets selected when choosing an episode. This issue will be fixed soon!.
 
