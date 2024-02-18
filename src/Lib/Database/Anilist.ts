@@ -6,7 +6,6 @@ import {
     IAnimeSearchResult,
     ISeasonResponse,
 } from '../../Types';
-import axios from 'axios';
 
 export class AniList {
     constructor() {}

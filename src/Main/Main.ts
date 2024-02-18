@@ -1,7 +1,7 @@
 import { app, BrowserWindow, Menu, ipcMain, dialog, nativeImage, nativeTheme } from 'electron';
 import path from 'path';
 import { TGlobalVar } from '../Types';
-import { clearRuntimeCache } from '../Core';
+import { clearRuntimeCache, Downloader, readSettings, saveDownloadProgress } from '../Core';
 import * as fs from 'fs';
 import { setupTitlebar, attachTitlebarToWindow } from 'custom-electron-titlebar/main';
 import { tmpdir } from 'os';
@@ -188,6 +188,14 @@ const createWindow = () => {
     ipcMain.handle('getSearchMemory', (e) => {
         return memory.searchMemory;
     });
+
+    ipcMain.handle('downloadEpisode', async(e, url: string, title: string) => {
+        const settings = JSON.parse(fs.readFileSync(`${essentials.settingPath}/settings.json`, 'utf8'))
+        if(!url || !title) throw new Error('No url or title')
+        const download = new Downloader(url, `${settings.downloadPath}/${title}.mp4`)
+        download.downloadStream()
+        download.on('progress', (progress) => saveDownloadProgress(progress))
+    })
 };
 
 const icoPath = path.join(__dirname, '../../Assets/Icons/logo_new.png');

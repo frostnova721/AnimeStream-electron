@@ -10,6 +10,7 @@ import {
     getStoredTotalEpisodes,
     getPaheStreamDetails,
     readSettings,
+    downloadEpisode,
 } from '../Core';
 import { IStreams } from '../Types';
 
@@ -102,6 +103,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     downloadButton.onclick = () => {
         if (videoLoaded) {
+            downloadEpisode(autoLoadLink, 'niggaballs')
         }
     };
 

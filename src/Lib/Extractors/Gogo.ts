@@ -30,9 +30,11 @@ export class Gogo {
         const id = episodeLink.searchParams.get('id') ?? '';
 
         const encryptedKey = await this.getEncryptedKey(id);
+        // console.log(`${encryptedKey}`)
         const decrypted = await this.decrypt(episodeLink);
 
         const params = `id=${encryptedKey}&alias=${id}&${decrypted}`;
+        console.log(`${episodeLink.protocol}//${episodeLink.hostname}/encrypt-ajax.php?${params}`)
 
         const encryptedData = (
             await axios.get(

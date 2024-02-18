@@ -11,6 +11,8 @@ const mal = new MAL();
 const pahe = new Animepahe();
 const anilist = new AniList();
 
+let downloadProgress: any = {}
+
 const defaultSettings: Settings = {
     database: 'anilist',
     defaultStream: 'gogoanime',
@@ -311,6 +313,12 @@ export async function reload() {
     await ipcRenderer.invoke('reloadMain');
 }
 
+export async function downloadEpisode(url: string, title: string) {
+    title = title.replace(/[\/\\:*?"<>|]/g, '')
+    const downloader = await ipcRenderer.invoke('downloadEpisode', url, title)
+    
+}
+
 export async function setDefaultSkipTime(duration: number) {
     const settings = await readSettings();
     settings.skipDuration = duration < 60 ? duration : 60;
@@ -335,4 +343,8 @@ export async function downloader(m3u8Link: string, title: string) {
     }
     const downloader = new Downloader(m3u8Link, `${downloadPath}${title}.mp4`);
     return downloader;
+}
+
+export async function saveDownloadProgress(progress: any) {
+    downloadProgress = progress
 }

@@ -198,7 +198,7 @@ async function appendInfo() {
     clearPage();
     const html = `<h2>INFO</h2>
     <p>AnimeStream - A electron app made to stream and download anime</p><br>
-    <p>Repository: <a id="repo" href=https://github.com/frostnova721/AnimeStream style="color: #caf979;">https://github.com/frostnova721/AnimeStream</a></p><br>
+    <p>Repository: <a id="repo" href=https://github.com/frostnova721/AnimeStream-electron style="color: #caf979;">https://github.com/frostnova721/AnimeStream-electron</a></p><br>
     <div><p>Thanks for downloading ♥</p></div><br><br>
     <div>app info:<br>
     electron version: ${process.versions.electron}<br>
