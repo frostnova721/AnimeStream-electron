@@ -30,15 +30,12 @@ This project is made to just test my skills (im still kind of new). While this i
 Currently, you can enjoy anime content from the following sources:
 
 - **Gogo**
-- ~~Animepahe~~ (will be removed on next release)
 
 ## Known Issues
 
 Ofcourse there are issues(a lot) some of the major stuffs are:
 
-- **Animepahe server unavailable:** The api of Animepahe has been modified and now is inaccessible. This source will be removed on next release.
-
-- **Episode Selection Glitch:** Occasionally, the wrong anime gets selected when choosing an episode. This issue will be fixed soon!.
+- **Episode Selection Glitch:** Occasionally, the wrong anime gets selected when choosing an episode. This issue will be fixed soon (i hope)!.
 
 *Pro Tip: Dont use MAL as database(It doesnt work well with my concept).*
 
