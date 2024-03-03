@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { MAL, GogoStreams, AniList, Episodes, Animepahe } from '../Lib';
+import { MAL, GogoStreams, AniList, Episodes } from '../Lib';
 import { IDownloads, ISearchOutput, IStreams, Settings } from '../Types';
 import Hls from 'hls.js';
 import * as fs from 'fs';
@@ -8,7 +8,6 @@ import { clearRuntimeCache } from './CacheManager';
 import { Downloader } from './Download';
 
 const mal = new MAL();
-const pahe = new Animepahe();
 const anilist = new AniList();
 
 let downloadProgress: any = {}
@@ -81,29 +80,6 @@ export async function getGogoStreams(
         console.log(err);
         throw new Error('Couldnt get any results');
     }
-}
-
-//animepahe search
-export async function paheSearch(term: string) {
-    const res = await pahe.searchPahe(term);
-    return res;
-}
-
-export async function paheStreamDetails(session: string, episode: number) {
-    const res = await pahe.getEpisodeInfo(session);
-    return await getPaheStreamDetails(
-        `https://animepahe.ru/play/${session}/${res[episode - 1].session}`,
-    );
-}
-
-export async function getPaheStreamDetails(link: string) {
-    const data = await pahe.getAnimepaheStreams(link);
-    return data;
-}
-
-export async function getPaheStreams(streamLink: string) {
-    const streams = await pahe.extractKwik(streamLink);
-    return streams;
 }
 
 export async function stream(videoElement: HTMLVideoElement, src: string) {
@@ -232,7 +208,7 @@ export async function getDefaultStream() {
     return settings.defaultStream;
 }
 
-export async function changeDefaultStream(stream: 'animepahe' | 'gogoanime') {
+export async function changeDefaultStream(stream: 'gogoanime') {
     const settings = await readSettings();
     settings.defaultStream = stream;
     return await writeSettings(settings);

@@ -1,4 +1,3 @@
-import { shell } from 'electron';
 import { readDownload } from '../Core';
 
 document.addEventListener('DOMContentLoaded', async () => {

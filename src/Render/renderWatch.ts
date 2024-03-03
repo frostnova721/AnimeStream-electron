@@ -2,13 +2,9 @@ import {
     getDefaultStream,
     getEpisodeLink,
     getGogoStreams,
-    getPaheStreams,
     gogoSearch,
-    paheSearch,
-    paheStreamDetails,
     stream,
     getStoredTotalEpisodes,
-    getPaheStreamDetails,
     readSettings,
     downloadEpisode,
 } from '../Core';
@@ -22,7 +18,7 @@ let videoLoaded = false;
 let overlayShown = false;
 let autoLoadLink = '';
 let loadedStreamsLink = '';
-let selectedProvider: 'animepahe' | 'gogoanime' = 'gogoanime';
+let selectedProvider: 'gogoanime' = 'gogoanime';
 let playTime: number = 0;
 let backLink = './AnimeInfo.html?rel=watch';
 let widened = false;
@@ -103,7 +99,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     downloadButton.onclick = () => {
         if (videoLoaded) {
-            downloadEpisode(autoLoadLink, 'niggaballs')
+            downloadEpisode(autoLoadLink, anime)
         }
     };
 
@@ -167,12 +163,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     selectedProvider = await getDefaultStream();
-
-    paheButton.onclick = async () => {
-        selectedProvider = 'animepahe';
-        streamsLoading('enable');
-        await loadCorrespondingStreams(anime ?? '', parseInt(ep));
-    };
 
     gogoButton.onclick = async () => {
         selectedProvider = 'gogoanime';
@@ -354,8 +344,6 @@ async function loadCorrespondingStreams(anime: string, ep: number, link?: string
     switch (selectedProvider) {
         case 'gogoanime':
             return await loadGogoStreams(anime, ep, link);
-        case 'animepahe':
-            return await loadPaheStreams(anime, ep, link);
         default:
             return await loadGogoStreams(anime, ep, link);
     }
@@ -407,57 +395,6 @@ async function loadGogoStreams(anime: string, ep: number, link?: string) {
             streamsLoading('disable');
             localMemory.push({
                 server: 'gogoanime',
-                result: subStream?.innerHTML ?? '',
-            });
-        }
-    } catch (err) {
-        console.log(err);
-        manageErrorScreen();
-    }
-}
-
-async function loadPaheStreams(anime: string, ep: number, link?: string) {
-    try {
-        let sources;
-        if (error) {
-            manageErrorScreen();
-        }
-        if (selectedProvider === (await getDefaultStream()) && link) {
-            sources = await getPaheStreamDetails(link);
-        } else {
-            const search = await paheSearch(anime);
-            sources = await paheStreamDetails(search[0].session, ep);
-        }
-
-        if (selectedProvider === 'animepahe') {
-            const arr: { child: HTMLElement; source: string }[] = [];
-            for (const source of sources) {
-                const child = document.createElement('button');
-                child.className = 'source';
-                child.id = 'source';
-                const data = await getPaheStreams(source.link);
-                child.setAttribute('data-value', data.url);
-                child.textContent = source.quality ?? '';
-                arr.push({ child: child, source: source.server });
-            }
-
-            const srcs = Array.from(new Set(arr.map((obj) => obj.source)));
-            if (autoLoadLink.length < 1) {
-                let src: IStreams | undefined;
-                src = sources.find((item) => item.quality === defaultQuality ?? '720p');
-                if (!src) src = sources[0];
-                autoLoadLink = src?.link ?? '';
-                console.log(`selected source: ${src?.server} ${src?.quality}`);
-            }
-            const subStream = document.getElementById('subStream');
-            if (subStream) subStream.innerHTML = '';
-            for (const source of srcs) {
-                const filteredArray = arr.filter((obj) => obj.source === source);
-                createStreamGroup(source, filteredArray);
-            }
-            streamsLoading('disable');
-            localMemory.push({
-                server: 'animepahe',
                 result: subStream?.innerHTML ?? '',
             });
         }

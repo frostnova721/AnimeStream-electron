@@ -2,7 +2,7 @@ import cheerio from 'cheerio';
 import axios from 'axios';
 import { IAiredSiteEpisodes, IAiredEpisodes } from '../../Types';
 import request, { gql } from 'graphql-request';
-import { Animepahe, GogoStreams } from '..';
+import { GogoStreams } from '..';
 
 export class Episodes {
     constructor() {}
@@ -18,10 +18,9 @@ export class Episodes {
 
     public getAiredEpisodesFromSite = async (
         animeName: string,
-        site: 'gogoanime' | 'animepahe',
+        site: 'gogoanime',
     ) => {
         if (site === 'gogoanime') return await this.getAiredEpisodesFromGogo(animeName);
-        if (site === 'animepahe') return await this.getAiredEpisodesFromAnimePahe(animeName);
         throw new Error('No site??');
     };
 
@@ -95,24 +94,6 @@ export class Episodes {
             episodeArray.push({
                 episodeNumber: i + 1,
                 link: `https://gogoanime3.net${eps.link.trim()}${i + 1}`,
-            });
-        }
-        return episodeArray;
-    };
-
-    private getAiredEpisodesFromAnimePahe = async (
-        animeName: string,
-    ): Promise<IAiredSiteEpisodes[]> => {
-        const pahe = new Animepahe();
-        const search = await pahe.searchPahe(animeName);
-        const eps = await pahe.getEpisodeInfo(search[0].session);
-        const episodeArray: IAiredSiteEpisodes[] = [];
-        for (let i = 0; i < eps.length; i++) {
-            episodeArray.push({
-                episodeNumber: i + 1,
-                title: eps[i].title,
-                img: eps[i].snapshot,
-                link: `https://animepahe.ru/play/${search[0].session}/${eps[i].session}`,
             });
         }
         return episodeArray;

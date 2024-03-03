@@ -123,14 +123,14 @@ async function loadStreamOptions() {
     dropdown.className = 'dropdown';
     // const select = document.createElement('select')
 
-    const streamNames = ['gogoanime', 'animepahe'];
+    const streamNames = ['gogoanime'];
     for (const streamName of streamNames) {
         const option = document.createElement('div');
         option.setAttribute('data-value', streamName);
         // option.className = 'streamName'
         option.onclick = async () => {
             const currentStream = await getDefaultStream();
-            const selectedStream = option.getAttribute('data-value') as 'animepahe' | 'gogoanime';
+            const selectedStream = option.getAttribute('data-value') as 'gogoanime';
             if (currentStream === selectedStream) return;
             await changeDefaultStream(selectedStream);
             opts.innerText = selectedStream;
