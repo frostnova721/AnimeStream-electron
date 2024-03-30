@@ -7,7 +7,7 @@ export class GogoStreams {
     constructor() {}
 
     private readonly baseUrl = `https://gogoanime3.net`;
-    private readonly ajaxUrl = `https://ajax.gogo-load.com/ajax`;
+    private readonly ajaxUrl = `https://ajax.gogocdn.net/ajax`;
 
     public searchForAnime = async (
         searchTerm: string,

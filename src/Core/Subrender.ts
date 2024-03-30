@@ -290,8 +290,9 @@ export async function reload() {
 }
 
 export async function downloadEpisode(url: string, title: string) {
+    console.log("DOWNLOADING" + title);
     title = title.replace(/[\/\\:*?"<>|]/g, '')
-    const downloader = await ipcRenderer.invoke('downloadEpisode', url, title)
+    await ipcRenderer.invoke('downloadEpisode', url, title)
     
 }
 

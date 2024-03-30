@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const overlay = document.getElementById('overlay');
     const container = document.getElementById('container');
     const subStream = document.getElementById('subStream');
-    const paheButton = document.getElementById('pahe');
     const gogoButton = document.getElementById('gogo');
     const previousBtn = document.getElementById('previousEp');
     const nextBtn = document.getElementById('nextEp');
@@ -71,7 +70,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         !overlay ||
         !container ||
         !gogoButton ||
-        !paheButton ||
         !subStream ||
         !previousBtn ||
         !nextBtn ||
@@ -80,7 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         !wideScreen ||
         !downloadButton
     )
-        throw new Error('err'); //typescript's OCD
+        throw new Error('ERR_ELEMENT_NOT_FOUND'); //typescript's OCD
 
     const totalEps = await getStoredTotalEpisodes();
 
