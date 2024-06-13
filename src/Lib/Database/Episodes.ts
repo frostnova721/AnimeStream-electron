@@ -93,7 +93,7 @@ export class Episodes {
         for (let i = 0; i < eps.episodes; i++) {
             episodeArray.push({
                 episodeNumber: i + 1,
-                link: `https://gogoanime3.net${eps.link.trim()}${i + 1}`,
+                link: `https://ww5.gogoanimes.fi${eps.link.trim()}${i + 1}`,
             });
         }
         return episodeArray;

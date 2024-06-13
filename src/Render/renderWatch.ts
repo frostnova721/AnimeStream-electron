@@ -358,7 +358,7 @@ async function loadGogoStreams(anime: string, ep: number, link?: string) {
         } else {
             const search = await gogoSearch(decodeURIComponent(anime));
             const link = await getEpisodeLink(search[0].alias);
-            sources = await getGogoStreams(`https://gogoanime3.net${link.link.trim()}` + ep);
+            sources = await getGogoStreams(`https://ww5.gogoanimes.fi${link.link.trim()}` + ep);
         }
 
         if (selectedProvider === 'gogoanime') {

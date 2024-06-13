@@ -12,7 +12,7 @@ export class Gogo {
         iv: CryptoJS.enc.Utf8.parse('3134003223491201'),
     };
 
-    private readonly baseUrl = `https://gogoanime3.net`;
+    private readonly baseUrl = `https://ww5.gogoanimes.fi`;
 
     public extractGogo = async (
         episodeId: string,

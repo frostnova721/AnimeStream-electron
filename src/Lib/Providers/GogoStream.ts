@@ -6,7 +6,7 @@ import { Gogo, StreamWish } from '..';
 export class GogoStreams {
     constructor() {}
 
-    private readonly baseUrl = `https://gogoanime3.net`;
+    private readonly baseUrl = `https://ww5.gogoanimes.fi`;
     private readonly ajaxUrl = `https://ajax.gogocdn.net/ajax`;
 
     public searchForAnime = async (
@@ -97,7 +97,7 @@ export class GogoStreams {
         }
         try {
             //current src link (embtaku.pro) works when using vpn. otherwise its giving conn timed out
-            // vidStreaming = (await gogo.extractGogo(episodeId, quality)).sources
+            vidStreaming = (await gogo.extractGogo(episodeId, quality)).sources
         } catch (err) {
             //ignore
         }
