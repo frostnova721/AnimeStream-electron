@@ -1,4 +1,4 @@
-import ffmpeg from 'fluent-ffmpeg';
+// import ffmpeg from 'fluent-ffmpeg';
 import { EventEmitter } from 'events';
 
 interface DownloadEvents {
@@ -30,25 +30,25 @@ export class Downloader extends EventEmitter {
 
     private m3u8Link: string = '';
     private downloadPath: string = '';
-    private ffmpegInstance: ffmpeg.FfmpegCommand | null = null;
+    // private ffmpegInstance: ffmpeg.FfmpegCommand | null = null;
 
     public downloadStream = () => {
-        if (!this.m3u8Link.includes('.m3u8')) throw new Error('Stream_Is_Not_In_m3u8_Format');
-        ffmpeg()
-            .input(this.m3u8Link)
-            .outputOptions(['-bsf:a aac_adtstoasc', '-c:v copy', '-c:a copy', '-crf 0'])
-            .on('end', () => this.emit('end'))
-            .on('error', (err) => this.emit('error', err))
-            .on('progress', (progress) => {
-                this.emit('progress', progress);
-            })
-            .save(this.downloadPath);
+        // if (!this.m3u8Link.includes('.m3u8')) throw new Error('Stream_Is_Not_In_m3u8_Format');
+        // ffmpeg()
+        //     .input(this.m3u8Link)
+        //     .outputOptions(['-bsf:a aac_adtstoasc', '-c:v copy', '-c:a copy', '-crf 0'])
+        //     .on('end', () => this.emit('end'))
+        //     .on('error', (err) => this.emit('error', err))
+        //     .on('progress', (progress) => {
+        //         this.emit('progress', progress);
+        //     })
+        //     .save(this.downloadPath);
     };
 
-    public killDownloadProcess = () => {
-        if (this.ffmpegInstance) {
-            this.ffmpegInstance.kill('SIGINT');
-            this.emit('kill', true);
-        }
-    };
+    // public killDownloadProcess = () => {
+    //     if (this.ffmpegInstance) {
+    //         this.ffmpegInstance.kill('SIGINT');
+    //         this.emit('kill', true);
+    //     }
+    // };
 }

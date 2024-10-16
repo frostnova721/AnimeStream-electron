@@ -5,6 +5,7 @@ import { clearRuntimeCache, Downloader, readSettings, saveDownloadProgress } fro
 import * as fs from 'fs';
 import { setupTitlebar, attachTitlebarToWindow } from 'custom-electron-titlebar/main';
 import { tmpdir } from 'os';
+import electronReload from 'electron-reload';
 
 const cachePath = `${tmpdir()}/animestream`;
 const settingPath =
@@ -47,6 +48,8 @@ const anilistData = {
 };
 
 setupTitlebar();
+
+electronReload(__dirname, {})
 
 const createWindow = () => {
     const mainWindow = new BrowserWindow({

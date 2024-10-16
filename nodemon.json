@@ -1,5 +1,5 @@
 {
     "watch": ["./"],
     "ext": ".ts .html .css",
-    "exec": "npm test"
+    "exec": "electron ."
 }

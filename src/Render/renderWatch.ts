@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     downloadButton.onclick = () => {
         if (videoLoaded) {
-            downloadEpisode(autoLoadLink, anime)
+            downloadEpisode(autoLoadLink, anime);
         }
     };
 
@@ -127,20 +127,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         widenVideo();
     };
 
-    const queries = window.location.href.split('?')[1].split('&');
+    const queries = new URLSearchParams(window.location.search);
 
     let anime: string = '',
         ep: string = '',
         fromlatest: 'true' | 'false' | undefined,
         link: string = '';
 
-    for (const query of queries) {
-        const key = query.split('=');
-        if (key[0] === 'watch') anime = key[1];
-        if (key[0] === 'ep') ep = key[1];
-        if (key[0] === 'fromlatest') fromlatest = key[1] as typeof fromlatest;
-        if (key[0] === 'link') link = key[1];
-    }
+        anime = queries.get("watch") ?? ''
+        ep = queries.get("ep") ?? ''
+        fromlatest = queries.get('fromlatest') as typeof fromlatest
+        link = queries.get('link') ?? ''
+
+    // for (const query of queries) {
+        // const key = query.split('=');
+        // if (key[0] === 'watch') anime = key[1];
+        // if (key[0] === 'ep') ep = key[1];
+        // if (key[0] === 'fromlatest') fromlatest = key[1] as typeof fromlatest;
+        // if (key[0] === 'link') link = key[1];
+    // }
 
     if (fromlatest === 'true') backLink = './AnimeInfo.html?rel=latest';
 
@@ -148,16 +153,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     playerTitle.innerText = decodeURIComponent(`${anime} - Episode ${ep}`);
 
+    //nav to prev episode
     previousBtn.onclick = () => {
         if (parseInt(ep) === 1) {
             return;
         }
-        window.location.href = `./Watch.html?watch=${anime ?? ''}&ep=${parseInt(ep) - 1 ?? ''}`;
+        window.location.href = `./Watch.html?watch=${anime ?? ''}&ep=${parseInt(ep) - 1}`;
     };
 
+    //nav to next ep
     nextBtn.onclick = () => {
         if (parseInt(ep) !== parseInt(totalEps))
-            window.location.href = `./Watch.html?watch=${anime ?? ''}&ep=${parseInt(ep) + 1 ?? ''}`;
+            window.location.href = `./Watch.html?watch=${anime ?? ''}&ep=${parseInt(ep) + 1}`;
     };
 
     selectedProvider = await getDefaultStream();
@@ -255,7 +262,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     //pause or play or skip when space key is pressed
-    let skipDuration = (await (await readSettings()).skipDuration) || 5;
+    let skipDuration = ((await readSettings()).skipDuration) || 5;
     document.addEventListener('keydown', (event) => {
         if (event.key === ' ' || event.keyCode === 32 || event.which === 32) {
             event.preventDefault();
@@ -367,7 +374,7 @@ async function loadGogoStreams(anime: string, ep: number, link?: string) {
 
             if (autoLoadLink.length < 1) {
                 let src: IStreams | undefined;
-                src = sources.find((item) => item.quality === defaultQuality ?? '720p');
+                src = sources.find((item) => item.quality === (defaultQuality ?? '720p'));
                 if (!src) src = sources[0];
                 autoLoadLink = src?.link ?? '';
                 console.log(`selected source: ${src?.server} ${src?.quality}`);
