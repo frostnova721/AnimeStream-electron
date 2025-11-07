@@ -1,5 +1,9 @@
 # Anime Stream Project
 
+> [!WARNING]
+> **Animestream-Electron Project Has Been Archived!** \
+This one's retired now. Yet preserved for the sake of history!  
+
 Welcome to the Anime Stream project—a simple project designed for streaming and downloading your favorite anime!
 
 ![Project Logo](Assets/Icons/logo_new.ico)
